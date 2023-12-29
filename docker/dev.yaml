@@ -29,4 +29,3 @@ services:
 
 volumes:
   mongo_volume:
-
