@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  mongo:
+    container_name: mongo_dev
+    image: mongo:7.0.5-rc0
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_volume:/data/db
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  redis:
+    image: redis:7.2.3
+    container_name: redis_dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  mongo_volume:
+
