@@ -10,14 +10,15 @@
         }
     },
     "python.testing.pytestArgs": [
-        "backend/apps/beaver_etl/tests/unit"
+        "backend/apps/beaver_etl/tests/unit",
+        "backend/apps/beaver_etl/tests/functional"
+
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
-        "aiomqtt",
         "docstrings",
-        "mosquitto",
-        "mqtt"
+        "pymongo",
+        "testcontainers"
     ]
 }
