@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from beaver_etl.project_parsers.python_project_parsers import (
+from beaver_etl.utils.project_parsers.python_project_parsers import (
     PoetryProjectParser,
 )
 
