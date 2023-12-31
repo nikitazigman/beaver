@@ -7,21 +7,20 @@ from beaver_etl.utils.project_parsers.python_project_parsers import (
 )
 
 
-TEST_SOURCE_PATH = Path(__file__).parent.parent / "source"
+TEST_PROJECT_PATH = (
+    Path(__file__).parent.parent.parent.parent.parent.parent
+    / "algorithms/Arrays/MergeSortedArray"
+)
 
 
 @pytest.mark.parametrize(
     "path_to_project, expected_attributes",
     (
         (
-            TEST_SOURCE_PATH / "test_project",
+            TEST_PROJECT_PATH,
             {
-                "source_code": (
-                    TEST_SOURCE_PATH / "test_project/src/main.py"
-                ).read_text(),
-                "readme": (
-                    TEST_SOURCE_PATH / "test_project/README.md"
-                ).read_text(),
+                "source_code": (TEST_PROJECT_PATH / "src/main.py").read_text(),
+                "readme": (TEST_PROJECT_PATH / "README.md").read_text(),
                 "link_to_task": "https://leetcode.com/problems/merge-sorted-array/",
                 "language": "python",
                 "title": "Merge Sorted Array",
