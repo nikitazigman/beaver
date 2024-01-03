@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from beaver_etl.schemas.loader import LoaderCodeSchema
+from beaver_etl.loaders.schema import LoaderCodeSchema
 
 from pymongo import MongoClient
 
