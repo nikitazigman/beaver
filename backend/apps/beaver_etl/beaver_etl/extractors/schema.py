@@ -1,11 +1,10 @@
 from pydantic import BaseModel
 
 
-class LoaderCodeSchema(BaseModel):
+class ExtractorCodeSchema(BaseModel):
     source_code: str
     language: str
     link_to_task: str
     title: str
-    types: list[str]
+    types: set[str]
     readme: str
-    hash: str
