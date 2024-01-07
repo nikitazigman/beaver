@@ -2,12 +2,21 @@
 name = "beaver-api"
 version = "0.1.0"
 description = ""
-authors = ["nikita zigman <zigman.nikita@gmail.com>"]
+authors = ["nikita zigman <zigman.nikita@gmail.com>", "paveleroshkinweb <eroshkin321@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
+typer = "^0.9.0"
+uvicorn = "^0.25.0"
+pydantic = "^2.5.3"
+pydantic-settings = "^2.1.0"
+structlog = "^23.3.0"
+fastapi = "^0.108.0"
 
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.19.0"
 
 [build-system]
 requires = ["poetry-core"]
