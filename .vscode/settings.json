@@ -17,6 +17,7 @@
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
         "docstrings",
+        "filterset",
         "pymongo",
         "testcontainers"
     ]
