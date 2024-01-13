@@ -48,10 +48,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Third party
+    "django_filters",
     "rest_framework",
     # Local
     "code_api.apps.CodeApiConfig",
     "tags_api.apps.TagsApiConfig",
+    "language_api.apps.LanguageApiConfig",
     "users.apps.UsersConfig",
 ]
 
@@ -145,13 +147,22 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Beaver API",
+    "DESCRIPTION": "Provides a read-only API for retrieving the projects code.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": True,
+    # OTHER SETTINGS
 }
 
 if DEBUG:
+    INTERNAL_IPS = ["127.0.0.1"]
     INSTALLED_APPS += [
         "debug_toolbar",
         "django_extensions",
+        "drf_spectacular",
     ]
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
