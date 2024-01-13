@@ -18,6 +18,10 @@ from beaver_api import settings
 
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+)
 
 
 urlpatterns = [
@@ -27,13 +31,17 @@ urlpatterns = [
         include("rest_framework.urls", namespace="rest_framework"),
     ),
     path("api/v1/", include("code_api.urls"), name="code_api"),
-    path("api/v1/", include("tags_api.urls"), name="tags_api"),
-    path("api/v1/", include("users.urls"), name="users"),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns += [
+        path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
+        path(
+            "api/v1/schema/swagger-ui/",
+            SpectacularSwaggerView.as_view(url_name="schema"),
+            name="swagger-ui",
+        ),
         path("__debug__/", include(debug_toolbar.urls)),
     ]
