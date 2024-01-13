@@ -1,18 +1,22 @@
 version: "3.8"
 
 services:
-  mongo:
-    container_name: mongo_dev
-    image: mongo:7.0.5-rc0
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo_volume:/data/db
+  beaver_api_db:
+    image: postgres:15.3
+    container_name: beaver_api_db
     restart: unless-stopped
+    environment:
+      POSTGRES_USER: beaver_api
+      POSTGRES_PASSWORD: beaver_api
+      POSTGRES_DB: beaver_api_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: ["CMD-SHELL", "pg_isready -U films -d films_db"]
       interval: 5s
-      timeout: 10s
+      timeout: 5s
       retries: 10
 
   redis:
@@ -28,4 +32,4 @@ services:
       retries: 10
 
 volumes:
-  mongo_volume:
+  postgres_volume:
