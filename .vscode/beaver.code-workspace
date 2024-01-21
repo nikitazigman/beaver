@@ -36,7 +36,8 @@
 			"docstrings",
 			"filterset",
 			"pymongo",
-			"testcontainers"
+			"testcontainers",
+			"yasg"
 		]
 	}
 }
