@@ -1,0 +1,19 @@
+{
+    "folders": [
+		{
+			"path": "../dataset"
+		},
+		{
+			"path": "../frontend"
+		},
+		{
+			"path": "../backend/apps/beaver_etl"
+		},
+		{
+			"path": "../backend/apps/beaver_api"
+		},
+		{
+			"path": "../docker"
+		}
+	]
+}
