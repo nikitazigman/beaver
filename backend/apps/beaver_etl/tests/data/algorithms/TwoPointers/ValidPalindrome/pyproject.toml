@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+authors = ["nikita zigman <zigman.nikita@gmail.com>"]
+readme = "README.md"
+documentation = "https://leetcode.com/problems/valid-palindrome/"
+description = "Valid Palindrome"
+keywords = ["two pointers", "string"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^7.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

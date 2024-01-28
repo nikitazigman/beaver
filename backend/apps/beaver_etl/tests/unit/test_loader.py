@@ -1,7 +1,7 @@
 import pytest
 
 from beaver_etl.loaders.mongodb_loader import MongoDBLoader
-from beaver_etl.schemas.loader import LoaderCodeSchema
+from beaver_etl.loaders.schema import LoaderCodeSchema
 from pymongo import MongoClient
 
 

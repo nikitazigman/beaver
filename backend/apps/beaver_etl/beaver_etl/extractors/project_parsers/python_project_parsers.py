@@ -3,12 +3,12 @@ import tomllib
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from beaver_etl.schemas.parser import ParserCodeSchema
+from beaver_etl.extractors.schema import ExtractorCodeSchema
 
 
 class IPythonProjectParser(ABC):
     @abstractmethod
-    def retrieve_data(self, project: Path) -> ParserCodeSchema:
+    def retrieve_data(self, project: Path) -> ExtractorCodeSchema:
         """retrieves data from a python project"""
 
 
@@ -23,7 +23,7 @@ class PoetryProjectParser(IPythonProjectParser):
         self.relative_path_to_pyproject_toml = relative_path_to_pyproject_toml
         self.relative_path_to_readme = relative_path_to_readme
 
-    def retrieve_data(self, project: Path) -> ParserCodeSchema:
+    def retrieve_data(self, project: Path) -> ExtractorCodeSchema:
         poetry_project_config = self._toml_to_dict(project)
         link_to_task = self._get_link_to_task(poetry_project_config)
         title = self._get_title(poetry_project_config)
@@ -32,7 +32,7 @@ class PoetryProjectParser(IPythonProjectParser):
         source_code = self._get_source_code(project)
         readme = self._get_readme(project)
 
-        code_schema = ParserCodeSchema(
+        code_schema = ExtractorCodeSchema(
             source_code=source_code,
             link_to_task=link_to_task,
             title=title,
