@@ -2,14 +2,13 @@ from pathlib import Path
 
 import pytest
 
-from beaver_etl.utils.project_parsers.python_project_parsers import (
+from beaver_etl.extractors.project_parsers.python_project_parsers import (
     PoetryProjectParser,
 )
 
 
 TEST_PROJECT_PATH = (
-    Path(__file__).parent.parent.parent.parent.parent.parent
-    / "algorithms/Arrays/MergeSortedArray"
+    Path(__file__).parent.parent / "data/algorithms/Arrays/MergeSortedArray"
 )
 
 
@@ -24,7 +23,7 @@ TEST_PROJECT_PATH = (
                 "link_to_task": "https://leetcode.com/problems/merge-sorted-array/",
                 "language": "python",
                 "title": "Merge Sorted Array",
-                "types": ["array", "two pointers", "sorting"],
+                "types": {"array", "two pointers", "sorting"},
             },
         ),
     ),
