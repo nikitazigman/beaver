@@ -100,10 +100,23 @@ DATABASES = {
         "PASSWORD": env("POSTGRES_PASSWORD"),
         "HOST": env("POSTGRES_HOST"),
         "PORT": env("POSTGRES_PORT"),
+        "CONN_MAX_AGE": 60,  # sec
         "OPTIONS": {"options": "-c search_path=public,content"},
     }
 }
 
+# cache
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": (
+            f"redis://"
+            f"{env('REDIS_HOST', default="127.0.0.1")}:"
+            f"{env('REDIS_PORT',default=6379)}"
+        ),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
