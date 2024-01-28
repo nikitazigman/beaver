@@ -1,6 +1,10 @@
 # Beaver
 * [project structure](docs/project_structure.md)
 
+## Main Data Flow
+
+[main_dataflow](docs/beaver_main_dataflow.jpg)
+
 ## backend services
 * [beaver_api](backend/apps/beaver_api/README.md)
 * [beaver_etl](backend/apps/beaver_etl/README.md)
