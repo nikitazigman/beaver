@@ -16,12 +16,6 @@ Including another URLconf
 """
 
 from beaver_api import settings
-from beaver_api.views import (
-    CodeDocumentCreateView,
-    CodeDocumentDeleteView,
-    CodeDocumentListView,
-    CodeDocumentUpdateView,
-)
 
 from django.contrib import admin
 from django.urls import URLPattern, URLResolver, include, path
@@ -34,26 +28,6 @@ urlpatterns: list[URLPattern | URLResolver] = [
         include("rest_framework.urls", namespace="rest_framework"),
     ),
     path("api/v1/", include("code_api.urls"), name="code_api"),
-    path(
-        "api/v1/bulk_create/",
-        CodeDocumentCreateView.as_view(),
-        name="code-document-bulk-create",
-    ),
-    path(
-        "api/v1/bulk_update/",
-        CodeDocumentUpdateView.as_view(),
-        name="code-document-bulk-update",
-    ),
-    path(
-        "api/v1/bulk_delete/",
-        CodeDocumentDeleteView.as_view(),
-        name="code-document-bulk-delete",
-    ),
-    path(
-        "api/v1/code_documents/",
-        CodeDocumentListView.as_view(),
-        name="code-documents-list",
-    ),
 ]
 
 if settings.DEBUG:

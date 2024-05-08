@@ -1,8 +1,9 @@
 import hashlib
 
+from code_api.models import CodeDocument
+
 import pytest
 
-from code_api.models import CodeDocument
 from django.urls import reverse
 from language_api.models import Language
 from rest_framework import status
@@ -186,7 +187,7 @@ class BulkDeleteViewTestCase(APITestCase):
 
 
 class CodeDocumentListViewTestCase(APITestCase):
-    def test_get_code_documents(self):
+    def setUp(self):
         code_document_1 = CodeDocument.objects.create(
             id="f363f562-bc30-42aa-b96c-ff5c01c57e2c",
             title="Test document 1",
@@ -214,22 +215,25 @@ class CodeDocumentListViewTestCase(APITestCase):
         code_document_2.tags.set(
             [Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")]
         )
-        self.url = reverse("code-documents")
+        self.url = reverse("code-documents-list")
 
+    def test_get_code_documents(self):
         response = self.client.get(self.url)
 
+        results = response.data["results"]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]["title"], "Test document 1")
-        self.assertEqual(response.data[1]["title"], "Test document 2")
+        self.assertEqual(len(response.data["results"]), 2)
+        self.assertEqual(results[0]["title"], "Test document 1")
+        self.assertEqual(results[1]["title"], "Test document 2")
 
     def test_get_code_documents_with_title_filter(self):
         response = self.client.get(self.url + "?language=Python")
 
+        results = response.data["results"]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]["title"], "Test document 1")
-        self.assertEqual(response.data[1]["title"], "Test document 2")
+        self.assertEqual(len(response.data["results"]), 2)
+        self.assertEqual(results[0]["title"], "Test document 1")
+        self.assertEqual(results[1]["title"], "Test document 2")
 
     def test_get_code_documents_with_tags_filter(self):
         response = self.client.get(self.url + "?tags=tag1")
