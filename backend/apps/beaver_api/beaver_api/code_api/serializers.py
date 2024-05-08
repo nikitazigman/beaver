@@ -10,17 +10,20 @@ from tags_api.models import Tag
 
 
 class CodeDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CodeDocument
+        fields = "__all__"
+        read_only_fields = ("id", "created_at", "updated_at")
+
     id = serializers.UUIDField(required=False)
     tags = serializers.SlugRelatedField(
         many=True,
         slug_field="name",
         queryset=Tag.objects.all(),
-        error_messages={"Tag with name {value} does not exist."},
     )
     language = serializers.SlugRelatedField(
         slug_field="name",
         queryset=Language.objects.all(),
-        error_messages={"Language with name {value} does not exist."},
     )
 
     def create(self, validated_data):
@@ -43,11 +46,6 @@ class CodeDocumentSerializer(serializers.ModelSerializer):
             instance.tags.set(tags_data)
 
         return instance
-
-    class Meta:
-        model = CodeDocument
-        fields = "__all__"
-        read_only_fields = ("id", "created_at", "updated_at")
 
     def validate_title(self, value):
         if CodeDocument.objects.filter(title=value).exists():
