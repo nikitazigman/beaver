@@ -54,7 +54,7 @@ class BulkCreateViewTestCase(APITestCase):
             self.url, data=self.valid_data, format="json"
         )
 
-        created_code_documents = CodeDocument.objects.all()
+        created_code_documents = CodeDocument.objects.all().order_by("title")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         for document, data in zip(created_code_documents, self.valid_data):

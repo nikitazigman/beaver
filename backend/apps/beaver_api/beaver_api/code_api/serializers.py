@@ -47,18 +47,6 @@ class CodeDocumentSerializer(serializers.ModelSerializer):
 
         return instance
 
-    def validate_title(self, value):
-        if CodeDocument.objects.filter(title=value).exists():
-            raise serializers.ValidationError("Title must be unique.")
-        return value
-
-    def validate_code(self, value):
-        if CodeDocument.objects.filter(code=value).exists():
-            raise serializers.ValidationError(
-                "Code snippet already exists in the database."
-                )
-        return value
-
     def validate_link_to_project(self, value):
         url_validator = URLValidator()
         try:
