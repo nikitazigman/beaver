@@ -61,7 +61,13 @@ class CodeDocumentDeleteView(generics.DestroyAPIView):
 
 
 class CodeDocumentListView(generics.ListAPIView):
-    queryset = CodeDocument.objects.all()
+    queryset = (
+    CodeDocument.objects
+    .seal()
+    .select_related('language')
+    .prefetch_related('tags')
+    .all()
+)
     serializer_class = CodeDocumentSerializer
     pagination_class = CodeDocumentPagination
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
