@@ -9,10 +9,10 @@ from code_api.serializers import (
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, status
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 
 class GetRandomCodeDocumentView(GenericAPIView, GetRandomObjectMixin):
@@ -53,7 +53,7 @@ class CodeDocumentDeleteView(generics.DestroyAPIView):
     serializer_class = CodeDocumentSerializer
 
     def delete(self, request: Request, *args, **kwargs):
-        ids = request.data.get("ids", [])
+        ids = request.data.get("ids")
         if not ids:
             raise ValidationError("No 'ids' provided for deletion.")
         CodeDocument.objects.filter(id__in=ids).delete()
