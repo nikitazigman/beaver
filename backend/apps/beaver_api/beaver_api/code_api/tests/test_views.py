@@ -11,7 +11,7 @@ from rest_framework.test import APITestCase
 from tags_api.models import Tag
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="class")
 def setup_db():
     Tag.objects.create(id="939551ed-b25d-4dec-9258-733277616709", name="tag1")
     Tag.objects.create(id="b7c16bf7-d4ad-404f-9402-f41d4cefdc53", name="tag2")
@@ -30,7 +30,8 @@ def setup_db():
 
 
 class BulkCreateViewTestCase(APITestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         self.url = reverse("code-document-bulk-create")
         self.valid_data = [
             {
@@ -67,9 +68,60 @@ class BulkCreateViewTestCase(APITestCase):
                 data["tags"],
             )
 
+    def test_create_single_code_document_with_valid_data(self):
+        valid_data = [
+            {
+                "title": "Test document",
+                "code": "print('Hello, World!')",
+                "link_to_project": "https://leetcode.com/problems/integer-to-roman/",
+                "language": "Python",
+                "tags": ["tag1", "tag2"],
+            }
+        ]
+        response = self.client.post(self.url, data=valid_data, format="json")
+
+        created_code_documents = CodeDocument.objects.all().order_by("title")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        for document, data in zip(created_code_documents, valid_data):
+            self.assertEqual(document.title, data["title"])
+            self.assertEqual(document.language.name, data["language"])
+            self.assertEqual(document.code, data["code"])
+            self.assertEqual(document.link_to_project, data["link_to_project"])
+            self.assertEqual(
+                list(document.tags.values_list("name", flat=True)),
+                data["tags"],
+            )
+
+    def test_create_code_document_without_title(self):
+        data = {
+            "code": "print('Hello, World!')",
+            "link_to_project": "https://leetcode.com/problems/integer-to-roman/",
+            "language": "Python",
+            "tags": ["tag1", "tag2"],
+        }
+        response = self.client.post(self.url, data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_code_document_empty_code_field(self):
+        invalid_data = {**self.valid_data[0], "code": ""}
+        response = self.client.post(self.url, data=invalid_data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_code_document_non_existent_language(self):
+        invalid_data = {**self.valid_data[0], "language": "NonExistentLang"}
+        response = self.client.post(self.url, data=invalid_data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_code_document_non_existent_tag(self):
+        invalid_data = {**self.valid_data[0], "tags": ["nonexistenttag"]}
+        response = self.client.post(self.url, data=invalid_data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class BulkUpdateViewTestCase(APITestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         code_document_1 = CodeDocument.objects.create(
             id="03ead967-0bb6-4a02-97a1-4f7d8d27ce04",
             title="Test document 1",
@@ -136,9 +188,57 @@ class BulkUpdateViewTestCase(APITestCase):
                 data["tags"],
             )
 
+    def test_update_single_code_document(self):
+        valid_data = [
+            {
+                "id": "03ead967-0bb6-4a02-97a1-4f7d8d27ce04",
+                "title": "Updated document 1",
+                "code": "print('Updated code 1')",
+                "link_to_project": "https://leetcode.com/problems/merge-k-sorted-lists/",
+                "language": "Python",
+                "tags": ["tag1", "tag2"],
+            }
+        ]
+        response = self.client.put(
+            self.url, data=self.valid_data, format="json"
+        )
+
+        updated_code_documents = CodeDocument.objects.all()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        for document, data in zip(updated_code_documents, valid_data):
+            self.assertEqual(document.title, data["title"])
+            self.assertEqual(document.language.name, data["language"])
+            self.assertEqual(document.code, data["code"])
+            self.assertEqual(document.link_to_project, data["link_to_project"])
+            self.assertEqual(
+                list(document.tags.values_list("name", flat=True)),
+                data["tags"],
+            )
+
+    def test_update_code_document_with_wrong_id(self):
+        nonexistent_data = [
+            {
+                "id": "c4ce2e1a-cff7-4281-bcb4-67a3af313d26",
+                "title": "Should fail",
+                "code": "print('This should not work.')",
+                "link_to_project": "https://example.com",
+                "language": "Python",
+                "tags": ["tag1", "tag2"],
+            }
+        ]
+        with pytest.raises(CodeDocument.DoesNotExist):
+            self.client.put(self.url, nonexistent_data, format="json")
+
+    def test_update_code_document_with_invalid_data_submission(self):
+        invalid_data = [dict(data, code="") for data in self.valid_data]
+        response = self.client.put(self.url, invalid_data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class BulkDeleteViewTestCase(APITestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         code_document_1 = CodeDocument.objects.create(
             id="f363f562-bc30-42aa-b96c-ff5c01c57e2c",
             title="Test document 1",
@@ -185,9 +285,27 @@ class BulkDeleteViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(CodeDocument.objects.count(), 0)
 
+    def test_delete_single_code_document(self):
+        valid_data = {"ids": ["f363f562-bc30-42aa-b96c-ff5c01c57e2c"]}
+        self.assertEqual(CodeDocument.objects.count(), 2)
+
+        response = self.client.delete(self.url, data=valid_data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(CodeDocument.objects.count(), 1)
+
+    def test_bulk_delete_code_documents_with_no_ids(self):
+        valid_data = {"ids": []}
+        self.assertEqual(CodeDocument.objects.count(), 2)
+
+        response = self.client.delete(self.url, data=valid_data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class CodeDocumentListViewTestCase(APITestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         code_document_1 = CodeDocument.objects.create(
             id="f363f562-bc30-42aa-b96c-ff5c01c57e2c",
             title="Test document 1",
