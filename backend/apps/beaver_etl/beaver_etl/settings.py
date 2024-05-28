@@ -1,9 +1,10 @@
+from functools import lru_cache
 from pathlib import Path
 
 from pydantic_settings import BaseSettings
 
 
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -14,3 +15,9 @@ class Settings(BaseSettings):
     relative_path_to_readme: str = "README.md"
 
     service_url: str = "http://localhost:8000/"
+    chunk_size: int = 10
+
+
+@lru_cache(maxsize=1)
+def get_settings() -> Settings:
+    return Settings()

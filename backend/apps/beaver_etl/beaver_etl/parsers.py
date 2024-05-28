@@ -8,7 +8,7 @@ from beaver_etl.schemas import ParserCodeSchema
 
 class IParser(ABC):
     @abstractmethod
-    def retrieve_data(self, project: Path) -> ParserCodeSchema:
+    def parse(self, project: Path) -> ParserCodeSchema:
         """retrieves data from a python project"""
 
 
@@ -23,7 +23,7 @@ class PoetryProjectParser(IParser):
         self.path_to_pyproject_toml = path_to_pyproject_toml
         self.path_to_readme = path_to_readme
 
-    def retrieve_data(self, project: Path) -> ParserCodeSchema:
+    def parse(self, project: Path) -> ParserCodeSchema:
         poetry_project_config = self._toml_to_dict(project)
         link_to_task = self._get_link_to_task(poetry_project_config)
         title = self._get_title(poetry_project_config)
@@ -34,7 +34,7 @@ class PoetryProjectParser(IParser):
 
         code_schema = ParserCodeSchema(
             source_code=source_code,
-            link_to_task=link_to_task,
+            link=link_to_task,
             title=title,
             types=types,
             language="python",
