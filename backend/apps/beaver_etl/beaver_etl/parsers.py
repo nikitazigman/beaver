@@ -3,25 +3,25 @@ import tomllib
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from beaver_etl.schemas.parser import ParserCodeSchema
+from beaver_etl.schemas import ParserCodeSchema
 
 
-class IPythonProjectParser(ABC):
+class IParser(ABC):
     @abstractmethod
     def retrieve_data(self, project: Path) -> ParserCodeSchema:
         """retrieves data from a python project"""
 
 
-class PoetryProjectParser(IPythonProjectParser):
+class PoetryProjectParser(IParser):
     def __init__(
         self,
-        relative_path_to_main: str = "src/main.py",
-        relative_path_to_pyproject_toml: str = "pyproject.toml",
-        relative_path_to_readme: str = "README.md",
+        path_to_main: str,
+        path_to_pyproject_toml: str,
+        path_to_readme: str,
     ):
-        self.relative_path_to_main = relative_path_to_main
-        self.relative_path_to_pyproject_toml = relative_path_to_pyproject_toml
-        self.relative_path_to_readme = relative_path_to_readme
+        self.path_to_main = path_to_main
+        self.path_to_pyproject_toml = path_to_pyproject_toml
+        self.path_to_readme = path_to_readme
 
     def retrieve_data(self, project: Path) -> ParserCodeSchema:
         poetry_project_config = self._toml_to_dict(project)
@@ -44,7 +44,7 @@ class PoetryProjectParser(IPythonProjectParser):
 
     def _toml_to_dict(self, project: Path) -> dict:
         return tomllib.loads(
-            (project / self.relative_path_to_pyproject_toml).read_text()
+            (project / self.path_to_pyproject_toml).read_text()
         )
 
     def _get_link_to_task(self, poetry_config: dict) -> str:
@@ -57,7 +57,17 @@ class PoetryProjectParser(IPythonProjectParser):
         return poetry_config["tool"]["poetry"]["keywords"]
 
     def _get_source_code(self, project: Path) -> str:
-        return (project / self.relative_path_to_main).read_text()
+        return (project / self.path_to_main).read_text()
 
     def _get_readme(self, project: Path) -> str:
-        return (project / self.relative_path_to_readme).read_text()
+        return (project / self.path_to_readme).read_text()
+
+
+def get_parser(
+    path_to_main: str,
+    path_to_pyproject_toml: str,
+    path_to_readme: str,
+) -> IParser:
+    return PoetryProjectParser(
+        path_to_main, path_to_pyproject_toml, path_to_readme
+    )
