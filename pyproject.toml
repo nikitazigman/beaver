@@ -1,6 +1,7 @@
 [tool.mypy]
 files = "backend/"
 ignore_missing_imports = "True"
+enable-incomplete-feature= "NewGenericSyntax"
 strict_optional = "True"
 plugins = ["pydantic.mypy"]
 
