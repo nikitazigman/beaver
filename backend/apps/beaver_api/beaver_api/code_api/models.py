@@ -1,5 +1,3 @@
-import uuid
-
 from beaver_api.models import TimeStampMixin, UUIDMixin
 from django.db import models
 from language_api.models import Language
@@ -8,8 +6,6 @@ from tags_api.models import Tag
 
 
 class CodeDocument(UUIDMixin, TimeStampMixin, SealableModel):  # type: ignore
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
     title: models.CharField = models.CharField(
         max_length=255, blank=False, null=False, unique=True
     )
