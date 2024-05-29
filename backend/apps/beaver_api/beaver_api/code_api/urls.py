@@ -1,8 +1,8 @@
 from code_api.views import (
-    CodeDocumentCreateView,
-    CodeDocumentDeleteView,
+    CodeDocumentBulkCreateView,
+    CodeDocumentBulkDeleteView,
+    CodeDocumentBulkUpdateView,
     CodeDocumentListView,
-    CodeDocumentUpdateView,
     GetRandomCodeDocumentView,
 )
 
@@ -17,17 +17,17 @@ urlpatterns = [
     ),
     path(
         "bulk_create/",
-        CodeDocumentCreateView.as_view(),
+        CodeDocumentBulkCreateView.as_view(),
         name="code-document-bulk-create",
     ),
     path(
         "bulk_update/",
-        CodeDocumentUpdateView.as_view(),
+        CodeDocumentBulkUpdateView.as_view(),
         name="code-document-bulk-update",
     ),
     path(
         "bulk_delete/",
-        CodeDocumentDeleteView.as_view(),
+        CodeDocumentBulkDeleteView.as_view(),
         name="code-document-bulk-delete",
     ),
     path(
