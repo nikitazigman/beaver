@@ -20,8 +20,9 @@ class Service(IService):
         projects = find_projects(path=path_dataset, key_file="pyproject.toml")
         code_schemas = [self.parser.parse(project) for project in projects]
 
-        for chunk in chunked(code_schemas, chunk_size):
-            self.client.send(chunk)
+        with self.client as client:
+            for chunk in chunked(code_schemas, chunk_size):
+                client.send(chunk)
 
 
 def get_service(parser: IParser, client: IClient) -> IService:
