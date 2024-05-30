@@ -123,7 +123,6 @@ class BulkUpdateViewTestCase(APITestCase):
     @classmethod
     def setUpTestData(self):
         code_document_1 = CodeDocument.objects.create(
-            id="03ead967-0bb6-4a02-97a1-4f7d8d27ce04",
             title="Test document 1",
             code="print('Test Code 1')",
             link_to_project="https://leetcode.com/problems/longest-common-prefix/",
@@ -137,7 +136,6 @@ class BulkUpdateViewTestCase(APITestCase):
         )
 
         code_document_2 = CodeDocument.objects.create(
-            id="747c10f1-518f-4be7-9397-e2ca13dcd9f9",
             title="Test document 2",
             code="print('Test Code 2')",
             link_to_project="https://leetcode.com/problems/reverse-integer/",
@@ -153,7 +151,7 @@ class BulkUpdateViewTestCase(APITestCase):
         self.url = reverse("code-document-bulk-update")
         self.valid_data = [
             {
-                "id": "03ead967-0bb6-4a02-97a1-4f7d8d27ce04",
+                "id": code_document_1.id,
                 "title": "Updated document 1",
                 "code": "print('Updated code 1')",
                 "link_to_project": "https://leetcode.com/problems/merge-k-sorted-lists/",
@@ -161,7 +159,7 @@ class BulkUpdateViewTestCase(APITestCase):
                 "tags": ["tag1", "tag2"],
             },
             {
-                "id": "747c10f1-518f-4be7-9397-e2ca13dcd9f9",
+                "id": code_document_2.id,
                 "title": "Updated document 2",
                 "code": "console.log('Updated code 2');",
                 "link_to_project": "https://leetcode.com/problems/combination-sum-ii/",
@@ -171,7 +169,7 @@ class BulkUpdateViewTestCase(APITestCase):
         ]
 
     def test_bulk_update_code_documents_with_valid_data(self):
-        response = self.client.put(
+        response = self.client.post(
             self.url, data=self.valid_data, format="json"
         )
 
@@ -199,7 +197,7 @@ class BulkUpdateViewTestCase(APITestCase):
                 "tags": ["tag1", "tag2"],
             }
         ]
-        response = self.client.put(
+        response = self.client.post(
             self.url, data=self.valid_data, format="json"
         )
 
@@ -227,12 +225,15 @@ class BulkUpdateViewTestCase(APITestCase):
                 "tags": ["tag1", "tag2"],
             }
         ]
-        with pytest.raises(CodeDocument.DoesNotExist):
-            self.client.put(self.url, nonexistent_data, format="json")
+
+        self.assertEqual(CodeDocument.objects.count(), 2)
+        response = self.client.post(self.url, nonexistent_data, format="json")
+        self.assertEqual(CodeDocument.objects.count(), 2)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_code_document_with_invalid_data_submission(self):
         invalid_data = [dict(data, code="") for data in self.valid_data]
-        response = self.client.put(self.url, invalid_data, format="json")
+        response = self.client.post(self.url, invalid_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 

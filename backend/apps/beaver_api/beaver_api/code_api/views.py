@@ -7,7 +7,7 @@ from code_api.serializers import (
     CodeDocumentLimitedContentSerializer,
     CodeDocumentSerializer,
 )
-from code_api.services import delete_objects_by_ids
+from code_api.services import check_ids_existence, delete_objects_by_ids
 
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
@@ -47,11 +47,14 @@ class CodeDocumentBulkUpdateView(generics.GenericAPIView):
     @transaction.atomic
     def post(self, request: Request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = self.get_serializer(
-            queryset, data=request.data, many=True
-        )
+        serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
-        serializer.update()
+
+        ids = [item["id"] for item in serializer.validated_data]
+        check_ids_existence(ids=ids, queryset=queryset)
+
+        delete_objects_by_ids(queryset, ids)
+        serializer.save()
 
         return Response(status=status.HTTP_200_OK)
 
