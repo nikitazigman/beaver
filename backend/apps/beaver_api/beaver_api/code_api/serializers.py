@@ -3,24 +3,69 @@ from uuid import UUID
 from code_api.models import CodeDocument
 from code_api.services import (
     compute_hash,
-    delete_objects_by_ids,
     get_or_create_obj_by_names,
 )
 
-from django.db.models import QuerySet
 from language_api.models import Language
 from rest_framework import serializers
 from tags_api.models import Tag
 
 
-def check_ids_existence(
-    ids: list[UUID], queryset: QuerySet[CodeDocument]
-) -> None:
-    code_docs = queryset.filter(id__in=ids)
-    if len(ids) != code_docs.count():
-        raise serializers.ValidationError(
-            "Some of the ids does not exist in db"
-        )
+# Note: We do the following so that users of the framework can use this style:
+#
+#     example_field = serializers.CharField(...)
+#
+# This helps keep the separation between model fields, form fields, and
+# serializer fields more explicit.
+from rest_framework.fields import (  # NOQA # isort:skip
+    BooleanField,
+    CharField,
+    ChoiceField,
+    DateField,
+    DateTimeField,
+    DecimalField,
+    DictField,
+    DurationField,
+    EmailField,
+    Field,
+    FileField,
+    FilePathField,
+    FloatField,
+    HiddenField,
+    HStoreField,
+    IPAddressField,
+    ImageField,
+    IntegerField,
+    JSONField,
+    ListField,
+    ModelField,
+    MultipleChoiceField,
+    ReadOnlyField,
+    RegexField,
+    SerializerMethodField,
+    SlugField,
+    TimeField,
+    URLField,
+    UUIDField,
+)
+from rest_framework.relations import (  # NOQA # isort:skip
+    HyperlinkedIdentityField,
+    HyperlinkedRelatedField,
+    ManyRelatedField,
+    PrimaryKeyRelatedField,
+    RelatedField,
+    SlugRelatedField,
+    StringRelatedField,
+)
+
+# Non-field imports, but public API
+from rest_framework.fields import (  # NOQA # isort:skip
+    CreateOnlyDefault,
+    CurrentUserDefault,
+    SkipField,
+    empty,
+)
+from rest_framework.relations import Hyperlink, PKOnlyObject  # NOQA # isort:skip
 
 
 class CodeDocumentListSerializer(serializers.ListSerializer):
@@ -62,14 +107,6 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
 
         return new_code_docs
 
-    def update(
-        self, instance: QuerySet[CodeDocument], validated_data: list[dict]
-    ):
-        ids = [item["id"] for item in validated_data]
-        check_ids_existence(ids=ids, queryset=instance)
-        delete_objects_by_ids(instance, ids)
-        return self.create(validated_data)
-
 
 class CodeDocumentSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
@@ -95,7 +132,7 @@ class CodeDocumentBulkSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
     tags = serializers.ListField(child=serializers.CharField())
     language = serializers.CharField()
-    link_to_project = serializers.URLField()
+    link_to_project = serializers.CharField()
 
     class Meta:
         model = CodeDocument

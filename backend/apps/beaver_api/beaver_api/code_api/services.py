@@ -6,6 +6,7 @@ from uuid import UUID
 
 from django.db.models import Model, QuerySet
 from django.http import Http404
+from rest_framework.exceptions import ValidationError
 
 
 T = TypeVar("T", bound=Model)
@@ -44,3 +45,9 @@ def get_or_create_obj_by_names[T: Model](
     new_objs = model_class.objects.bulk_create(new_obj_instances)
 
     return list(existing_objs) + new_objs
+
+
+def check_ids_existence(ids: list[UUID], queryset: QuerySet) -> None:
+    code_docs = queryset.filter(id__in=ids)
+    if len(ids) != code_docs.count():
+        raise ValidationError("Some of the ids does not exist in db")
