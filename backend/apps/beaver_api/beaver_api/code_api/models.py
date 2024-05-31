@@ -1,10 +1,11 @@
 from beaver_api.models import TimeStampMixin, UUIDMixin
 from django.db import models
 from language_api.models import Language
+from seal.models import SealableModel
 from tags_api.models import Tag
 
 
-class CodeDocument(UUIDMixin, TimeStampMixin):  # type: ignore
+class CodeDocument(UUIDMixin, TimeStampMixin, SealableModel):  # type: ignore
     title: models.CharField = models.CharField(
         max_length=255, blank=False, null=False, unique=True
     )
@@ -23,6 +24,9 @@ class CodeDocument(UUIDMixin, TimeStampMixin):  # type: ignore
     )
     tags: models.ManyToManyField = models.ManyToManyField(
         Tag, related_name="code_documents"
+    )
+    code_content_hash: models.CharField = models.CharField(
+        max_length=64, blank=False, null=False, unique=True, serialize=False
     )
 
     def __str__(self) -> str:

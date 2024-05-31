@@ -14,6 +14,9 @@ django-filter = "^23.5"
 django-split-settings = "^1.2.0"
 django-environ = "^0.11.2"
 psycopg2-binary = "^2.9.9"
+redis = "^5.0.3"
+drf-spectacular = "^0.27.2"
+django-seal = "^1.6.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -23,7 +26,13 @@ django-cors-headers = "^4.3.1"
 django-filter-stubs = "^0.1.3"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.14.5"}
 drf-yasg = {extras = ["validation"], version = "^1.21.7"}
+pytest-django = "^4.8.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "beaver_api"
+DJANGO_SETTINGS_MODULE = "beaver_api.settings"
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
