@@ -1,12 +1,12 @@
-import hashlib
-
+from datetime import datetime
 from random import choice
 from typing import TypeVar
 from uuid import UUID
 
+from code_api.models import CodeDocument
+
 from django.db.models import Model, QuerySet
 from django.http import Http404
-from rest_framework.exceptions import ValidationError
 
 
 T = TypeVar("T", bound=Model)
@@ -24,15 +24,6 @@ def get_random_object_id(queryset: QuerySet) -> UUID:
     return random_id
 
 
-def delete_objects_by_ids(queryset: QuerySet, ids: list[UUID]) -> None:
-    queryset.filter(id__in=ids).delete()
-
-
-def compute_hash(code: str) -> dict:
-    encoded_code_content = code.encode("utf-8")
-    return hashlib.sha256(encoded_code_content).hexdigest()
-
-
 def get_or_create_obj_by_names[T: Model](
     names: list[str], model_class: T
 ) -> list[T]:
@@ -47,7 +38,8 @@ def get_or_create_obj_by_names[T: Model](
     return list(existing_objs) + new_objs
 
 
-def check_ids_existence(ids: list[UUID], queryset: QuerySet) -> None:
-    code_docs = queryset.filter(id__in=ids)
-    if len(ids) != code_docs.count():
-        raise ValidationError("Some of the ids does not exist in db")
+def delete_docs_before_timestamp(
+    timestamp: datetime, queryset: QuerySet[CodeDocument]
+) -> None:
+    docs_to_delete = queryset.filter(last_synchronization__lt=timestamp)
+    docs_to_delete.delete()

@@ -1,8 +1,5 @@
-from uuid import UUID
-
 from code_api.models import CodeDocument
 from code_api.services import (
-    compute_hash,
     get_or_create_obj_by_names,
 )
 
@@ -88,7 +85,6 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
         code_objects: list[CodeDocument] = []
         code_through_tags: list[CodeDocument.tags.through] = []
         for data in validated_data:
-            data["code_content_hash"] = compute_hash(data["code"])
             data["language"] = language_mapping[data["language"]]
             tags = data.pop("tags")
             code_doc = CodeDocument(**data)
@@ -141,21 +137,5 @@ class CodeDocumentBulkSerializer(serializers.ModelSerializer):
         list_serializer_class = CodeDocumentListSerializer
 
 
-class CodeDocumentLimitedContentSerializer(CodeDocumentSerializer):
-    class Meta:
-        model = CodeDocument
-        fields = ["id", "title", "language", "tags", "code_content_hash"]
-        read_only_fields = fields
-
-
 class CodeDocumentDeleteSerializer(serializers.Serializer):
-    ids = serializers.ListField(child=serializers.UUIDField())
-
-    def validate_ids(self, value: list[UUID]) -> list[UUID]:
-        if not value:
-            raise serializers.ValidationError("The list of ids is empty.")
-
-        if len(value) != CodeDocument.objects.filter(id__in=value).count():
-            raise serializers.ValidationError("Some of the ids are invalid.")
-
-        return value
+    timestamp = serializers.DateTimeField()
