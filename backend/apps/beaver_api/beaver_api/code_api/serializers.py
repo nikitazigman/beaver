@@ -8,63 +8,6 @@ from rest_framework import serializers
 from tags_api.models import Tag
 
 
-# Note: We do the following so that users of the framework can use this style:
-#
-#     example_field = serializers.CharField(...)
-#
-# This helps keep the separation between model fields, form fields, and
-# serializer fields more explicit.
-from rest_framework.fields import (  # NOQA # isort:skip
-    BooleanField,
-    CharField,
-    ChoiceField,
-    DateField,
-    DateTimeField,
-    DecimalField,
-    DictField,
-    DurationField,
-    EmailField,
-    Field,
-    FileField,
-    FilePathField,
-    FloatField,
-    HiddenField,
-    HStoreField,
-    IPAddressField,
-    ImageField,
-    IntegerField,
-    JSONField,
-    ListField,
-    ModelField,
-    MultipleChoiceField,
-    ReadOnlyField,
-    RegexField,
-    SerializerMethodField,
-    SlugField,
-    TimeField,
-    URLField,
-    UUIDField,
-)
-from rest_framework.relations import (  # NOQA # isort:skip
-    HyperlinkedIdentityField,
-    HyperlinkedRelatedField,
-    ManyRelatedField,
-    PrimaryKeyRelatedField,
-    RelatedField,
-    SlugRelatedField,
-    StringRelatedField,
-)
-
-# Non-field imports, but public API
-from rest_framework.fields import (  # NOQA # isort:skip
-    CreateOnlyDefault,
-    CurrentUserDefault,
-    SkipField,
-    empty,
-)
-from rest_framework.relations import Hyperlink, PKOnlyObject  # NOQA # isort:skip
-
-
 class CodeDocumentListSerializer(serializers.ListSerializer):
     # TODO: Refactor
     def create(self, validated_data: list[dict]) -> list[CodeDocument]:

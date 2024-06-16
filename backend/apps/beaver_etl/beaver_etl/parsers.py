@@ -33,10 +33,10 @@ class PoetryProjectParser(IParser):
         readme = self._get_readme(project)
 
         code_schema = ParserCodeSchema(
-            source_code=source_code,
-            link=link_to_task,
+            code=source_code,
+            link_to_project=link_to_task,
             title=title,
-            types=types,
+            tags=types,
             language="python",
             readme=readme,
         )

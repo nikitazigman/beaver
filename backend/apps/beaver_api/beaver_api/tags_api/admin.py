@@ -1,2 +1,6 @@
+from tags_api.models import Tag
 
-# Register your models here.
+from django.contrib import admin
+
+
+admin.site.register(Tag)

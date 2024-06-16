@@ -9,7 +9,7 @@ from django.urls import path
 
 urlpatterns = [
     path(
-        "code_document/",
+        "random/",
         GetRandomCodeDocumentView.as_view(),
         name="code_document",
     ),

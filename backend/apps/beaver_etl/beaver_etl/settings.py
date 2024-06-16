@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     relative_path_to_pyproject_toml: str = "pyproject.toml"
     relative_path_to_readme: str = "README.md"
 
-    service_url: str = "http://localhost:8000/"
+    service_url: str = "http://localhost:8000"
     chunk_size: int = 10
 
 

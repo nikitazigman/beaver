@@ -27,7 +27,7 @@ urlpatterns: list[URLPattern | URLResolver] = [
         "api/v1/auth/",
         include("rest_framework.urls", namespace="rest_framework"),
     ),
-    path("api/v1/", include("code_api.urls"), name="code_api"),
+    path("api/v1/code_documents/", include("code_api.urls"), name="code_api"),
 ]
 
 if settings.DEBUG:
