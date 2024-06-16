@@ -25,8 +25,8 @@ class CodeDocument(UUIDMixin, TimeStampMixin, SealableModel):  # type: ignore
     tags: models.ManyToManyField = models.ManyToManyField(
         Tag, related_name="code_documents"
     )
-    code_content_hash: models.CharField = models.CharField(
-        max_length=64, blank=False, null=False, unique=True, serialize=False
+    last_synchronization: models.DateTimeField = models.DateTimeField(
+        null=False, blank=False
     )
 
     def __str__(self) -> str:
