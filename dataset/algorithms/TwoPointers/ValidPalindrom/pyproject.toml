@@ -3,8 +3,8 @@ name = "src"
 version = "0.1.0"
 authors = ["nikita zigman <zigman.nikita@gmail.com>"]
 readme = "README.md"
-documentation = "https://leetcode.com/problems/merge-sorted-array/"
-description = "Merge Sorted Array"
+documentation = "https://leetcode.com/problems/merge-sorted-array2"
+description = "Valid Palindrom"
 keywords = ["array", "two pointers", "sorting"]
 
 [tool.poetry.dependencies]
