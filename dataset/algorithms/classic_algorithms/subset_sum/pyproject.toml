@@ -3,9 +3,9 @@ name = "src"
 version = "0.1.0"
 authors = ["nikita zigman <zigman.nikita@gmail.com>"]
 readme = "README.md"
-documentation = "https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/"
-description = "Kadane Algorithm for Maximum Subarray Sum"
-keywords = ["dynamic programming", "array", "maximum subarray sum", "Kadane's Algorithm"]
+documentation = "https://www.geeksforgeeks.org/subset-sum-problem-dp-25/"
+description = "Subset Sum"
+keywords = ["dynamic programming", "recursion", "backtracking", "subset sum"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
