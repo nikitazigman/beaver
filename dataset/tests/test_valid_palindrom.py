@@ -1,6 +1,6 @@
 import pytest
 
-from src.main import Solution
+from algorithms.TwoPointers.ValidPalindrome.src.main import Solution
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+authors = ["nikita zigman <zigman.nikita@gmail.com>"]
+readme = "README.md"
+documentation = "https://www.geeksforgeeks.org/min-cost-path-dp-6/"
+description = "Minimum Path Sum in a Grid"
+keywords = ["dynamic programming", "matrix", "minimum path sum", "grid"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^7.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

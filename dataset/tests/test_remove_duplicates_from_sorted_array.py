@@ -1,6 +1,8 @@
 import pytest
 
-from src.main import Solution
+from algorithms.Arrays.RemoveDuplicatesFromSortedArrayII.src.main import (
+    Solution,
+)
 
 
 @pytest.mark.parametrize(
