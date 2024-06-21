@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+authors = ["nikita zigman <zigman.nikita@gmail.com>"]
+readme = "README.md"
+documentation = "https://www.geeksforgeeks.org/subset-sum-problem-dp-25/"
+description = "Subset Sum"
+keywords = ["recursion", "backtracking", "subset sum", "dynamic programming"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^7.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
