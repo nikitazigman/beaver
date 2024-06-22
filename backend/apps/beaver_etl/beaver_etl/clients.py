@@ -38,7 +38,8 @@ class BeaverAPI(IClient):
     update_path = "bulk_update/"
     delete_path = "bulk_delete/"
 
-    def __init__(self, api_url: str) -> None:
+    def __init__(self, api_url: str, token: str) -> None:
+        self.token = token
         self.base_url = f"{api_url}/{self.api_version}{self.resource_path}"
 
     def start_session(self) -> None:
@@ -50,6 +51,7 @@ class BeaverAPI(IClient):
         http_adapter = HTTPAdapter(max_retries=retries)
         self.session = requests.Session()
         self.session.mount("http://", http_adapter)
+        self.session.headers["Authorization"] = f"Token {self.token}"
 
     def close_session(self) -> None:
         self.session.close()
@@ -79,5 +81,5 @@ class BeaverAPI(IClient):
         response.raise_for_status()
 
 
-def get_client(api_url: str) -> IClient:
-    return BeaverAPI(api_url=api_url)
+def get_client(api_url: str, token: str) -> IClient:
+    return BeaverAPI(api_url=api_url, token=token)

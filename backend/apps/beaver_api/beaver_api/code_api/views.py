@@ -13,6 +13,7 @@ from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -31,6 +32,7 @@ class GetRandomCodeDocumentView(GenericAPIView, GetRandomObjectMixin):
 class CodeDocumentBulkUpdateView(generics.GenericAPIView):
     serializer_class = CodeDocumentBulkSerializer
     queryset = CodeDocument.objects.all()
+    permission_classes = [IsAuthenticated]
 
     @transaction.atomic
     def post(self, request: Request, *args, **kwargs):
@@ -50,6 +52,7 @@ class CodeDocumentBulkUpdateView(generics.GenericAPIView):
 class CodeDocumentBulkDeleteView(generics.GenericAPIView):
     serializer_class = CodeDocumentDeleteSerializer
     queryset = CodeDocument.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def post(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
