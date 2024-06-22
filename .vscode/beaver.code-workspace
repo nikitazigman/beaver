@@ -17,6 +17,9 @@
 		},
 		{
 			"path": ".."
+		},
+		{
+			"path": "../backend/apps/beaver_linter"
 		}
 	], 
 	"settings": {
