@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "src"
 version = "0.1.0"
-authors = ["nikita zigman <zigman.nikita@gmail.com>"]
+authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
 readme = "README.md"
 documentation = "https://www.geeksforgeeks.org/bin-packing-problem-minimize-number-of-used-bins/"
 description = "Bin Packing Algorithms: Next Fit, First Fit, and Best Fit"

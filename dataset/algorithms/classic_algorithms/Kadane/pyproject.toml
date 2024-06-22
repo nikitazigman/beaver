@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "src"
 version = "0.1.0"
-authors = ["nikita zigman <zigman.nikita@gmail.com>"]
+authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
 readme = "README.md"
 documentation = "https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/"
 description = "Kadane Algorithm for Maximum Subarray Sum"
