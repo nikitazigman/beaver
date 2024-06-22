@@ -6,7 +6,9 @@ from beaver_etl.settings import get_settings
 
 def main() -> None:
     settings = get_settings()
-    client = get_client(api_url=settings.service_url)
+    client = get_client(
+        api_url=settings.service_url, token=settings.api_secret_token
+    )
     parser = get_parser(
         path_to_main=settings.relative_path_to_main,
         path_to_pyproject_toml=settings.relative_path_to_pyproject_toml,

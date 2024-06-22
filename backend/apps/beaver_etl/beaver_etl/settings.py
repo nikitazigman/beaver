@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     service_url: str = "http://localhost:8000"
     chunk_size: int = 10
 
+    api_secret_token: str = "73092d292062a7cf2476d56770064c5d88b063d8"
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
