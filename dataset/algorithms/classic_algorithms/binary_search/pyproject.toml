@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
+readme = "README.md"
+documentation = "https://www.geeksforgeeks.org/binary-search/"
+description = "Binary Search Algorithm"
+keywords = ["binary search", "searching algorithm", "array search"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^7.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

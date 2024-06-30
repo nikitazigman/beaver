@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
+readme = "README.md"
+documentation = "https://www.geeksforgeeks.org/hashing-set-2-separate-chaining/"
+description = "Hash Map with Separate Chaining"
+keywords = ["hash map", "hashing", "separate chaining", "linked list"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^7.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
+readme = "README.md"
+documentation = "https://www.geeksforgeeks.org/stable-marriage-problem/"
+description = "Stable Match Algorithm for task-user pairing based on preferences and estimations"
+keywords = ["stable match", "stable marriage problem", "matching algorithm", "preferences", "estimations"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^7.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
