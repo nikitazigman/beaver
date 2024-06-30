@@ -27,13 +27,18 @@ class Graph:
             self.adjacency_list.get(vertex2) or []
         ) + [vertex1]
         self.costs[(vertex1, vertex2)] = cost
+        self.costs[(vertex2, vertex1)] = cost
 
     def add_edges(self, edges):
         for edge in edges:
             self.add_edge(*edge)
 
     def get_edge_cost(self, edge):
-        return self.costs.get(edge) or self.costs.get(edge[::-1])
+        return (
+            self.costs.get(edge)
+            if edge in self.costs
+            else self.costs.get(edge[::-1], 0)
+        )
 
     def remove_edge(self, vertex1, vertex2):
         list1, list2 = self.adjacency_list.get(
