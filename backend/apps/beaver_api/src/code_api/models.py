@@ -13,7 +13,7 @@ class CodeDocument(UUIDMixin, TimeStampMixin, SealableModel):  # type: ignore
         blank=False, null=False, unique=True
     )
     link_to_project: models.URLField = models.URLField(
-        blank=False, null=False, unique=True
+        blank=False, null=False, unique=False
     )
 
     language: models.ForeignKey = models.ForeignKey(
