@@ -1,15 +1,7 @@
+from beaver_cli.services.code_document import CodeService
+from beaver_cli.utils.session import Session
 from textual import events
 from textual.widgets import TextArea
-
-
-demo_code = (
-    "def bubble_sort(array):\n"
-    "    n = len(array)\n"
-    "    for i in range(n - 1):\n"
-    "        for j in range(0, n - i - 1):\n"
-    "            if array[j] > array[j + 1]:\n"
-    "                array[j], array[j + 1] = array[j + 1], array[j]\n"
-)
 
 
 class Code(TextArea, inherit_bindings=False):
@@ -28,8 +20,12 @@ class Code(TextArea, inherit_bindings=False):
     BINDINGS = []
 
     def on_mount(self) -> None:
+        with Session() as session:
+            service = CodeService(session=session)
+            code_document = service.get_code_document()
+
         self.user_input = ""
-        self.script = demo_code
+        self.script = code_document.code
         self.language = "python"
         self.theme = "dracula"
         self.read_only = True
