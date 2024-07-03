@@ -1,0 +1,12 @@
+name: Backend CI
+
+on:
+  workflow_call:
+
+
+jobs:
+  beaver_etl:
+    if: contains(github.event.head_commit.message, 'backend/apps/beaver_etl') || contains(github.event.pull_request.changed_files, 'backend/apps/beaver_etl/')
+    uses: ./.github/workflows/beaver_etl.yml
+    with:
+      ref: master
