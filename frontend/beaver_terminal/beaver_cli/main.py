@@ -1,16 +1,23 @@
-from beaver_cli.components.code.code import Code
-from beaver_cli.components.footer.footer import BeaverFooter
-from beaver_cli.components.header.header import BeaverHeader
+from beaver_cli.components.footer import BeaverFooter
+from beaver_cli.components.game_display import GameDisplay
+from beaver_cli.components.header import BeaverHeader
 
 from textual.app import App, ComposeResult
+
+
+code = "def sum(a: int, b: int):\n    return a + b\n"
 
 
 class BeaverCli(App):
     CSS_PATH = "main.tcss"
 
+    BINDINGS = [
+        # Binding("d", "toggle_dark", "Toggle dark mode", show=True),
+    ]
+
     def compose(self) -> ComposeResult:
         yield BeaverHeader(name="Beaver CLI")
-        yield Code()
+        yield GameDisplay()
         yield BeaverFooter()
 
 

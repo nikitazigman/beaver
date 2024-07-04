@@ -1,5 +1,3 @@
-from beaver_cli.services.code_document import CodeService
-from beaver_cli.utils.session import Session
 from textual import events
 from textual.widgets import TextArea
 
@@ -14,55 +12,50 @@ class Code(TextArea, inherit_bindings=False):
         background: $panel;
         border: $secondary tall;
         content-align: center middle;
+        text-opacity: 100%;
     }
     """
 
     BINDINGS = []
 
-    def on_mount(self) -> None:
-        with Session() as session:
-            service = CodeService(session=session)
-            code_document = service.get_code_document()
-
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.user_input = ""
-        self.script = code_document.code
-        self.language = "python"
-        self.theme = "dracula"
         self.read_only = True
-        self.text = self.script
 
     def get_character(self, event: events.Key) -> str:
         if event.key == "enter":
             return "\n"
         elif event.key == "tab":
             return "    "
-        else:
-            if event.is_printable:
-                return event.character
-            return ""
+
+        if not event.is_printable:
+            raise ValueError("Not a printable character")
+
+        return event.character
 
     def on_end(self) -> None:
-        self.app.exit(0)
+        ...
 
     def _on_key(self, event: events.Key) -> None:
-        if event.key == "backspace":
-            return
+        try:
+            character: str = self.get_character(event)
 
-        character: str = self.get_character(event)
+            user_input = self.user_input + character
+            is_match = user_input == self.text[: len(user_input)]
+            is_end = user_input == self.text
 
-        user_input = self.user_input + character
-        is_match = user_input == self.script[: len(user_input)]
-        is_end = user_input == self.script
+            if is_end:
+                self.on_end()
 
-        if is_end:
-            self.on_end()
+            if not is_match:
+                raise ValueError("Invalid input")
 
-        if is_match:
             self.user_input = user_input
             if event.key == "tab":
                 self.move_cursor_relative(rows=0, columns=4)
             else:
                 self.action_cursor_right()
 
-        else:
+        except ValueError:
             self.app.bell()
