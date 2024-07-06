@@ -1,12 +1,11 @@
 from textual.widgets import Static
 
 
-class TagDisplay(Static):
+class LanguageDisplay(Static):
     DEFAULT_CSS = """
-        TagDisplay {
+        LanguageDisplay {
             color: $text-muted;
             width: auto;
-            # content-align: center middle;
             text-opacity: 60%;
             height: auto;
             padding-right: 2;
@@ -14,4 +13,4 @@ class TagDisplay(Static):
     """
 
     def on_mount(self) -> None:
-        self.renderable = f"# Tags: {self.renderable}"
+        self.renderable = f"# Language: {self.renderable}"

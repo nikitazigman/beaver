@@ -7,9 +7,9 @@ from textual.widgets import Static
 class TimeDisplay(Static):
     DEFAULT_CSS = """
         TimeDisplay {
-            content-align: center middle;
+            # content-align: center middle;
             text-opacity: 60%;
-            height: 3;
+            height: auto;
         }
         .started TimeDisplay {
             text-opacity: 100%;

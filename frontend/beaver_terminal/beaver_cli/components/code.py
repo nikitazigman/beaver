@@ -1,27 +1,44 @@
 from textual import events
+from textual.events import Click, MouseDown, MouseMove, MouseUp
+from textual.message import Message
 from textual.widgets import TextArea
 
 
 class Code(TextArea, inherit_bindings=False):
     """Display a greeting."""
 
-    _inherit_bindings = False
     DEFAULT_CSS = """
     Code {
-        padding: 1 2;
         background: $panel;
-        border: $secondary tall;
+        border: none;
+        margin: 0;
+        padding: 1 0;
         content-align: center middle;
         text-opacity: 100%;
-    }
+
+        &:focus {
+            border: none;
+        }
+    }   
     """
 
     BINDINGS = []
+
+    class Running(Message):
+        """Color selected message."""
+
+        def __init__(self, running: bool) -> None:
+            self.running = running
+            super().__init__()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.user_input = ""
         self.read_only = True
+
+    def on_mount(self) -> None:
+        self.suppress_click()
+        self.disable_messages(MouseDown, MouseUp, MouseMove, Click)
 
     def get_character(self, event: events.Key) -> str:
         if event.key == "enter":
@@ -34,11 +51,29 @@ class Code(TextArea, inherit_bindings=False):
 
         return event.character
 
-    def on_end(self) -> None:
-        ...
+    def on_mouse_down(self, event: events.MouseDown) -> None:
+        event.stop()
 
-    def _on_key(self, event: events.Key) -> None:
+    async def _on_mouse_up(self, event: events.MouseDown) -> None:
+        event.stop()
+
+    async def _on_mouse_move(self, event: events.MouseMove) -> None:
+        event.stop()
+
+    async def _on_click(self, event: events.Click) -> None:
+        event.stop()
+
+    def start(self) -> None:
+        self.post_message(self.Running(running=True))
+
+    def stop(self) -> None:
+        self.post_message(self.Running(running=False))
+
+    def on_key(self, event: events.Key) -> None:
         try:
+            if not self.user_input:
+                self.start()
+
             character: str = self.get_character(event)
 
             user_input = self.user_input + character
@@ -46,7 +81,7 @@ class Code(TextArea, inherit_bindings=False):
             is_end = user_input == self.text
 
             if is_end:
-                self.on_end()
+                self.stop()
 
             if not is_match:
                 raise ValueError("Invalid input")
