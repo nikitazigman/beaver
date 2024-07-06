@@ -1,8 +1,13 @@
+from beaver_cli.components.code import (
+    UserCompletedCode,
+)
 from beaver_cli.components.footer import BeaverFooter
 from beaver_cli.components.game_display import GameDisplay
 from beaver_cli.components.header import BeaverHeader
+from beaver_cli.components.result_display import ResultDisplay
 
-from textual.app import App, ComposeResult
+from textual import on
+from textual.app import App, ComposeResult, NoMatches
 from textual.binding import Binding
 
 
@@ -31,13 +36,35 @@ class BeaverCli(App):
 
     def compose(self) -> ComposeResult:
         yield BeaverHeader(name="Beaver CLI")
+        # yield ResultDisplay()
         yield GameDisplay()
         yield BeaverFooter()
 
-    def action_load_new_game(self) -> None:
+    @on(UserCompletedCode)
+    def show_statistics(self, event: UserCompletedCode) -> None:
         game_display = self.query_one(GameDisplay)
-        game_display.load_new_game()
-        game_display.focus()
+        statistic = game_display.get_game_statistic()
+        game_display.remove()
+
+        self.mount(
+            ResultDisplay(
+                statistic=statistic,
+                intervals=20,
+            )
+        )
+
+    def action_load_new_game(self) -> None:
+        try:
+            self.query_one(ResultDisplay).remove()
+        except NoMatches:
+            ...
+
+        try:
+            game_display = self.query_one(GameDisplay)
+            game_display.load_new_game()
+            game_display.focus()
+        except NoMatches:
+            self.mount(GameDisplay())
 
 
 if __name__ == "__main__":

@@ -1,7 +1,24 @@
 from textual import events
 from textual.events import Click, MouseDown, MouseMove, MouseUp
 from textual.message import Message
+from textual.reactive import Reactive, reactive
 from textual.widgets import TextArea
+
+
+class UserStartTyping(Message):
+    """User has started the code."""
+
+
+class UserCompletedCode(Message):
+    """User has completed the code."""
+
+
+class UserErrorEvent(Message):
+    """User has made a typo."""
+
+
+class UserCorrectEvent(Message):
+    """User has made a typo."""
 
 
 class Code(TextArea, inherit_bindings=False):
@@ -23,73 +40,54 @@ class Code(TextArea, inherit_bindings=False):
     """
 
     BINDINGS = []
-
-    class Running(Message):
-        """Color selected message."""
-
-        def __init__(self, running: bool) -> None:
-            self.running = running
-            super().__init__()
+    user_input: Reactive = reactive("", always_update=True, init=False)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.user_input = ""
         self.read_only = True
 
     def on_mount(self) -> None:
         self.disable_messages(MouseDown, MouseUp, MouseMove, Click)
 
-    def get_character(self, event: events.Key) -> str:
-        if event.key == "enter":
-            return "\n"
-        elif event.key == "tab":
-            return "    "
+    def move_cursor_to_user_input_position(self, user_input: str) -> None:
+        user_input = user_input.split("\n")
+        row = len(user_input) - 1
+        column = len(user_input[-1])
+        self.move_cursor((row, column))
+
+    def watch_user_input(self, user_input: str) -> None:
+        self.move_cursor_to_user_input_position(user_input)
+        self.post_message(UserCorrectEvent())
+
+        if self.text == user_input:
+            self.post_message(UserCompletedCode())
+
+    def get_insert_value(self, event: events.Key) -> str:
+        mapping = {
+            "enter": "\n",
+            "tab": "    ",
+        }
+
+        if value := mapping.get(event.key):
+            return value
 
         if not event.is_printable:
             raise ValueError("Not a printable character")
 
         return event.character
 
-    def on_mouse_down(self, event: events.MouseDown) -> None:
-        event.stop()
-
-    async def _on_mouse_up(self, event: events.MouseDown) -> None:
-        event.stop()
-
-    async def _on_mouse_move(self, event: events.MouseMove) -> None:
-        event.stop()
-
-    async def _on_click(self, event: events.Click) -> None:
-        event.stop()
-
-    def start(self) -> None:
-        self.post_message(self.Running(running=True))
-
-    def stop(self) -> None:
-        self.post_message(self.Running(running=False))
-
     def on_key(self, event: events.Key) -> None:
         try:
-            if not self.user_input:
-                self.start()
+            not self.user_input and self.post_message(UserStartTyping())
 
-            character: str = self.get_character(event)
-
+            character: str = self.get_insert_value(event)
             user_input = self.user_input + character
-            is_match = user_input == self.text[: len(user_input)]
-            is_end = user_input == self.text
 
-            if is_end:
-                self.stop()
-
-            if not is_match:
+            if user_input != self.text[: len(user_input)]:
                 raise ValueError("Invalid input")
 
             self.user_input = user_input
-            if event.key == "tab":
-                self.move_cursor_relative(rows=0, columns=4)
-            else:
-                self.action_cursor_right()
 
         except ValueError:
+            self.post_message(UserErrorEvent())
             self.app.bell()
