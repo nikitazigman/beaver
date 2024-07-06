@@ -1,10 +1,10 @@
 from time import monotonic
 
 from textual.reactive import reactive
-from textual.widgets import Static
+from textual.widgets import Label
 
 
-class TimeDisplay(Static):
+class TimeDisplay(Label):
     DEFAULT_CSS = """
         TimeDisplay {
             # content-align: center middle;
@@ -33,7 +33,7 @@ class TimeDisplay(Static):
         """Called when the time attribute changes."""
         minutes, seconds = divmod(time, 60)
         hours, minutes = divmod(minutes, 60)
-        self.update(f"{hours:02,.0f}:{minutes:02.0f}:{seconds:05.2f}")
+        self.update(f"{minutes:02.0f}:{seconds:02.0f}")
 
     def start(self) -> None:
         """Method to start (or resume) time updating."""
