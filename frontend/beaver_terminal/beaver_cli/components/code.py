@@ -37,7 +37,6 @@ class Code(TextArea, inherit_bindings=False):
         self.read_only = True
 
     def on_mount(self) -> None:
-        self.suppress_click()
         self.disable_messages(MouseDown, MouseUp, MouseMove, Click)
 
     def get_character(self, event: events.Key) -> str:
