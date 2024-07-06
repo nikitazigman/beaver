@@ -41,6 +41,7 @@
 			"forcelist",
 			"pymongo",
 			"Renderable",
+			"Sparkline",
 			"testcontainers",
 			"yasg"
 		]
