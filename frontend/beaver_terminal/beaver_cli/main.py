@@ -1,4 +1,5 @@
 from beaver_cli.components.code import (
+    Code,
     UserCompletedCode,
 )
 from beaver_cli.components.footer import BeaverFooter
@@ -65,6 +66,11 @@ class BeaverCli(App):
             game_display.focus()
         except NoMatches:
             self.mount(GameDisplay())
+
+    def action_toggle_dark(self) -> None:
+        super().action_toggle_dark()
+        code_widget: Code = self.query_one("#code")
+        code_widget.theme = "vscode_dark" if self.dark else "github_light"
 
 
 if __name__ == "__main__":

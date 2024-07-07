@@ -13,6 +13,7 @@ from beaver_cli.schemas.statistic import Statistic
 from beaver_cli.services.code_document import CodeService
 from beaver_cli.utils.session import Session
 from textual import on
+from textual.app import NoMatches
 from textual.containers import Container
 
 
@@ -21,11 +22,11 @@ class GameDisplay(Container):
         GameDisplay {
             layout: vertical;
             background: $panel;
-            border: tall $accent;
+            # border: tall $accent;
             align: center middle;
             # margin: 1;
             # min-width: 50;
-            padding: 0 2;
+            padding: 1 2;
         }
         .info_container {
             height: auto;
@@ -42,12 +43,14 @@ class GameDisplay(Container):
     @on(UserStartTyping)
     async def handle_start(self) -> None:
         time_display = TimeDisplay()
-        self.query_one("#info-language").remove()
-        self.query_one("#info-title").remove()
-        self.query_one("#info-tags").remove()
-
-        await self.mount(time_display, before=self.query_one(Code))
-        time_display.start()
+        try:
+            self.query_one("#info-language").remove()
+            self.query_one("#info-title").remove()
+            self.query_one("#info-tags").remove()
+            await self.mount(time_display, before=self.query_one(Code))
+            time_display.start()
+        except NoMatches:
+            pass
 
     @on(UserCompletedCode)
     async def handle_stop(self) -> None:
@@ -90,7 +93,9 @@ class GameDisplay(Container):
             Code(
                 language=code_document.language,
                 read_only=True,
+                theme="vscode_dark",
                 text=code_document.code,
                 show_line_numbers=True,
+                id="code",
             ),
         )

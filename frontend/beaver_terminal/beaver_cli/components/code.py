@@ -40,7 +40,7 @@ class Code(TextArea, inherit_bindings=False):
     """
 
     BINDINGS = []
-    user_input: Reactive = reactive("", always_update=True, init=False)
+    user_input: Reactive = reactive("", always_update=False, init=False)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -79,7 +79,6 @@ class Code(TextArea, inherit_bindings=False):
     def on_key(self, event: events.Key) -> None:
         try:
             not self.user_input and self.post_message(UserStartTyping())
-
             character: str = self.get_insert_value(event)
             user_input = self.user_input + character
 
