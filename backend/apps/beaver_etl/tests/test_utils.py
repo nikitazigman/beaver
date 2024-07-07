@@ -1,6 +1,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from beaver_etl.utils import find_projects, chunked
+
+from beaver_etl.utils import chunked, find_projects
 
 
 def test_find_projects():
