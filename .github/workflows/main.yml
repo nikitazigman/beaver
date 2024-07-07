@@ -9,8 +9,19 @@ on:
       - master
 
 jobs:
-  backend:
-    if: contains(github.event.head_commit.message, 'backend') || contains(github.event.pull_request.changed_files, 'backend/')
-    uses: ./.github/workflows/backend.yml
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chartboost/ruff-action@v1
+        with:
+          args: 'format --check'
+          changed-files: 'true'
+          config: '.pyproject.toml'
+
+  beaver_etl:
+    needs: linting
+    if: contains(github.event.head_commit.message, 'backend/apps/beaver_etl') || contains(github.event.pull_request.changed_files, 'backend/apps/beaver_etl/')
+    uses: ./.github/workflows/beaver_etl.yml
     with:
       ref: master
