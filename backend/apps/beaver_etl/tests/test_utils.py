@@ -2,6 +2,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from beaver_etl.utils import find_projects, chunked
 
+
 def test_find_projects():
     with TemporaryDirectory() as tempdir:
         base_path = Path(tempdir)
@@ -23,6 +24,7 @@ def test_find_projects():
         result = find_projects(base_path, key_file_name)
 
         assert sorted(result) == sorted([project1, project2])
+
 
 def test_chunked():
     # Test with list
