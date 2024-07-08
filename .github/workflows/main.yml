@@ -1,0 +1,39 @@
+name: Beaver CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chartboost/ruff-action@v1
+        with:
+          args: check . --config pyproject.toml
+
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      beaver_etl: ${{ steps.filter.outputs.beaver_etl }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: master
+          filters: |
+            beaver_etl:
+              - 'backend/apps/beaver_etl/**'
+
+  beaver_etl:
+    needs: [linting, changes]
+    if: ${{ needs.changes.outputs.beaver_etl == 'true' }}
+    uses: ./.github/workflows/beaver_etl.yml

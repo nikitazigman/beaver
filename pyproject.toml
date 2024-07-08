@@ -7,10 +7,12 @@ plugins = ["pydantic.mypy"]
 
 
 [tool.ruff]
+# Never enforce `E501` (line length violations).
+lint.ignore = ["E501"]
 exclude = [".git", "docs", "build", "dist", "venv"]
 line-length = 79
 target-version = "py312"
-fixable = [
+lint.fixable = [
     "A",
     "B",
     "C",
@@ -56,14 +58,14 @@ fixable = [
     "UP",
     "YTT",
 ]
-select = [
+lint.select = [
     "E",  # pycodestyle
     "F",  # pyflakes
     "UP", # pyupgrade,
     "I",  # isort
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 lines-after-imports = 2
 lines-between-types = 1
 section-order = [

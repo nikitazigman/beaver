@@ -17,7 +17,7 @@ def get_random_object_id(queryset: QuerySet) -> UUID:
 
     if not objects_ids:
         raise Http404(
-            "No %s matches the given query." % queryset.model._meta.object_name
+            f"No {queryset.model._meta.object_name} matches the given query."
         )
 
     random_id = choice(objects_ids)
