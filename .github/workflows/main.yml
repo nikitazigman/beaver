@@ -23,6 +23,7 @@ jobs:
       pull-requests: read
     outputs:
       beaver_etl: ${{ steps.filter.outputs.beaver_etl }}
+      dataset: ${{ steps.filter.outputs.dataset }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -32,8 +33,16 @@ jobs:
           filters: |
             beaver_etl:
               - 'backend/apps/beaver_etl/**'
+            dataset:
+              - 'dataset/**'
 
   beaver_etl:
     needs: [linting, changes]
     if: ${{ needs.changes.outputs.beaver_etl == 'true' }}
     uses: ./.github/workflows/beaver_etl.yml
+
+
+  dataset:
+    needs: [linting, changes]
+    if: ${{ needs.changes.outputs.dataset == 'true' && github.event_name == 'pull_request' }}
+    uses: ./.github/workflows/dataset.yml
