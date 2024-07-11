@@ -1,4 +1,0 @@
-name: Dataset CI
-
-on:
-  workflow_call:

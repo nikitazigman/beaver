@@ -45,7 +45,3 @@ jobs:
             dataset:
               - 'dataset/**'
 
-  dataset:
-    needs: [linting, changes]
-    if: ${{ needs.changes.outputs.dataset == 'true' && github.event_name == 'pull_request' }}
-    uses: ./.github/workflows/dataset.yml
