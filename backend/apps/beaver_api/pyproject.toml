@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "src"
+name = "beaver_api"
 version = "0.1.0"
 description = ""
 authors = ["nikita zigman <zigman.nikita@gmail.com>"]
