@@ -1,6 +1,6 @@
-from beaver_linter.parsers import get_parser
-from beaver_linter.services import get_service
-from beaver_linter.settings import get_settings
+from src.parsers import get_parser
+from src.services import get_service
+from src.settings import get_settings
 
 
 def main() -> None:

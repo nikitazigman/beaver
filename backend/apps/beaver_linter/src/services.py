@@ -1,8 +1,8 @@
 from abc import ABC
 from pathlib import Path
 
-from beaver_linter.parsers import IParser
-from beaver_linter.utils import find_projects
+from src.parsers import IParser
+from src.utils import find_projects
 
 
 class IService(ABC):

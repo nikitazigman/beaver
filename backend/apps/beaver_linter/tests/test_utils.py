@@ -1,7 +1,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from beaver_linter.utils import chunked, find_projects
+from src.utils import chunked, find_projects
 
 
 def test_find_projects():

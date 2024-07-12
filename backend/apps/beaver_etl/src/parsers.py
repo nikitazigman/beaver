@@ -3,7 +3,7 @@ import tomllib
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from beaver_etl.schemas import ParserCodeSchema
+from src.schemas import ParserCodeSchema
 
 
 class IParser(ABC):

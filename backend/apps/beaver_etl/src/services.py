@@ -2,10 +2,10 @@ from abc import ABC
 from datetime import UTC, datetime
 from pathlib import Path
 
-from beaver_etl.clients import IClient
-from beaver_etl.parsers import IParser
-from beaver_etl.schemas import UpdateCodeSchemaOut
-from beaver_etl.utils import chunked, find_projects
+from src.clients import IClient
+from src.parsers import IParser
+from src.schemas import UpdateCodeSchemaOut
+from src.utils import chunked, find_projects
 
 
 class IService(ABC):
