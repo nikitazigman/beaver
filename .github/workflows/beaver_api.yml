@@ -2,6 +2,17 @@ name: Beaver API CI
 
 on:
   workflow_call:
+env:
+  DEBUG: True
+  SECRET_KEY: ${{ vars.SECRET_KEY }}
+  ALLOWED_HOSTS: localhost,127.0.0.1
+  POSTGRES_DB: beaver_api_db
+  POSTGRES_USER: beaver_api
+  POSTGRES_PASSWORD: beaver_api
+  POSTGRES_HOST: 127.0.0.1
+  POSTGRES_PORT: 5432
+  REDIS_HOST: 127.0.0.1
+  REDIS_PORT: 6379
 
 jobs:
   test:
@@ -11,9 +22,9 @@ jobs:
       postgres:
         image: postgres:15.3
         env:
-          POSTGRES_USER: beaver_api
-          POSTGRES_PASSWORD: beaver_api
-          POSTGRES_DB: beaver_api_db
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
         ports:
           - 5432:5432
         options: >-
@@ -36,26 +47,15 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_DEBUG: False
-          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          envkey_POSTGRES_HOST: 127.0.0.1
-          envkey_POSTGRES_PORT: 5432
-          envkey_POSTGRES_USER: beaver_api
-          envkey_POSTGRES_PASSWORD: beaver_api
-          envkey_POSTGRES_DB: beaver_api_db
-          envkey_REDIS_HOST: 127.0.0.1
-          envkey_REDIS_PORT: 6379
-          directory: backend/apps/beaver_api/
-          file_name: .env
-
-      - name: Set up python
-        id: setup-python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Install PostgreSQL and Redis Client Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client redis-tools
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -63,27 +63,38 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Load cached venv
-        id: cached-poetry-dependencies
+      - name: Cache Poetry Dependencies
         uses: actions/cache@v3
+        id: cached-poetry-dependencies
         with:
           path: backend/apps/beaver_api/.venv
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('backend/apps/beaver_api/poetry.lock') }}
+          restore-keys: |
+            venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
 
-      - name: Install dependencies
+      - name: Install Dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
           cd backend/apps/beaver_api
           poetry install --no-interaction --no-root
 
-      - name: Install project
+      - name: Install Project
         run: |
           cd backend/apps/beaver_api
           poetry install --no-interaction
 
-
-      - name: Run tests
+      - name: Wait for Services to be Ready
         run: |
+          for i in {1..30}; do
+            pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER && redis-cli -h $REDIS_HOST -p $REDIS_PORT ping && break
+            sleep 1
+          done
+
+      - name: Run Tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: |
+          env
           cd backend/apps/beaver_api
           source .venv/bin/activate
           pytest -v .
