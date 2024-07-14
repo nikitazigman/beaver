@@ -92,7 +92,6 @@ jobs:
 
       - name: Run Tests
         run: |
-          env
           cd backend/apps/beaver_api
           source .venv/bin/activate
           pytest -v .
