@@ -7,6 +7,31 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15.3
+        env:
+          POSTGRES_USER: beaver_api
+          POSTGRES_PASSWORD: beaver_api
+          POSTGRES_DB: beaver_api_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U beaver_api"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7.2.3
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
