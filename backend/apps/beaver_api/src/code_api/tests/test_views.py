@@ -6,8 +6,10 @@ from code_api.models import CodeDocument
 from django.urls import reverse
 from language_api.models import Language
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from tags_api.models import Tag
+from users.models import BeaverUser
 
 
 @pytest.fixture(autouse=True, scope="class")
@@ -73,6 +75,12 @@ class BulkUpdateViewTestCase(APITestCase):
                 "last_synchronization": last_synchronization,
             },
         ]
+
+    def setUp(self):
+        # Create a user and obtain a token for authentication
+        self.user = BeaverUser.objects.create_user(username='testuser', password='testpassword')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_bulk_update_code_documents_with_valid_data(self):
         response = self.client.post(
@@ -144,6 +152,12 @@ class BulkDeleteViewTestCase(APITestCase):
 
         self.url = reverse("code-document-bulk-delete")
         self.valid_data = {"timestamp": self.last_sync}
+
+    def setUp(self):
+        # Create a user and obtain a token for authentication
+        self.user = BeaverUser.objects.create_user(username='testuser', password='testpassword')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_bulk_delete_code_documents(self):
         self.assertEqual(CodeDocument.objects.count(), 2)
