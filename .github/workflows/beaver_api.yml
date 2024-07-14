@@ -41,6 +41,21 @@ jobs:
           cd backend/apps/beaver_api
           poetry install --no-interaction
 
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DEBUG: False
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          envkey_POSTGRES_HOST: 127.0.0.1
+          envkey_POSTGRES_PORT: 5432
+          envkey_POSTGRES_USER: beaver_api
+          envkey_POSTGRES_PASSWORD: beaver_api
+          envkey_POSTGRES_DB: beaver_api_db
+          envkey_REDIS_HOST: 127.0.0.1
+          envkey_REDIS_PORT: 6379
+          directory: backend/apps/beaver_api/
+          file_name: .env
+
       - name: Run tests
         run: |
           cd backend/apps/beaver_api

@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 
-from code_api.models import CodeDocument
-
 import pytest
 
+from code_api.models import CodeDocument
 from django.urls import reverse
 from language_api.models import Language
 from rest_framework import status
