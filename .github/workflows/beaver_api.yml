@@ -4,7 +4,7 @@ on:
   workflow_call:
 env:
   DEBUG: True
-  SECRET_KEY: ${{ vars.SECRET_KEY }}
+  SECRET_KEY: ${{ vars.TEST_KEY }}
   ALLOWED_HOSTS: localhost,127.0.0.1
   POSTGRES_DB: beaver_api_db
   POSTGRES_USER: beaver_api
@@ -91,8 +91,6 @@ jobs:
           done
 
       - name: Run Tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           env
           cd backend/apps/beaver_api
