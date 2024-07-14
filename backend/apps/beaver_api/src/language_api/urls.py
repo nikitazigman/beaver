@@ -1,6 +1,5 @@
-from language_api.views import ListLanguageView
-
 from django.urls import path
+from language_api.views import ListLanguageView
 
 
 urlpatterns = [
