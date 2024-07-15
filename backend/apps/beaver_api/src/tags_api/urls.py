@@ -1,6 +1,5 @@
-from tags_api.views import ListTagView
-
 from django.urls import path
+from tags_api.views import ListTagView
 
 
 urlpatterns = [

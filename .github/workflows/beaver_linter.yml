@@ -1,4 +1,4 @@
-name: Beaver ETL CI
+name: Beaver Linter CI
 
 on:
   workflow_call:
@@ -27,22 +27,22 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: backend/apps/beaver_etl/.venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('backend/apps/beaver_etl/poetry.lock') }}
+          path: backend/apps/beaver_linter/.venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('backend/apps/beaver_linter/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
-          cd backend/apps/beaver_etl
+          cd backend/apps/beaver_linter
           poetry install --no-interaction --no-root
 
       - name: Install project
         run: |
-          cd backend/apps/beaver_etl
+          cd backend/apps/beaver_linter
           poetry install --no-interaction
 
       - name: Run tests
         run: |
-          cd backend/apps/beaver_etl
+          cd backend/apps/beaver_linter
           source .venv/bin/activate
           pytest -v tests/

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "src"
+name = "beaver_api"
 version = "0.1.0"
 description = ""
 authors = ["nikita zigman <zigman.nikita@gmail.com>"]
@@ -17,6 +17,7 @@ psycopg2-binary = "^2.9.9"
 redis = "^5.0.3"
 drf-spectacular = "^0.27.2"
 django-seal = "^1.6.1"
+setuptools = "^70.3.0"
 
 
 [tool.poetry.group.dev.dependencies]

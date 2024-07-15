@@ -3,7 +3,6 @@ from code_api.views import (
     CodeDocumentBulkUpdateView,
     GetRandomCodeDocumentView,
 )
-
 from django.urls import path
 
 

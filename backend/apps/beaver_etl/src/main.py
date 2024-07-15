@@ -1,7 +1,7 @@
-from beaver_etl.clients import get_client
-from beaver_etl.parsers import get_parser
-from beaver_etl.services import get_service
-from beaver_etl.settings import get_settings
+from src.clients import get_client
+from src.parsers import get_parser
+from src.services import get_service
+from src.settings import get_settings
 
 
 def main() -> None:

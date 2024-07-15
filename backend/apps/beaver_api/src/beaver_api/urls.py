@@ -16,7 +16,6 @@ Including another URLconf
 """
 
 from beaver_api import settings
-
 from django.contrib import admin
 from django.urls import URLPattern, URLResolver, include, path
 

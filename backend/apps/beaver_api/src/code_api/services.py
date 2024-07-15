@@ -4,7 +4,6 @@ from typing import TypeVar
 from uuid import UUID
 
 from code_api.models import CodeDocument
-
 from django.db.models import Model, QuerySet
 from django.http import Http404
 
