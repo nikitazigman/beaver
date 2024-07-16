@@ -4,9 +4,6 @@
 			"path": "../dataset"
 		},
 		{
-			"path": "../frontend"
-		},
-		{
 			"path": "../backend/apps/beaver_etl"
 		},
 		{
@@ -20,6 +17,9 @@
 		},
 		{
 			"path": "../backend/apps/beaver_linter"
+		},
+		{
+			"path": "../frontend/beaver_terminal"
 		}
 	], 
 	"settings": {
@@ -40,6 +40,8 @@
 			"filterset",
 			"forcelist",
 			"pymongo",
+			"Renderable",
+			"Sparkline",
 			"testcontainers",
 			"yasg"
 		]
