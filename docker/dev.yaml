@@ -1,9 +1,49 @@
 version: "3.8"
 
 services:
-  beaver_api_db:
+  nginx:
+    image: nginx:1.25.3
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./configs/nginx/site.conf:/etc/nginx/conf.d/default.conf
+      - static_files:/opt/app/static
+    depends_on:
+      beaver_api:
+        condition: service_started
+
+  beaver_api:
+    container_name: beaver_api
+    build:
+      context: ../backend/apps/beaver_api
+      target: beaver_api
+    environment:
+      - DEBUG=True
+      - SECRET_KEY="django-insecure-1t4o@rj87ww68nz3=kv4**niw=06z%@lrq@_r3qk5cv_+iio%$"
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - POSTGRES_HOST=beaver_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=beaver_api
+      - POSTGRES_PASSWORD=beaver_api
+      - POSTGRES_DB=beaver_api_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    volumes:
+      - static_files:/opt/app/static
+    depends_on:
+      beaver_db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  beaver_db:
     image: postgres:15.3
-    container_name: beaver_api_db
+    container_name: beaver_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: beaver_api
@@ -33,3 +73,4 @@ services:
 
 volumes:
   postgres_volume:
+  static_files: 
