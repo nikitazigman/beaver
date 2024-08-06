@@ -1,8 +1,8 @@
 FROM python:3.12-slim AS beaver_api
 
 ARG APP_PATH=/opt/app
-ARG USER=backend-usr
-ARG GROUP=backend-grp
+ARG USER=1000
+ARG GROUP=1000
 
 ENV PYTHONUNBUFFERED=1 \
   # Prevents python creating .pyc files
@@ -32,8 +32,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # Install poetry - respects $POETRY_VERSION & $POETRY_HOME
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-RUN addgroup --system ${GROUP} \
-  && adduser --system --ingroup ${GROUP} ${USER}
+    RUN groupadd -g ${GROUP} appgroup && \
+    useradd -r -u  ${USER} -g appgroup appuser
 
 # Copy app code to WORKDIR
 WORKDIR $APP_PATH
@@ -46,4 +46,3 @@ RUN poetry install
 
 USER ${USER}:${GROUP}
 
-CMD ["gunicorn","src.beaver_api.wsgi", "-w", "4", "-b", "0.0.0.0:8000"]
