@@ -5,8 +5,8 @@ from typing import Self
 
 import requests
 
-from beaver_etl.schemas import DeleteSchemaOut, UpdateCodeSchemaOut
 from requests.adapters import HTTPAdapter, Retry
+from src.schemas import DeleteSchemaOut, UpdateCodeSchemaOut
 
 
 class IClient(ABC):
