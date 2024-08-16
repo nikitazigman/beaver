@@ -7,11 +7,11 @@ from textual.screen import ModalScreen
 from textual.widgets import Footer, Markdown, Static
 
 
-HELP_CONTENT_PATH = Path(__file__).parent.parent / "components/resources/help.md"
+ASSETS_FOLDER_PATH = Path(__file__).parent.parent / "assets"
+HELP_CONTENT_PATH = ASSETS_FOLDER_PATH / "help.md"
 
 class HelpScreen(ModalScreen[None]):
-    CSS_PATH = "css/help_screen.tcss"
-
+    CSS_PATH = ASSETS_FOLDER_PATH /  "help_screen.tcss"
     BINDINGS = [Binding("escape", "app.pop_screen", "Close", show=True)]
 
 
