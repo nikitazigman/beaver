@@ -1,0 +1,19 @@
+
+HelpScreen {
+    align: center middle;
+}
+
+#help_screen_container {
+    max-width: 70%;
+    height: auto;
+    max-height: 80%;
+    background: $panel;
+    align: center middle;
+
+    #help_screen_title {
+        width: auto;
+        text-style: bold;
+        padding-top: 1;
+        padding-bottom: 0;
+        }
+}

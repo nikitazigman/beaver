@@ -5,6 +5,7 @@ from beaver_cli.components.code import (
 from beaver_cli.components.footer import BeaverFooter
 from beaver_cli.components.game_display import GameDisplay
 from beaver_cli.components.header import BeaverHeader
+from beaver_cli.components.help_screen import HelpScreen
 from beaver_cli.components.result_display import ResultDisplay
 
 from textual import on
@@ -31,6 +32,12 @@ class BeaverCli(App):
             "ctrl+d",
             "toggle_dark",
             "Toggle dark mode",
+            show=True,
+        ),
+        Binding(
+            "f1",
+            "show_help",
+            "Show help",
             show=True,
         ),
     ]
@@ -71,6 +78,9 @@ class BeaverCli(App):
         super().action_toggle_dark()
         code_widget: Code = self.query_one("#code")
         code_widget.theme = "vscode_dark" if self.dark else "github_light"
+
+    def action_show_help(self) -> None:
+        self.push_screen(HelpScreen())
 
 
 if __name__ == "__main__":
