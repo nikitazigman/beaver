@@ -48,3 +48,37 @@ resource "aws_security_group" "ecs-fargate" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# RDS Security Group (traffic Fargate -> RDS)
+resource "aws_security_group" "rds" {
+  name        = "rds-security-group"
+  description = "Allows inbound access from Fargate only"
+  vpc_id      = aws_vpc.production-vpc.id
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = "5432"
+    to_port         = "5432"
+    security_groups = [aws_security_group.ecs-fargate.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "efs_sg" {
+  name        = "EFS Security Group"
+  description = "Allow ECS to EFS communication"
+  vpc_id      = aws_vpc.production-vpc.id
+
+  ingress {
+    from_port   = 2049 # NFS port
+    to_port     = 2049
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Modify this based on your security requirements
+  }
+}

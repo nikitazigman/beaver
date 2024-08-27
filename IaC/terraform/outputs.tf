@@ -8,7 +8,7 @@ output "ecs_task_execution_role_arn" {
 }
 
 output "subnets" {
-  value = [aws_subnet.public-subnet.id]
+  value = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
 }
 
 output "security_group" {

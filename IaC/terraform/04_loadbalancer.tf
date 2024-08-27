@@ -4,7 +4,7 @@ resource "aws_lb" "production" {
   load_balancer_type = "application"
   internal           = false
   security_groups    = [aws_security_group.load-balancer.id]
-  subnets            = [aws_subnet.public-subnet.id]
+  subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
 }
 
 # Target group for ECS Fargate
@@ -19,9 +19,9 @@ resource "aws_alb_target_group" "default-target-group" {
     path                = var.health_check_path
     port                = "traffic-port"
     healthy_threshold   = 5
-    unhealthy_threshold = 2
-    timeout             = 2
-    interval            = 5
+    unhealthy_threshold = 5
+    timeout             = 20
+    interval            = 30
     matcher             = "200"
   }
 }
@@ -29,8 +29,10 @@ resource "aws_alb_target_group" "default-target-group" {
 # Listener (redirects traffic from the load balancer to the target group)
 resource "aws_alb_listener" "ecs-alb-http-listener" {
   load_balancer_arn = aws_lb.production.id
-  port              = "80"
-  protocol          = "HTTP"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.certificate_arn
   depends_on        = [aws_alb_target_group.default-target-group]
 
   default_action {
