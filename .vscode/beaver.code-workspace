@@ -10,9 +10,6 @@
 			"path": "../backend/apps/beaver_api"
 		},
 		{
-			"path": "../docker"
-		},
-		{
 			"path": ".."
 		},
 		{
