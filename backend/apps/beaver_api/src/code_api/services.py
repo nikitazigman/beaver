@@ -1,26 +1,11 @@
 from datetime import datetime
-from random import choice
 from typing import TypeVar
-from uuid import UUID
 
 from code_api.models import CodeDocument
 from django.db.models import Model, QuerySet
-from django.http import Http404
 
 
 T = TypeVar("T", bound=Model)
-
-
-def get_random_object_id(queryset: QuerySet) -> UUID:
-    objects_ids = queryset.values_list("id", flat=True)
-
-    if not objects_ids:
-        raise Http404(
-            f"No {queryset.model._meta.object_name} matches the given query."
-        )
-
-    random_id = choice(objects_ids)
-    return random_id
 
 
 def get_or_create_obj_by_names[T: Model](
