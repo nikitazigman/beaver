@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "beaver_api.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -93,31 +94,30 @@ WSGI_APPLICATION = "beaver_api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
-        "CONN_MAX_AGE": 60,  # sec
-        "OPTIONS": {"options": "-c search_path=public,content"},
+if env("RDS_DB_NAME", default=None):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": env("RDS_DB_NAME"),
+            "USER": env("RDS_USERNAME"),
+            "PASSWORD": env("RDS_PASSWORD"),
+            "HOST": env("RDS_HOSTNAME"),
+            "PORT": env("RDS_PORT"),
+        }
     }
-}
-
-# cache
-
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": (
-            f"redis://"
-            f"{env('REDIS_HOST', default="127.0.0.1")}:"
-            f"{env('REDIS_PORT',default=6379)}"
-        ),
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("POSTGRES_DB"),
+            "USER": env("POSTGRES_USER"),
+            "PASSWORD": env("POSTGRES_PASSWORD"),
+            "HOST": env("POSTGRES_HOST"),
+            "PORT": env("POSTGRES_PORT"),
+            "CONN_MAX_AGE": 60,  # sec
+            "OPTIONS": {"options": "-c search_path=public,content"},
+        }
     }
-}
 
 
 # Password validation
