@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  nginx:
+    container_name: beaver_nginx
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/upstream-dev.conf:/etc/nginx/conf.d/upstream.conf
+      - static_files:/opt/app/static
+    environment:
+      - SERVER_DOMAIN=beaver_api
+    depends_on:
+      beaver_api:
+        condition: service_started
+
+  beaver_api:
+    container_name: beaver_api
+    build:
+      context: ../../backend/apps/beaver_api
+      target: beaver_api
+    command: "sh start.sh"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY="django-insecure-1t4o@rj87ww68nz3=kv4**niw=06z%@lrq@_r3qk5cv_+iio%$"
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - POSTGRES_HOST=beaver_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=beaver_api
+      - POSTGRES_PASSWORD=beaver_api
+      - POSTGRES_DB=beaver_api_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    volumes:
+      - static_files:/opt/app/static
+    depends_on:
+      beaver_db:
+        condition: service_healthy
+
+  beaver_db:
+    image: postgres:15.3
+    container_name: beaver_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: beaver_api
+      POSTGRES_PASSWORD: beaver_api
+      POSTGRES_DB: beaver_api_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U films -d films_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_volume:
+  static_files: 
+

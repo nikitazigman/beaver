@@ -1,4 +1,5 @@
-from code_api.mixins import GetRandomObjectMixin
+from random import randint
+
 from code_api.models import CodeDocument
 from code_api.serializers import (
     CodeDocumentBulkSerializer,
@@ -17,14 +18,21 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 
-class GetRandomCodeDocumentView(GenericAPIView, GetRandomObjectMixin):
+class GetRandomCodeDocumentView(GenericAPIView):
     queryset = CodeDocument.objects.all()
     serializer_class = CodeDocumentSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["language__name", "tags__name"]
 
     def get(self, request: Request, *args, **kwargs) -> Response:
-        return self.get_random_document(request, *args, **kwargs)
+        documents_count = self.get_queryset().count()
+        if documents_count == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        random_document_index = randint(0, documents_count - 1)
+        random_document = self.get_queryset()[random_document_index]
+        serializer = self.get_serializer(random_document)
+        return Response(serializer.data)
 
 
 class CodeDocumentBulkUpdateView(generics.GenericAPIView):

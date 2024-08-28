@@ -10,9 +10,6 @@
 			"path": "../backend/apps/beaver_api"
 		},
 		{
-			"path": "../docker"
-		},
-		{
 			"path": ".."
 		},
 		{
@@ -20,6 +17,9 @@
 		},
 		{
 			"path": "../frontend/beaver_terminal"
+		},
+		{
+			"path": "../IaC"
 		}
 	], 
 	"settings": {
