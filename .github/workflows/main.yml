@@ -17,24 +17,25 @@ jobs:
         with:
           args: check . --config pyproject.toml
 
-  beaver_etl:
-    needs: linting
-    uses: ./.github/workflows/beaver_etl.yml
+  # beaver_etl:
+  #   needs: linting
+  #   uses: ./.github/workflows/beaver_etl.yml
 
-  beaver_linter:
-    needs: linting
-    uses: ./.github/workflows/beaver_linter.yml
+  # beaver_linter:
+  #   needs: linting
+  #   uses: ./.github/workflows/beaver_linter.yml
 
-  beaver_api:
-    needs: linting
-    uses: ./.github/workflows/beaver_api.yml
+  # beaver_api:
+  #   needs: linting
+  #   uses: ./.github/workflows/beaver_api.yml
 
-  changes:
+  dataset_changes:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
     outputs:
-      dataset: ${{ steps.filter.outputs.dataset }}
+      dataset_changed: ${{ steps.filter.outputs.dataset }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -45,3 +46,8 @@ jobs:
             dataset:
               - 'dataset/**'
 
+  call_etl_workflow:
+    needs: [linting, dataset_changes]
+    uses: ./.github/workflows/etl_workflow.yml
+    with:
+      dataset_changed: ${{ needs.dataset_changes.outputs.dataset_changed }}
