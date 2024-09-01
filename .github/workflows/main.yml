@@ -17,17 +17,17 @@ jobs:
         with:
           args: check . --config pyproject.toml
 
-  # beaver_etl:
-  #   needs: linting
-  #   uses: ./.github/workflows/beaver_etl.yml
+  beaver_etl:
+    needs: linting
+    uses: ./.github/workflows/beaver_etl.yml
 
-  # beaver_linter:
-  #   needs: linting
-  #   uses: ./.github/workflows/beaver_linter.yml
+  beaver_linter:
+    needs: linting
+    uses: ./.github/workflows/beaver_linter.yml
 
-  # beaver_api:
-  #   needs: linting
-  #   uses: ./.github/workflows/beaver_api.yml
+  beaver_api:
+    needs: linting
+    uses: ./.github/workflows/beaver_api.yml
 
   dataset_changes:
     if: github.event.pull_request.merged == true
