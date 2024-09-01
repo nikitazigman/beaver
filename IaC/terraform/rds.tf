@@ -1,6 +1,26 @@
+resource "aws_security_group" "rds" {
+  name        = "rds-security-group"
+  description = "Allows inbound access from Fargate only"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = "5432"
+    to_port         = "5432"
+    security_groups = [aws_security_group.ecs_task.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_db_subnet_group" "production" {
   name       = "main"
-  subnet_ids = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
+  subnet_ids = aws_subnet.public[*].id
 }
 
 resource "aws_db_instance" "production" {
