@@ -6,14 +6,17 @@ on:
       dataset_changed:
         required: true
         type: boolean
-env:
-  SERVICE_URL: ${{ secrets.SERVICE_URL }}
-  API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
-  
+
+
 jobs:
   run_etl_on_dataset_change:
     if: ${{ inputs.dataset_changed }}
     runs-on: ubuntu-latest
+
+    env:
+      SERVICE_URL: ${{ secrets.SERVICE_URL }}
+      API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -44,8 +47,10 @@ jobs:
             poetry install --no-interaction --no-root
           fi
           poetry install --no-interaction
-
+          
       - name: Run ETL script
         run: |
           cd backend/apps/beaver_etl/src
+          run: |
+          echo "Running ETL script with SERVICE_URL=${{ env.SERVICE_URL }} and API_SECRET_TOKEN=${{ env.API_SECRET_TOKEN }}"
           poetry run python main.py
