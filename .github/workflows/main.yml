@@ -35,6 +35,7 @@ jobs:
       pull-requests: read
     outputs:
       dataset_changed: ${{ steps.filter.outputs.dataset }}
+      type: boolean
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -49,4 +50,4 @@ jobs:
     needs: [linting, dataset_changes]
     uses: ./.github/workflows/etl_workflow.yml
     with:
-      dataset_changed: ${{ needs.dataset_changes.outputs.dataset_changed }}
+      dataset_changed: ${{ needs.dataset_changes.outputs.dataset_changed == 'true' }}
