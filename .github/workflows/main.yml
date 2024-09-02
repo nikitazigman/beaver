@@ -51,4 +51,5 @@ jobs:
     uses: ./.github/workflows/etl_workflow.yml
     with:
       dataset_changed: ${{ needs.dataset_changes.outputs.dataset_changed == 'true' }}
-      api_secret_token: ${{ secrets.API_SECRET_TOKEN }}
+    secrets:
+      API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
