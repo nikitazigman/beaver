@@ -13,6 +13,9 @@ jobs:
     if: ${{ inputs.dataset_changed }}
     runs-on: ubuntu-latest
     environment: beaver_etl
+    env:
+      SERVICE_URL: ${{ vars.SERVICE_URL }}
+      API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -45,9 +48,6 @@ jobs:
           poetry install --no-interaction
           
       - name: Run ETL script
-        env:
-          SERVICE_URL: ${{ vars.SERVICE_URL }}
-          API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
         run: |
           cd backend/apps/beaver_etl/src
           run: |
