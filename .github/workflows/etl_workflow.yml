@@ -6,6 +6,9 @@ on:
       dataset_changed:
         required: true
         type: boolean
+      api_secret_token:
+        required: true
+        type: string
 
 
 jobs:
@@ -15,7 +18,7 @@ jobs:
     environment: beaver_etl
     env:
       SERVICE_URL: ${{ vars.SERVICE_URL }}
-      API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+      API_SECRET_TOKEN: ${{ inputs.api_secret_token }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
