@@ -45,11 +45,13 @@ class BeaverAPI(IClient):
     def start_session(self) -> None:
         retries = Retry(
             total=5,
-            backoff_factor=1,
+            backoff_factor=0.1,
             status_forcelist=[400, 500, 502, 503, 504],
+            allowed_methods=["GET", "POST", "DELETE"],
         )
-        http_adapter = HTTPAdapter(max_retries=retries)
+        http_adapter = HTTPAdapter(max_retries=retries, pool_maxsize=1)
         self.session = requests.Session()
+        self.session.mount("https://", http_adapter)
         self.session.mount("http://", http_adapter)
         self.session.headers["Authorization"] = f"Token {self.token}"
 
@@ -71,8 +73,10 @@ class BeaverAPI(IClient):
     def send(self, code_schema: list[UpdateCodeSchemaOut]) -> None:
         resource_url = f"{self.base_url}{self.update_path}"
         data_out = [schema.model_dump() for schema in code_schema]
-        response = self.session.post(resource_url, json=data_out)
-        response.raise_for_status()
+        try:
+            self.session.post(resource_url, json=data_out)
+        except requests.exceptions.RetryError:
+            print([schema.title for schema in code_schema])
 
     def delete(self, timestamp: datetime) -> None:
         data_out = DeleteSchemaOut(timestamp=str(timestamp))
