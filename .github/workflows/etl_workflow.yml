@@ -6,9 +6,6 @@ on:
       dataset_changed:
         required: true
         type: boolean
-      api_secret_token:
-        required: true
-        type: string
     secrets:
       API_SECRET_TOKEN:
         required: true
