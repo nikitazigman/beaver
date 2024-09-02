@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     relative_path_to_readme: str = "README.md"
 
     service_url: str = "http://localhost:8000"
-    chunk_size: int = 10
+    chunk_size: int = 1
 
     api_secret_token: str
 
