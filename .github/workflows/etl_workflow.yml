@@ -6,7 +6,10 @@ on:
       dataset_changed:
         required: true
         type: boolean
-
+env:
+  SERVICE_URL: ${{ secrets.SERVICE_URL }}
+  API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+  
 jobs:
   run_etl_on_dataset_change:
     if: ${{ inputs.dataset_changed }}
