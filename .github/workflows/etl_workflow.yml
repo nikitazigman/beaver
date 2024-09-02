@@ -1,0 +1,58 @@
+name: ETL Workflow
+
+on:
+  workflow_call:
+    inputs:
+      dataset_changed:
+        required: true
+        type: boolean
+    secrets:
+      API_SECRET_TOKEN:
+        required: true
+
+
+jobs:
+  run_etl_on_dataset_change:
+    if: ${{ inputs.dataset_changed }}
+    runs-on: ubuntu-latest
+    environment: beaver_etl
+    env:
+      SERVICE_URL: ${{ vars.SERVICE_URL }}
+      API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: backend/apps/beaver_etl/.venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('backend/apps/beaver_etl/poetry.lock') }}
+
+      - name: Install dependencies and project
+        run: |
+          cd backend/apps/beaver_etl
+          if [ "${{ steps.cached-poetry-dependencies.outputs.cache-hit }}" != "true" ]; then
+            poetry install --no-interaction --no-root
+          fi
+          poetry install --no-interaction
+          
+      - name: Run ETL script
+        run: |
+          cd backend/apps/beaver_etl/src
+          run: |
+          echo "Running ETL script with SERVICE_URL=${{ env.SERVICE_URL }} and API_SECRET_TOKEN=${{ env.API_SECRET_TOKEN }}"
+          poetry run python main.py
