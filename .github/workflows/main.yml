@@ -30,6 +30,7 @@ jobs:
     uses: ./.github/workflows/beaver_api.yml
 
   dataset_changes:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
