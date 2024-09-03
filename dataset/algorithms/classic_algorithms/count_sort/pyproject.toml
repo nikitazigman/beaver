@@ -5,7 +5,7 @@ authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
 readme = "README.md"
 documentation = "https://www.geeksforgeeks.org/counting-sort/"
 description = "Counting Sort Algorithm"
-keywords = ["counting sort", "sorting", "data structures"]
+keywords = ["sort", "sorting", "data structures"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
