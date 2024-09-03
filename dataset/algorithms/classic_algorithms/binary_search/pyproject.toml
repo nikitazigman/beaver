@@ -5,7 +5,7 @@ authors = ["Pavel Eroshkin <eroshkin321@gmail.com>"]
 readme = "README.md"
 documentation = "https://www.geeksforgeeks.org/binary-search/"
 description = "Binary Search Algorithm"
-keywords = ["binary search", "searching algorithm", "array search"]
+keywords = ["search", "searching algorithm", "array search"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
