@@ -7,6 +7,7 @@ from beaver_cli.components.game_display import GameDisplay
 from beaver_cli.components.header import BeaverHeader
 from beaver_cli.components.help_screen import HelpScreen
 from beaver_cli.components.result_display import ResultDisplay
+from beaver_cli.components.settings_screen import SettingsScreen
 
 from textual import on
 from textual.app import App, ComposeResult, NoMatches
@@ -40,11 +41,18 @@ class BeaverCli(App):
             "Show help",
             show=True,
         ),
+        Binding(
+            "f2",
+            "show_settings",
+            "Show settings",
+            show=True,
+        ),
     ]
+
+    SCREENS = {"settings": SettingsScreen()}
 
     def compose(self) -> ComposeResult:
         yield BeaverHeader(name="Beaver CLI")
-        # yield ResultDisplay()
         yield GameDisplay()
         yield BeaverFooter()
 
@@ -69,7 +77,10 @@ class BeaverCli(App):
 
         try:
             game_display = self.query_one(GameDisplay)
-            game_display.load_new_game()
+            settings = self.SCREENS["settings"]
+            language, tag = settings.language, settings.tag
+
+            game_display.load_new_game(language, tag)
             game_display.focus()
         except NoMatches:
             self.mount(GameDisplay())
@@ -81,6 +92,9 @@ class BeaverCli(App):
 
     def action_show_help(self) -> None:
         self.push_screen(HelpScreen())
+
+    def action_show_settings(self) -> None:
+        self.push_screen("settings")
 
 
 if __name__ == "__main__":
