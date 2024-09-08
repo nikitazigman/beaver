@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS beaver_api
+FROM --platform=linux/amd64 python:3.12-slim AS beaver_api
 
 ARG APP_PATH=/opt/app
 
