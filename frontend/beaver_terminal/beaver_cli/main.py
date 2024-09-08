@@ -77,7 +77,7 @@ class BeaverCli(App):
 
         try:
             game_display = self.query_one(GameDisplay)
-            settings = self.SCREENS["settings"]
+            settings: SettingsScreen = self.SCREENS["settings"]
             language, tag = settings.language, settings.tag
 
             game_display.load_new_game(language, tag)
