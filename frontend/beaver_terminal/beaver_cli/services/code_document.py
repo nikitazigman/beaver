@@ -24,11 +24,21 @@ class CodeService(ICodeService):
         self.session = session
 
     def get_code_document(
-        self, tag_name: str = "", language: str = ""
+        self, tags: list[str] = None, language: str = None
     ) -> CodeDocument:
+        params = []
+
+        if tags:
+            for tag in tags:
+                params.append(("tags", tag))
+
+        if language:
+            params.append(("language", language))
+
         response = self.session.get(
             self.resource_path,
-            params={"tag_name": tag_name, "language": language},
+            params=params,
         )
+
         response.raise_for_status()
         return CodeDocument.model_validate_json(response.text)
