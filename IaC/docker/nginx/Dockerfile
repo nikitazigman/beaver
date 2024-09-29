@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 nginx:1.25.3
+FROM nginx:1.25.3
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY site.conf /etc/nginx/conf.d/site.conf
