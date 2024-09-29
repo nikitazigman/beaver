@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+
 from pathlib import Path
 
 import environ
@@ -187,3 +188,17 @@ if DEBUG:
     )
 
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+    },
+}
