@@ -8,7 +8,6 @@ def main() -> None:
     parser = get_parser(
         path_to_main=settings.relative_path_to_main,
         path_to_pyproject_toml=settings.relative_path_to_pyproject_toml,
-        path_to_readme=settings.relative_path_to_readme,
     )
     service = get_service(parser=parser)
     service.process(path_dataset=settings.path_to_dataset)

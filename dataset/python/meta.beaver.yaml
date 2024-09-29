@@ -1,0 +1,501 @@
+language: python
+link_to_project: https://www.geeksforgeeks.org/priority-queue-set-1-introduction/
+path: algorithms/data_structures/priority_queue.py
+tags:
+- priority queue
+- binary heap
+- data structures
+title: Priority Queue implementation using a binary heap
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/inverted-index/
+path: algorithms/data_structures/inverted_index.py
+tags:
+- inverted index
+- document search
+- text processing
+- algorithm
+title: Inverted Index for Document Search
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/hashing-set-2-separate-chaining/
+path: algorithms/data_structures/hashmap_chaining.py
+tags:
+- hash map
+- hashing
+- separate chaining
+- linked list
+title: Hash Map with Separate Chaining
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/open-addressing-collision-handling-technique-in-hashing/
+path: algorithms/data_structures/hashmap_addressing.py
+tags:
+- hash map
+- hashing
+- open addressing
+- double hashing
+title: Hash Map with Open Addressing
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/binary-search-tree-data-structure/
+path: algorithms/data_structures/binary_search_tree.py
+tags:
+- binary search tree
+- data structures
+- tree traversal
+- balancing
+title: Binary Search Tree
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/binary-heap/
+path: algorithms/data_structures/binary_heap.py
+tags:
+- binary heap
+- data structures
+title: Binary Heap
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/union-find/
+path: algorithms/data_structures/union_find.py
+tags:
+- union-find
+- disjoint-set
+- connected components
+- algorithm
+title: Union-Find Algorithms
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/merge-sort/
+path: algorithms/sort/merge_sort.py
+tags:
+- merge sort
+- sorting
+- data structures
+- divide and conquer
+title: Merge Sort Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/insertion-sort/
+path: algorithms/sort/insertion_sort.py
+tags:
+- insertion sort
+- sorting
+- data structures
+- comparison sort
+title: Insertion Sort Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/bubble-sort/
+path: algorithms/sort/bubble_sort.py
+tags:
+- sort
+- sorting
+- data structures
+title: Bubble Sort Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/quick-sort/
+path: algorithms/sort/quick_sort.py
+tags:
+- quick sort
+- sorting
+- data structures
+- divide and conquer
+title: Quick Sort Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/counting-sort/
+path: algorithms/sort/count_sort.py
+tags:
+- sort
+- sorting
+- data structures
+title: Counting Sort Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/selection-sort/
+path: algorithms/sort/selection_sort.py
+tags:
+- selection sort
+- sorting
+- data structures
+- comparison sort
+title: Selection Sort Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/heap-sort/
+path: algorithms/sort/heap_sort.py
+tags:
+- heap sort
+- sorting
+- data structures
+- heapq
+title: Heap Sort Algorithm using heapq
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+path: algorithms/graph/graph_dijkstra.py
+tags:
+- graph
+- shortest path
+- dijkstra
+- greedy algorithm
+title: Dijkstra's Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/bipartite-graph/
+path: algorithms/graph/graph_is_bipartite.py
+tags:
+- graph
+- bipartite
+- breadth first search
+- coloring
+title: If graph is bipartite
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/travelling-salesman-problem-using-dynamic-programming/
+path: algorithms/graph/graph_tsp.py
+tags:
+- graph
+- tsp
+- traveling salesman problem
+- heuristic
+- optimization
+title: Traveling Salesman Problem (TSP)
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/detect-cycle-undirected-graph/
+path: algorithms/graph/graph_is_acyclic.py
+tags:
+- graph
+- acyclic
+- cycle detection
+title: If graph is acyclic
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
+path: algorithms/graph/graph_gis_coloring.py
+tags:
+- graph
+- coloring
+- gis
+- greedy algorithm
+title: Graph coloring using the GIS algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/eulerian-path-and-circuit/
+path: algorithms/graph/graph_euler_cycle.py
+tags:
+- graph
+- euler cycle
+- eulerian path
+title: Find Euler cycle in a graph
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/
+path: algorithms/graph/graph_prim.py
+tags:
+- graph
+- minimum spanning tree
+- prim
+- greedy algorithm
+title: Prim's Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
+path: algorithms/graph/graph_dastur.py
+tags:
+- graph
+- coloring
+- dsatur
+- greedy algorithm
+title: Graph coloring using DSATUR algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/
+path: algorithms/graph/oriented_graph.py
+tags:
+- graph
+- data structures
+- graph algorithms
+- depth first search
+- topological sort
+title: Oriented Graph Implementation
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/
+path: algorithms/graph/graph_matrix.py
+tags:
+- graph
+- adjacency matrix
+- data structures
+title: Graph implementation using adjacency matrix
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/
+path: algorithms/graph/graph_kruskal.py
+tags:
+- graph
+- minimum spanning tree
+- kruskal
+- union find
+- greedy algorithm
+title: Kruskal's Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/
+path: algorithms/graph/graph_list.py
+tags:
+- graph
+- data structures
+- graph algorithms
+- breadth first search
+- depth first search
+title: Graph algorithms
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/lru-cache-implementation/
+path: algorithms/other/lru.py
+tags:
+- LRU cache
+- least recently used
+- cache
+- data structures
+title: LRU (Least Recently Used) Cache
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/
+path: algorithms/other/hoffman_coding.py
+tags:
+- huffman coding
+- compression
+- data structures
+- greedy algorithm
+title: Huffman Coding
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/counting-inversions/
+path: algorithms/other/count_inversions.py
+tags:
+- count inversions
+- merge sort
+- divide and conquer
+- data structures
+title: Count Inversions in an Array using Merge Sort
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array/
+path: algorithms/other/k_stat.py
+tags:
+- kth element
+- sorting
+- heap
+- data structures
+title: Kth smallest/largest element in an array
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/merge-k-sorted-arrays/
+path: algorithms/dynamic_programming/k_merge.py
+tags:
+- k-way merge
+- heapq
+- data structures
+title: K-way Merge Algorithm using heapq
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/bin-packing-problem-minimize-number-of-used-bins/
+path: algorithms/dynamic_programming/bin_packing.py
+tags:
+- bin packing
+- next fit
+- first fit
+- best fit
+- data structures
+title: 'Bin Packing Algorithms: Next Fit, First Fit, and Best Fit'
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
+path: algorithms/dynamic_programming/kadane.py
+tags:
+- dynamic programming
+- array
+- maximum subarray sum
+- Kadane's Algorithm
+title: Kadane Algorithm for Maximum Subarray Sum
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/subset-sum-problem-dp-25/
+path: algorithms/dynamic_programming/subset_sum.py
+tags:
+- dynamic programming
+- recursion
+- backtracking
+- subset sum
+title: Subset Sum
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/weighted-job-scheduling-log-n-time/
+path: algorithms/dynamic_programming/weight_interval_planning.py
+tags:
+- weighted interval scheduling
+- dynamic programming
+- greedy algorithm
+title: Weighted Interval Planning
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/linear-search/
+path: algorithms/search/linear_search.py
+tags:
+- search
+- searching algorithm
+- array search
+title: Linear Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/
+path: algorithms/search/bm_search.py
+tags:
+- boyer-moore
+- string search
+- pattern matching
+- algorithm
+title: Boyer-Moore String Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/binary-search/
+path: algorithms/search/binary_search.py
+tags:
+- search
+- searching algorithm
+- array search
+title: Binary Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/
+path: algorithms/search/naive_search.py
+tags:
+- naive search
+- string search
+- pattern matching
+- algorithm
+title: Naive String Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/
+path: algorithms/search/rk_search.py
+tags:
+- rabin-karp
+- string search
+- pattern matching
+- algorithm
+title: Rabin-Karp String Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/interpolation-search/
+path: algorithms/search/interpolation_search.py
+tags:
+- interpolation search
+- searching algorithm
+- array search
+title: Interpolation Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
+path: algorithms/search/kmp_search.py
+tags:
+- kmp
+- string search
+- pattern matching
+- algorithm
+title: Knuth-Morris-Pratt String Search Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/min-cost-path-dp-6/
+path: algorithms/classical_problems/min_max_matrix.py
+tags:
+- dynamic programming
+- matrix
+- minimum path sum
+- grid
+title: Minimum Path Sum in a Grid
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/
+path: algorithms/classical_problems/intervals_max_independent.py
+tags:
+- interval scheduling
+- greedy algorithm
+- heap
+title: Find the maximum set of independent intervals
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/find-subarray-with-given-sum/
+path: algorithms/classical_problems/subarray_sum.py
+tags:
+- dynamic programming
+- sliding window
+- array
+- subarray sum
+- target sum
+title: Sliding Window Algorithm to Check Subarray Sum Existence
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/
+path: algorithms/classical_problems/intervals_distribution.py
+tags:
+- interval distribution
+- greedy algorithm
+- heap
+- scheduling
+title: Distribute intervals into the minimum number of non-overlapping groups
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/stable-marriage-problem/
+path: algorithms/classical_problems/stable_marriage_problem.py
+tags:
+- stable marriage problem
+- matching algorithm
+- gale-shapley algorithm
+title: Stable Marriage Problem Algorithm
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/closest-pair-of-points-using-divide-and-conquer-algorithm/
+path: algorithms/classical_problems/nearest_pair_of_points.py
+tags:
+- nearest points
+- closest pair
+- divide and conquer
+- euclidean distance
+title: Finding the nearest pair of points
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/
+path: algorithms/classical_problems/intervals_plan.py
+tags:
+- interval planning
+- greedy algorithm
+- heap
+- scheduling
+title: Plan intervals based on entries
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/unique-paths-in-a-grid-with-obstacles/
+path: algorithms/classical_problems/robot_problem.py
+tags:
+- robot problem
+- dynamic programming
+- matrix
+- grid paths
+title: Robot problem using dynamic programming
+---
+language: python
+link_to_project: https://www.geeksforgeeks.org/stable-marriage-problem/
+path: algorithms/classical_problems/stable_match.py
+tags:
+- stable match
+- stable marriage problem
+- matching algorithm
+- preferences
+- estimations
+title: Stable Match Algorithm for task-user pairing based on preferences and estimations
