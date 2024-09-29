@@ -22,10 +22,6 @@ from django.urls import URLPattern, URLResolver, include, path
 
 urlpatterns: list[URLPattern | URLResolver] = [
     path("admin/", admin.site.urls),
-    path(
-        "api/v1/auth/",
-        include("rest_framework.urls", namespace="rest_framework"),
-    ),
     path("api/v1/code_documents/", include("code_api.urls"), name="code_api"),
     path("api/v1/tags/", include("tags_api.urls"), name="tag_api"),
     path(
@@ -61,5 +57,9 @@ if settings.DEBUG:
                 name="schema-swagger-ui",
             ),
             path("__debug__/", include(debug_toolbar.urls)),
+            path(
+                "api/v1/auth/",
+                include("rest_framework.urls", namespace="rest_framework"),
+            ),
         ]
     )
