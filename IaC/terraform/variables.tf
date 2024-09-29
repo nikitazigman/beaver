@@ -36,7 +36,7 @@ variable "desired_tasks" {
 
 variable "instance_type" {
   description = "Instance type for the ECS cluster"
-  default     = "t3.micro"
+  default     = "t4g.nano"
 }
 
 variable "task_cpu" {
@@ -46,7 +46,7 @@ variable "task_cpu" {
 
 variable "task_memory" {
   description = "Amount of memory for Fargate task. E.g., '512' (0.5GB)"
-  default     = 900
+  default     = 400
 }
 
 variable "autoscale_min" {
@@ -76,7 +76,7 @@ variable "rds_password" {
 
 variable "rds_instance_class" {
   description = "RDS instance type"
-  default     = "db.t3.micro"
+  default     = "db.t4g.micro"
 }
 
 variable "certificate_arn" {
