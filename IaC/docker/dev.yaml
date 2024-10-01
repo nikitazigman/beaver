@@ -12,6 +12,12 @@ services:
       - static_files:/opt/app/static
     environment:
       - SERVER_DOMAIN=beaver_api
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.7"
+          memory: 140M
     depends_on:
       beaver_api:
         condition: service_started
@@ -26,14 +32,18 @@ services:
       - DEBUG=True
       - SECRET_KEY="django-insecure-1t4o@rj87ww68nz3=kv4**niw=06z%@lrq@_r3qk5cv_+iio%$"
       - ALLOWED_HOSTS=127.0.0.1,localhost
-      - POSTGRES_HOST=beaver_db
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=beaver_api
-      - POSTGRES_PASSWORD=beaver_api
-      - POSTGRES_DB=beaver_api_db
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - RDS_HOSTNAME=beaver_db
+      - RDS_PORT=5432
+      - RDS_USERNAME=beaver_api
+      - RDS_PASSWORD=beaver_api
+      - RDS_DB_NAME=beaver_api_db
     restart: on-failure
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 230M
     ports:
       - "8000:8000"
     volumes:
@@ -46,6 +56,12 @@ services:
     image: postgres:15.3
     container_name: beaver_db
     restart: unless-stopped
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1000M
     environment:
       POSTGRES_USER: beaver_api
       POSTGRES_PASSWORD: beaver_api
