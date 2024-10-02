@@ -97,6 +97,10 @@ class BeaverCli(App):
         self.push_screen("settings")
 
 
-if __name__ == "__main__":
+def main() -> None:
     app = BeaverCli()
     app.run()
+
+
+if __name__ == "__main__":
+    main()
