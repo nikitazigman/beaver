@@ -85,8 +85,8 @@ resource "aws_ecs_task_definition" "app" {
     {
       name      = "beaver-api"
       image     = "public.ecr.aws/d0s9n5w1/beaver-api:latest",
-      cpu       = floor(var.task_cpu * 0.6),
-      memory    = floor(var.task_memory * 0.6),
+      cpu       = floor(var.task_cpu * 0.8),
+      memory    = floor(var.task_memory * 0.8),
       essential = true,
       command   = ["sh", "start.sh"],
       environment = [
@@ -145,8 +145,8 @@ resource "aws_ecs_task_definition" "app" {
     {
       name      = "beaver-nginx",
       image     = "public.ecr.aws/d0s9n5w1/beaver-nginx:latest",
-      cpu       = floor(var.task_cpu * 0.4),
-      memory    = floor(var.task_memory * 0.4),
+      cpu       = floor(var.task_cpu * 0.2),
+      memory    = floor(var.task_memory * 0.2),
       essential = true,
       portMappings = [
         {
