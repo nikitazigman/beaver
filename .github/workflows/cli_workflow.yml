@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: beaver_terminal
     env:
-      POETRY_PYPI_TOKEN_BEAVER_CLI: ${{ secrets.PYPI_SECRET_TOKEN }}
+      POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_SECRET_TOKEN }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -37,5 +37,4 @@ jobs:
       - name: Build and Deploy CLI 
         run: |
           cd frontend/beaver_terminal
-          echo "Deploying CLI APP with TOKEN=${{ env.POETRY_PYPI_TOKEN_BEAVER_CLI }}" 
           poetry publish --build
