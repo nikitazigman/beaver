@@ -61,6 +61,7 @@ jobs:
       API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
   
   cli_changes:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
