@@ -1,0 +1,40 @@
+name: CLI Workflow
+
+on:
+  workflow_call:
+    inputs:
+      cli_changed:
+        required: true
+        type: boolean
+    secrets:
+      PYPI_SECRET_TOKEN:
+        required: true
+
+
+jobs:
+  deploy_cli_on_change:
+    if: ${{ inputs.cli_changed }}
+    runs-on: ubuntu-latest
+    environment: beaver_terminal
+    env:
+      POETRY_PYPI_TOKEN_BEAVER_CLI: ${{ secrets.PYPI_SECRET_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          
+      - name: Build and Deploy CLI 
+        run: |
+          cd frontend/beaver_terminal
+          poetry publish --build
