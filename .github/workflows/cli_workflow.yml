@@ -37,4 +37,5 @@ jobs:
       - name: Build and Deploy CLI 
         run: |
           cd frontend/beaver_terminal
+          echo "Deploying CLI APP with TOKEN=${{ env.POETRY_PYPI_TOKEN_BEAVER_CLI }}" 
           poetry publish --build
