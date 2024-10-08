@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 from src.schemas import ParserCodeSchema
+from src.settings import get_settings
 
 
 class IParser(ABC):
@@ -17,11 +18,10 @@ class PoetryProjectParser(IParser):
         self,
         path_to_main: str,
         path_to_pyproject_toml: str,
-        path_to_readme: str,
     ):
         self.path_to_main = path_to_main
         self.path_to_pyproject_toml = path_to_pyproject_toml
-        self.path_to_readme = path_to_readme
+        self.settings = get_settings()
 
     def parse(self, project: Path) -> ParserCodeSchema:
         poetry_project_config = self._toml_to_dict(project)
@@ -29,16 +29,15 @@ class PoetryProjectParser(IParser):
         title = self._get_title(poetry_project_config)
         types = self._get_types(poetry_project_config)
 
-        source_code = self._get_source_code(project)
-        readme = self._get_readme(project)
-
         code_schema = ParserCodeSchema(
-            code=source_code,
             link_to_project=link_to_task,
             title=title,
             tags=types,
             language="python",
-            readme=readme,
+            path=str(
+                project.relative_to(self.settings.path_to_dataset.parent)
+                / self.path_to_main
+            ),
         )
         return code_schema
 
@@ -48,6 +47,7 @@ class PoetryProjectParser(IParser):
         )
 
     def _get_link_to_task(self, poetry_config: dict) -> str:
+        print(poetry_config)
         return poetry_config["tool"]["poetry"]["documentation"]
 
     def _get_title(self, poetry_config: dict) -> str:
@@ -56,18 +56,9 @@ class PoetryProjectParser(IParser):
     def _get_types(self, poetry_config: dict) -> list[str]:
         return poetry_config["tool"]["poetry"]["keywords"]
 
-    def _get_source_code(self, project: Path) -> str:
-        return (project / self.path_to_main).read_text()
-
-    def _get_readme(self, project: Path) -> str:
-        return (project / self.path_to_readme).read_text()
-
 
 def get_parser(
     path_to_main: str,
     path_to_pyproject_toml: str,
-    path_to_readme: str,
 ) -> IParser:
-    return PoetryProjectParser(
-        path_to_main, path_to_pyproject_toml, path_to_readme
-    )
+    return PoetryProjectParser(path_to_main, path_to_pyproject_toml)

@@ -16,7 +16,7 @@ NonEmptyStr = Annotated[str, AfterValidator(not_empty)]
 
 class ParserCodeSchema(BaseModel):
     title: NonEmptyStr
-    code: NonEmptyStr
     link_to_project: NonEmptyStr
     language: NonEmptyStr
     tags: list[NonEmptyStr]
+    path: NonEmptyStr
