@@ -1,20 +1,24 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
+SERVICE_ROOT = Path(__file__).resolve().parent.parent
+REPOSITORY_ROOT = SERVICE_ROOT.parent.parent.parent
 
 
 class Settings(BaseSettings):
-    path_to_dataset: Path = ROOT_DIR.joinpath("dataset").absolute()
+    model_config = SettingsConfigDict(
+        env_file=SERVICE_ROOT / ".env", env_file_encoding="utf-8"
+    )
+    path_to_dataset: Path = REPOSITORY_ROOT.joinpath("dataset").absolute()
 
     relative_path_to_main: str = "src/main.py"
     relative_path_to_pyproject_toml: str = "pyproject.toml"
     relative_path_to_readme: str = "README.md"
 
-    service_url: str = "http://localhost:8000"
+    service_url: str = "https://beaver-api.com"
     chunk_size: int = 1
 
     api_secret_token: str
@@ -22,4 +26,4 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    return Settings()
+    return Settings()  # type: ignore

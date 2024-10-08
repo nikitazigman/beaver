@@ -53,6 +53,4 @@ jobs:
       - name: Run ETL script
         run: |
           cd backend/apps/beaver_etl/src
-          run: |
-          echo "Running ETL script with SERVICE_URL=${{ env.SERVICE_URL }} and API_SECRET_TOKEN=${{ env.API_SECRET_TOKEN }}"
           poetry run python main.py

@@ -1,60 +1,49 @@
-# Local Development Setup Guide
+# Beaver
 
-Follow these steps to set up the project locally:
+Beaver is a command-line application that combines typing practice with algorithm learning. Inspired by Monkeytype and LeetCode, it provides a fun and educational way to improve your coding skills and typing speed by having you type out classical algorithms in a Text User Interface (TUI) environment.
 
-1. **Run Docker**
-```bash
-   ./scripts/dev up -d
-```
-2. Navigate to the API Source Directory
+## Table of Contents
 
-```bash
-cd beaver_api/src
-```
-3. Run Migrations
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
 
-```bash
-python manage.py migrate
-```
-4. Create Superuser
+## Features
 
-```bash
-python manage.py createsuperuser
-```
+- **Typing Practice with Algorithms**: Improve your typing speed and accuracy by typing out actual algorithm code.
+- **Algorithm Refresh**: Revisit and reinforce your understanding of classical algorithms and data structures.
+- **TUI Frontend**: Enjoy an intuitive and distraction-free typing experience in your terminal.
 
-5. Start the Development Server
+## Installation
+
+Beaver is available on [PyPI](https://pypi.org/project/beaver/). You can install it using `pip`:
 
 ```bash
-python manage.py runserver
+pip install beaver_cli
 ```
-6. Access Admin Page and Generate Token
-    * Go to the admin page at /admin
-    * Navigate to /tokens
-    * Generate and copy a token for your user
 
-7. Set Up ETL Process
+## Usage
+After installing, you can start using Beaver directly from your terminal.
+
+### Starting a Session
+To begin a typing session, simply run:
 ```bash
-cd beaver_etl
-```
-8. Export API Token
-
-```bash
-export api_secret_token=<token>
-```
-9. Run ETL
-
-```bash
-python beaver_etl/main
-```
-10. Navigate to CLI Directory
-
-```bash
-cd beaver_cli
-```
-11. Run CLI Client
-
-```bash
-python beaver_cli/main.py
+beaver-cli
 ```
 
-*Note: Ensure you activate the service's Poetry environment, install dependencies, and then exit the Poetry shell as needed.*
+### Screenshots
+![screenshot](docs/screenshot.png)
+
+### Contributing
+Contributions are welcome! If you'd like to contribute, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature/YourFeature).
+3. Commit your changes (git commit -m 'Add YourFeature').
+4. Push to the branch (git push origin feature/YourFeature).
+4. Open a pull request.
+
+### License 
+This project is licensed under the GNU GENERAL PUBLIC LICENSE.

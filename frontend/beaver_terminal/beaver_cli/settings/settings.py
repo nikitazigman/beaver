@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    service_url: str = "http://localhost:8000"
+    service_url: str = "https://beaver-api.com"
 
 
 @lru_cache(maxsize=1)

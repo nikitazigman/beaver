@@ -22,10 +22,7 @@ class GameDisplay(Container):
         GameDisplay {
             layout: vertical;
             background: $panel;
-            # border: tall $accent;
             align: center middle;
-            # margin: 1;
-            # min-width: 50;
             padding: 1 2;
         }
         .info_container {
@@ -70,9 +67,13 @@ class GameDisplay(Container):
     def get_game_statistic(self) -> Statistic:
         return self.statistic
 
-    def load_new_game(self, language: str = None, tags: list[str] = None) -> None:
+    def load_new_game(
+        self, language: str = None, tags: list[str] = None
+    ) -> None:
         with Session() as session:
-            code_document = CodeService(session).get_code_document(language=language, tags=tags)
+            code_document = CodeService(session).get_code_document(
+                language=language, tags=tags
+            )
 
         [widget.remove() for widget in self.query()]
 
