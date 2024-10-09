@@ -9,9 +9,9 @@ on:
 
 jobs:
   deploy_beaver_api:
-    needs: prepare_deployment
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ inputs.api_changed }}
 
     steps:
       - uses: actions/checkout@v4
