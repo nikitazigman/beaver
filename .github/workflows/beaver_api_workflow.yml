@@ -8,11 +8,6 @@ on:
         type: boolean
 
 jobs:
-  prepare_deployment:
-    if: inputs.api_changed
-    runs-on: ubuntu-latest
-    steps:
-
   deploy_beaver_api:
     needs: prepare_deployment
     runs-on: ubuntu-latest
