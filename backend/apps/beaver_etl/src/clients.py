@@ -58,7 +58,7 @@ class BeaverAPI(IClient):
     def close_session(self) -> None:
         self.session.close()
 
-    def __enter__(self) -> IClient:
+    def __enter__(self) -> Self:
         self.start_session()
         return self
 

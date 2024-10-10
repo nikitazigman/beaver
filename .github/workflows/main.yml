@@ -20,6 +20,10 @@ jobs:
   beaver_etl:
     needs: linting
     uses: ./.github/workflows/beaver_etl.yml
+  
+  beaver_terminal:
+    needs: linting
+    uses: ./.github/workflows/beaver_etl.yml
 
   beaver_linter:
     needs: linting
@@ -46,6 +50,7 @@ jobs:
           filters: |
             dataset:
               - 'dataset/**'
+  
 
   call_etl_workflow:
     needs: [linting, dataset_changes]
@@ -54,3 +59,29 @@ jobs:
       dataset_changed: ${{ needs.dataset_changes.outputs.dataset_changed == 'true' }}
     secrets:
       API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+  
+  cli_changes:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      cli_changed: ${{ steps.filter.outputs.beaver_terminal }}
+      type: boolean
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: master
+          filters: |
+            beaver_terminal:
+              - 'frontend/beaver_terminal/beaver_cli/**'
+  
+  call_cli_workflow:
+    needs: [linting, cli_changes]
+    uses: ./.github/workflows/cli_workflow.yml
+    with:
+      cli_changed: ${{ needs.cli_changes.outputs.cli_changed == 'true' }}
+    secrets:
+      PYPI_SECRET_TOKEN: ${{ secrets.PYPI_SECRET_TOKEN }}

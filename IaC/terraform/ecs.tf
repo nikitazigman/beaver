@@ -65,7 +65,9 @@ resource "aws_ecs_task_definition" "app" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   execution_role_arn       = aws_iam_role.ecs_exec_role.arn
   depends_on               = [aws_db_instance.production]
-
+  runtime_platform {
+    cpu_architecture = "ARM64"
+  }
   volume {
     name = "efs-volume"
     efs_volume_configuration {
@@ -83,8 +85,8 @@ resource "aws_ecs_task_definition" "app" {
     {
       name      = "beaver-api"
       image     = "public.ecr.aws/d0s9n5w1/beaver-api:latest",
-      cpu       = floor(var.task_cpu * 0.6),
-      memory    = floor(var.task_memory * 0.6),
+      cpu       = floor(var.task_cpu * 0.8),
+      memory    = floor(var.task_memory * 0.8),
       essential = true,
       command   = ["sh", "start.sh"],
       environment = [
@@ -143,8 +145,8 @@ resource "aws_ecs_task_definition" "app" {
     {
       name      = "beaver-nginx",
       image     = "public.ecr.aws/d0s9n5w1/beaver-nginx:latest",
-      cpu       = floor(var.task_cpu * 0.4),
-      memory    = floor(var.task_memory * 0.4),
+      cpu       = floor(var.task_cpu * 0.2),
+      memory    = floor(var.task_memory * 0.2),
       essential = true,
       portMappings = [
         {
@@ -193,65 +195,6 @@ resource "aws_security_group" "ecs_task" {
   }
 }
 
-resource "aws_ecs_task_definition" "django_admin" {
-  family                   = "django-admin-task"
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["EC2"]
-  cpu                      = var.task_cpu
-  memory                   = var.task_memory
-  task_role_arn            = aws_iam_role.ecs_task_role.arn
-  execution_role_arn       = aws_iam_role.ecs_exec_role.arn
-
-  container_definitions = jsonencode([
-    {
-      name  = "beaver-api"
-      image = var.docker_image_url_django
-      environment = [
-        {
-          "name" : "RDS_DB_NAME",
-          "value" : var.rds_db_name
-        },
-        {
-          "name" : "RDS_USERNAME",
-          "value" : var.rds_username
-        },
-        {
-          "name" : "RDS_PASSWORD",
-          "value" : var.rds_password
-        },
-        {
-          "name" : "RDS_HOSTNAME",
-          "value" : aws_db_instance.production.address
-        },
-        {
-          "name" : "RDS_PORT",
-          "value" : "5432"
-        }
-      ],
-      # Run migrations as the command
-      command = ["python", "src/manage.py", "create_admin"]
-
-      # Add log configuration for CloudWatch
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = "/ecs/beaver-api"
-          awslogs-region        = var.region
-          awslogs-stream-prefix = "ecs"
-        }
-      }
-
-      # Other required configurations go here...
-      portMappings = [
-        {
-          containerPort = 8000
-        }
-      ]
-    }
-  ])
-}
-
-
 resource "aws_ecs_service" "app" {
   name                               = "app"
   cluster                            = aws_ecs_cluster.main.id
@@ -291,47 +234,3 @@ resource "aws_ecs_service" "app" {
     ignore_changes = [desired_count]
   }
 }
-
-# resource "aws_appautoscaling_target" "ecs_target" {
-#   service_namespace  = "ecs"
-#   scalable_dimension = "ecs:service:DesiredCount"
-#   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
-#   min_capacity       = 1
-#   max_capacity       = 2
-# }
-
-# resource "aws_appautoscaling_policy" "ecs_target_cpu" {
-#   name               = "application-scaling-policy-cpu"
-#   policy_type        = "TargetTrackingScaling"
-#   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
-#   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-#   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-
-#   target_tracking_scaling_policy_configuration {
-#     predefined_metric_specification {
-#       predefined_metric_type = "ECSServiceAverageCPUUtilization"
-#     }
-
-#     target_value       = 80
-#     scale_in_cooldown  = 300
-#     scale_out_cooldown = 300
-#   }
-# }
-
-# resource "aws_appautoscaling_policy" "ecs_target_memory" {
-#   name               = "application-scaling-policy-memory"
-#   policy_type        = "TargetTrackingScaling"
-#   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-#   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-#   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
-
-#   target_tracking_scaling_policy_configuration {
-#     predefined_metric_specification {
-#       predefined_metric_type = "ECSServiceAverageMemoryUtilization"
-#     }
-
-#     target_value       = 80
-#     scale_in_cooldown  = 300
-#     scale_out_cooldown = 300
-#   }
-# }

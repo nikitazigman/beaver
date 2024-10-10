@@ -9,7 +9,7 @@ from src.utils import chunked, find_projects
 
 
 class IService(ABC):
-    def process(self, path_dataset: Path) -> None:
+    def process(self, path_dataset: Path, chunk_size: int) -> None:
         """iterate over projects in dataset and send update to the API"""
 
 

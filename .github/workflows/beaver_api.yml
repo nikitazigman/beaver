@@ -6,11 +6,11 @@ env:
   DEBUG: True
   SECRET_KEY: ${{ vars.TEST_KEY }}
   ALLOWED_HOSTS: localhost,127.0.0.1
-  POSTGRES_DB: beaver_api_db
-  POSTGRES_USER: beaver_api
-  POSTGRES_PASSWORD: beaver_api
-  POSTGRES_HOST: 127.0.0.1
-  POSTGRES_PORT: 5432
+  RDS_DB_NAME: beaver_api_db
+  RDS_USERNAME: beaver_api
+  RDS_PASSWORD: beaver_api
+  RDS_HOSTNAME: 127.0.0.1
+  RDS_PORT: 5432
   REDIS_HOST: 127.0.0.1
   REDIS_PORT: 6379
 
@@ -22,9 +22,9 @@ jobs:
       postgres:
         image: postgres:15.3
         env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.RDS_USERNAME }}
+          POSTGRES_PASSWORD: ${{ env.RDS_PASSWORD }}
+          POSTGRES_DB: ${{ env.RDS_DB_NAME }}
         ports:
           - 5432:5432
         options: >-

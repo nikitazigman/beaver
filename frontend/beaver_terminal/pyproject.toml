@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "beaver_cli"
-version = "0.1.0"
-description = ""
+version = "0.1.2"
+description = "CLI application for Beaver project"
 authors = ["nikita zigman <zigman.nikita@gmail.com>"]
 readme = "README.md"
 
@@ -19,3 +19,6 @@ requests = "^2.32.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+beaver_cli = "beaver_cli.main:main"

@@ -7,5 +7,5 @@ this_dir=$(dirname $this_file)
 api_dir=$(realpath $this_dir/../../)
 iac_dir=$(realpath $this_dir/..)
 
-docker build -t public.ecr.aws/d0s9n5w1/beaver-api:latest $api_dir/backend/apps/beaver_api
-docker build -t public.ecr.aws/d0s9n5w1/beaver-nginx:latest $iac_dir/docker/nginx
+docker build -t public.ecr.aws/d0s9n5w1/beaver-api:latest --platform=linux/arm64 $api_dir/backend/apps/beaver_api
+docker build -t public.ecr.aws/d0s9n5w1/beaver-nginx:latest --platform=linux/arm64 $iac_dir/docker/nginx

@@ -14,9 +14,6 @@ from textual.app import App, ComposeResult, NoMatches
 from textual.binding import Binding
 
 
-code = "def sum(a: int, b: int):\n    return a + b\n"
-
-
 class BeaverCli(App):
     CSS_PATH = "main.tcss"
 
@@ -97,6 +94,10 @@ class BeaverCli(App):
         self.push_screen("settings")
 
 
-if __name__ == "__main__":
+def main() -> None:
     app = BeaverCli()
     app.run()
+
+
+if __name__ == "__main__":
+    main()

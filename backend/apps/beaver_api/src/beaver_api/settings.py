@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+
 from pathlib import Path
 
 import environ
@@ -36,7 +37,6 @@ SECRET_KEY = env("SECRET_KEY", default="")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
-
 
 # Application definition
 
@@ -94,30 +94,17 @@ WSGI_APPLICATION = "beaver_api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if env("RDS_DB_NAME", default=None):
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": env("RDS_DB_NAME"),
-            "USER": env("RDS_USERNAME"),
-            "PASSWORD": env("RDS_PASSWORD"),
-            "HOST": env("RDS_HOSTNAME"),
-            "PORT": env("RDS_PORT"),
-        }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("RDS_DB_NAME"),
+        "USER": env("RDS_USERNAME"),
+        "PASSWORD": env("RDS_PASSWORD"),
+        "HOST": env("RDS_HOSTNAME"),
+        "PORT": env("RDS_PORT"),
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": env("POSTGRES_DB"),
-            "USER": env("POSTGRES_USER"),
-            "PASSWORD": env("POSTGRES_PASSWORD"),
-            "HOST": env("POSTGRES_HOST"),
-            "PORT": env("POSTGRES_PORT"),
-            "CONN_MAX_AGE": 60,  # sec
-            "OPTIONS": {"options": "-c search_path=public,content"},
-        }
-    }
+}
 
 
 # Password validation
@@ -162,7 +149,7 @@ STATIC_ROOT = ROOT_DIR / "static"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-REST_FRAMEWORK = {
+REST_FRAMEWORK: dict = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 100,
@@ -171,6 +158,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
     ],
 }
 
@@ -192,5 +182,22 @@ if DEBUG:
     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"].append(
         "rest_framework.authentication.BasicAuthentication",
     )
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    )
 
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+    },
+}

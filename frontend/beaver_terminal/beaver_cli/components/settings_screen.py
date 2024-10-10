@@ -13,6 +13,9 @@ from textual.widgets import Footer, Select, SelectionList, Static
 ASSETS_FOLDER_PATH = Path(__file__).parent.parent / "assets"
 
 class SettingsScreen(ModalScreen[None]):
+    language: str | None = None
+    tag: list[str] | None = None
+
     CSS_PATH = ASSETS_FOLDER_PATH / "settings_screen.tcss"
     BINDINGS = [Binding("escape", "close", "Close", show=True)]
 
