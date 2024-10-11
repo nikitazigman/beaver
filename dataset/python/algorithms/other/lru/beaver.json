@@ -1,0 +1,12 @@
+{
+  "title": "LRU (Least Recently Used) Cache",
+  "link_to_project": "https://www.geeksforgeeks.org/lru-cache-implementation/",
+  "language": "python",
+  "tags": [
+    "LRU cache",
+    "least recently used",
+    "cache",
+    "data structures"
+  ],
+  "path": "algorithms/other/lru/main.py"
+}

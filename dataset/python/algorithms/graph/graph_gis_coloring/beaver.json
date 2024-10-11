@@ -1,0 +1,12 @@
+{
+  "title": "Graph coloring using the GIS algorithm",
+  "link_to_project": "https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/",
+  "language": "python",
+  "tags": [
+    "graph",
+    "coloring",
+    "gis",
+    "greedy algorithm"
+  ],
+  "path": "algorithms/graph/graph_gis_coloring/main.py"
+}

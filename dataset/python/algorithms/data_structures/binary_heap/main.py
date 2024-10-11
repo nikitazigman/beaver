@@ -1,5 +1,4 @@
 class BinaryHeap:
-
     def __init__(self, compare, elements=[]):
         self.compare = compare
         self.values = []
@@ -39,8 +38,9 @@ class BinaryHeap:
         child_to_swap = self._get_child_to_swap(index)
         while child_to_swap != index:
             self._swap(index, child_to_swap)
-            index, child_to_swap = child_to_swap, self._get_child_to_swap(
-                child_to_swap
+            index, child_to_swap = (
+                child_to_swap,
+                self._get_child_to_swap(child_to_swap),
             )
 
     def _swap(self, i, j):

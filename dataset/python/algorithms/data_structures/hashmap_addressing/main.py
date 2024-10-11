@@ -47,7 +47,7 @@ class HashMapAddressing:
         index = self._find_place(key)
         if index is None:
             return None
-        return self.buckets[index].value
+        return self.buckets[index] and self.buckets[index].value
 
     def _hash(self, key, i=0):
         return double_hash(key, self.capacity, self.get_hash, hash3, i)

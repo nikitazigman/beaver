@@ -1,0 +1,11 @@
+{
+  "title": "If graph is acyclic",
+  "link_to_project": "https://www.geeksforgeeks.org/detect-cycle-undirected-graph/",
+  "language": "python",
+  "tags": [
+    "graph",
+    "acyclic",
+    "cycle detection"
+  ],
+  "path": "algorithms/graph/graph_is_acyclic/main.py"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Bubble Sort Algorithm",
+  "link_to_project": "https://www.geeksforgeeks.org/bubble-sort/",
+  "language": "python",
+  "tags": [
+    "sort",
+    "sorting",
+    "data structures"
+  ],
+  "path": "algorithms/sort/bubble_sort/main.py"
+}

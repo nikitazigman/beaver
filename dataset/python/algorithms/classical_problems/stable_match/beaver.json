@@ -1,0 +1,13 @@
+{
+  "title": "Stable Match Algorithm for task-user pairing based on preferences and estimations",
+  "link_to_project": "https://www.geeksforgeeks.org/stable-marriage-problem/",
+  "language": "python",
+  "tags": [
+    "stable match",
+    "stable marriage problem",
+    "matching algorithm",
+    "preferences",
+    "estimations"
+  ],
+  "path": "algorithms/classical_problems/stable_match/main.py"
+}

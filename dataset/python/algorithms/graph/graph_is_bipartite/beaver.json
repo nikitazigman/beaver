@@ -1,0 +1,12 @@
+{
+  "title": "If graph is bipartite",
+  "link_to_project": "https://www.geeksforgeeks.org/bipartite-graph/",
+  "language": "python",
+  "tags": [
+    "graph",
+    "bipartite",
+    "breadth first search",
+    "coloring"
+  ],
+  "path": "algorithms/graph/graph_is_bipartite/main.py"
+}

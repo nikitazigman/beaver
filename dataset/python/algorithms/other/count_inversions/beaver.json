@@ -1,0 +1,12 @@
+{
+  "title": "Count Inversions in an Array using Merge Sort",
+  "link_to_project": "https://www.geeksforgeeks.org/counting-inversions/",
+  "language": "python",
+  "tags": [
+    "count inversions",
+    "merge sort",
+    "divide and conquer",
+    "data structures"
+  ],
+  "path": "algorithms/other/count_inversions/main.py"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Binary Heap",
+  "link_to_project": "https://www.geeksforgeeks.org/binary-heap/",
+  "language": "python",
+  "tags": [
+    "binary heap",
+    "data structures"
+  ],
+  "path": "algorithms/data_structures/binary_heap/main.py"
+}

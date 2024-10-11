@@ -1,0 +1,12 @@
+{
+  "title": "Dijkstra's Algorithm",
+  "link_to_project": "https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/",
+  "language": "python",
+  "tags": [
+    "graph",
+    "shortest path",
+    "dijkstra",
+    "greedy algorithm"
+  ],
+  "path": "algorithms/graph/graph_dijkstra/main.py"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Kadane Algorithm for Maximum Subarray Sum",
+  "link_to_project": "https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/",
+  "language": "python",
+  "tags": [
+    "dynamic programming",
+    "array",
+    "maximum subarray sum",
+    "Kadane's Algorithm"
+  ],
+  "path": "algorithms/dynamic_programming/kadane/main.py"
+}

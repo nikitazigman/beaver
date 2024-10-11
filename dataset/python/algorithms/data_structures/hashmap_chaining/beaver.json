@@ -1,0 +1,12 @@
+{
+  "title": "Hash Map with Separate Chaining",
+  "link_to_project": "https://www.geeksforgeeks.org/hashing-set-2-separate-chaining/",
+  "language": "python",
+  "tags": [
+    "hash map",
+    "hashing",
+    "separate chaining",
+    "linked list"
+  ],
+  "path": "algorithms/data_structures/hashmap_chaining/main.py"
+}

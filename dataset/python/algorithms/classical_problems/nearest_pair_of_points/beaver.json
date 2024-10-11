@@ -1,0 +1,12 @@
+{
+  "title": "Finding the nearest pair of points",
+  "link_to_project": "https://www.geeksforgeeks.org/closest-pair-of-points-using-divide-and-conquer-algorithm/",
+  "language": "python",
+  "tags": [
+    "nearest points",
+    "closest pair",
+    "divide and conquer",
+    "euclidean distance"
+  ],
+  "path": "algorithms/classical_problems/nearest_pair_of_points/main.py"
+}

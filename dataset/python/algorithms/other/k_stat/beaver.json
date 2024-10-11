@@ -1,0 +1,12 @@
+{
+  "title": "Kth smallest/largest element in an array",
+  "link_to_project": "https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array/",
+  "language": "python",
+  "tags": [
+    "kth element",
+    "sorting",
+    "heap",
+    "data structures"
+  ],
+  "path": "algorithms/other/k_stat/main.py"
+}

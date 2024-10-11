@@ -1,0 +1,12 @@
+{
+  "title": "Prim's Algorithm",
+  "link_to_project": "https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/",
+  "language": "python",
+  "tags": [
+    "graph",
+    "minimum spanning tree",
+    "prim",
+    "greedy algorithm"
+  ],
+  "path": "algorithms/graph/graph_prim/main.py"
+}

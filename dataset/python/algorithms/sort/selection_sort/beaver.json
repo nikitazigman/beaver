@@ -1,0 +1,12 @@
+{
+  "title": "Selection Sort Algorithm",
+  "link_to_project": "https://www.geeksforgeeks.org/selection-sort/",
+  "language": "python",
+  "tags": [
+    "selection sort",
+    "sorting",
+    "data structures",
+    "comparison sort"
+  ],
+  "path": "algorithms/sort/selection_sort/main.py"
+}
