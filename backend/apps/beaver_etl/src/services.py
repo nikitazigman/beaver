@@ -14,13 +14,16 @@ class IService(ABC):
 
 
 class Service(IService):
-    def __init__(self, parser: IParser, client: IClient) -> None:
+    def __init__(
+        self, parser: IParser, client: IClient, beaver_file: str
+    ) -> None:
         self.parser = parser
         self.client = client
+        self.beaver_file = beaver_file
 
     def process(self, path_dataset: Path, chunk_size: int) -> None:
         timestamp = datetime.now(tz=UTC)
-        projects = find_projects(path=path_dataset, key_file="pyproject.toml")
+        projects = find_projects(path=path_dataset, key_file=self.beaver_file)
 
         with self.client as client:
             for chunk in chunked(projects, chunk_size):
@@ -42,5 +45,7 @@ class Service(IService):
             client.delete(timestamp)
 
 
-def get_service(parser: IParser, client: IClient) -> IService:
-    return Service(parser=parser, client=client)
+def get_service(
+    parser: IParser, client: IClient, beaver_file: str
+) -> IService:
+    return Service(parser=parser, client=client, beaver_file=beaver_file)
