@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Annotated
 
-from pydantic import BaseModel
 from pydantic.functional_validators import AfterValidator
+from pydantic.main import BaseModel
 
 
 def not_empty(value: str) -> str:
@@ -12,9 +12,9 @@ def not_empty(value: str) -> str:
     return value
 
 
+NonEmptyStr = Annotated[str, AfterValidator(not_empty)]
 BEAVER_FILE = "beaver.json"
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
-NonEmptyStr = Annotated[str, AfterValidator(not_empty)]
 PATH_TO_DATASET: Path = ROOT_DIR.joinpath("dataset").absolute()
 PATH_TO_PYTHON_PROJECTS: Path = PATH_TO_DATASET.joinpath("python")
 
@@ -31,7 +31,7 @@ class BeaverCodeSchema(BaseModel):
     language: NonEmptyStr
     tags: list[NonEmptyStr]
     path: NonEmptyStr
-    authors: list[Author] | None = None
+    authors: list[Author]
 
 
 def find_projects(path: Path, key_file: str) -> list[Path]:
@@ -54,16 +54,6 @@ def find_projects(path: Path, key_file: str) -> list[Path]:
 def python_checker(project: Path) -> None:
     with project.joinpath(BEAVER_FILE).open() as file:
         content = BeaverCodeSchema.model_validate_json(file.read())
-        content.authors = [
-            Author(
-                name="Pavel",
-                last_name="Eroshkin",
-                email="eroshkin321@gmail.com",
-            )
-        ]
-
-    with project.joinpath(BEAVER_FILE).open(mode="w") as file:
-        file.write(content.model_dump_json(indent=4))
 
     path_to_code = PATH_TO_PYTHON_PROJECTS.joinpath(content.path)
     if not path_to_code.is_file():
