@@ -1,12 +1,19 @@
 {
-  "title": "Minimum Path Sum in a Grid",
-  "link_to_project": "https://www.geeksforgeeks.org/min-cost-path-dp-6/",
-  "language": "python",
-  "tags": [
-    "dynamic programming",
-    "matrix",
-    "minimum path sum",
-    "grid"
-  ],
-  "path": "algorithms/classical_problems/min_max_matrix/main.py"
+    "title": "Minimum Path Sum in a Grid",
+    "link_to_project": "https://www.geeksforgeeks.org/min-cost-path-dp-6/",
+    "language": "python",
+    "tags": [
+        "dynamic programming",
+        "matrix",
+        "minimum path sum",
+        "grid"
+    ],
+    "path": "algorithms/classical_problems/min_max_matrix/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

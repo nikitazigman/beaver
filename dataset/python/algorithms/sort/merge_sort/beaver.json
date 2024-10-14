@@ -1,12 +1,19 @@
 {
-  "title": "Merge Sort Algorithm",
-  "link_to_project": "https://www.geeksforgeeks.org/merge-sort/",
-  "language": "python",
-  "tags": [
-    "merge sort",
-    "sorting",
-    "data structures",
-    "divide and conquer"
-  ],
-  "path": "algorithms/sort/merge_sort/main.py"
+    "title": "Merge Sort Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/merge-sort/",
+    "language": "python",
+    "tags": [
+        "merge sort",
+        "sorting",
+        "data structures",
+        "divide and conquer"
+    ],
+    "path": "algorithms/sort/merge_sort/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

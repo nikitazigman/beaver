@@ -1,11 +1,18 @@
 {
-  "title": "K-way Merge Algorithm using heapq",
-  "link_to_project": "https://www.geeksforgeeks.org/merge-k-sorted-arrays/",
-  "language": "python",
-  "tags": [
-    "k-way merge",
-    "heapq",
-    "data structures"
-  ],
-  "path": "algorithms/dynamic_programming/k_merge/main.py"
+    "title": "K-way Merge Algorithm using heapq",
+    "link_to_project": "https://www.geeksforgeeks.org/merge-k-sorted-arrays/",
+    "language": "python",
+    "tags": [
+        "k-way merge",
+        "heapq",
+        "data structures"
+    ],
+    "path": "algorithms/dynamic_programming/k_merge/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

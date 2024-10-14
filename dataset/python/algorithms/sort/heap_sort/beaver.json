@@ -1,12 +1,19 @@
 {
-  "title": "Heap Sort Algorithm using heapq",
-  "link_to_project": "https://www.geeksforgeeks.org/heap-sort/",
-  "language": "python",
-  "tags": [
-    "heap sort",
-    "sorting",
-    "data structures",
-    "heapq"
-  ],
-  "path": "algorithms/sort/heap_sort/main.py"
+    "title": "Heap Sort Algorithm using heapq",
+    "link_to_project": "https://www.geeksforgeeks.org/heap-sort/",
+    "language": "python",
+    "tags": [
+        "heap sort",
+        "sorting",
+        "data structures",
+        "heapq"
+    ],
+    "path": "algorithms/sort/heap_sort/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

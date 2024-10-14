@@ -1,11 +1,18 @@
 {
-  "title": "Counting Sort Algorithm",
-  "link_to_project": "https://www.geeksforgeeks.org/counting-sort/",
-  "language": "python",
-  "tags": [
-    "sort",
-    "sorting",
-    "data structures"
-  ],
-  "path": "algorithms/sort/count_sort/main.py"
+    "title": "Counting Sort Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/counting-sort/",
+    "language": "python",
+    "tags": [
+        "sort",
+        "sorting",
+        "data structures"
+    ],
+    "path": "algorithms/sort/count_sort/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

@@ -1,13 +1,20 @@
 {
-  "title": "Graph algorithms",
-  "link_to_project": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
-  "language": "python",
-  "tags": [
-    "graph",
-    "data structures",
-    "graph algorithms",
-    "breadth first search",
-    "depth first search"
-  ],
-  "path": "algorithms/graph/graph_list/main.py"
+    "title": "Graph algorithms",
+    "link_to_project": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "data structures",
+        "graph algorithms",
+        "breadth first search",
+        "depth first search"
+    ],
+    "path": "algorithms/graph/graph_list/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

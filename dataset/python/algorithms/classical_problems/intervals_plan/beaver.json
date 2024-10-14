@@ -1,12 +1,19 @@
 {
-  "title": "Plan intervals based on entries",
-  "link_to_project": "https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/",
-  "language": "python",
-  "tags": [
-    "interval planning",
-    "greedy algorithm",
-    "heap",
-    "scheduling"
-  ],
-  "path": "algorithms/classical_problems/intervals_plan/main.py"
+    "title": "Plan intervals based on entries",
+    "link_to_project": "https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/",
+    "language": "python",
+    "tags": [
+        "interval planning",
+        "greedy algorithm",
+        "heap",
+        "scheduling"
+    ],
+    "path": "algorithms/classical_problems/intervals_plan/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

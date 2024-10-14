@@ -1,12 +1,19 @@
 {
-  "title": "Hash Map with Open Addressing",
-  "link_to_project": "https://www.geeksforgeeks.org/open-addressing-collision-handling-technique-in-hashing/",
-  "language": "python",
-  "tags": [
-    "hash map",
-    "hashing",
-    "open addressing",
-    "double hashing"
-  ],
-  "path": "algorithms/data_structures/hashmap_addressing/main.py"
+    "title": "Hash Map with Open Addressing",
+    "link_to_project": "https://www.geeksforgeeks.org/open-addressing-collision-handling-technique-in-hashing/",
+    "language": "python",
+    "tags": [
+        "hash map",
+        "hashing",
+        "open addressing",
+        "double hashing"
+    ],
+    "path": "algorithms/data_structures/hashmap_addressing/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

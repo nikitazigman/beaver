@@ -1,12 +1,19 @@
 {
-  "title": "If graph is bipartite",
-  "link_to_project": "https://www.geeksforgeeks.org/bipartite-graph/",
-  "language": "python",
-  "tags": [
-    "graph",
-    "bipartite",
-    "breadth first search",
-    "coloring"
-  ],
-  "path": "algorithms/graph/graph_is_bipartite/main.py"
+    "title": "If graph is bipartite",
+    "link_to_project": "https://www.geeksforgeeks.org/bipartite-graph/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "bipartite",
+        "breadth first search",
+        "coloring"
+    ],
+    "path": "algorithms/graph/graph_is_bipartite/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

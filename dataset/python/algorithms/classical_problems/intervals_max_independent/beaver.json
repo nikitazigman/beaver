@@ -1,11 +1,18 @@
 {
-  "title": "Find the maximum set of independent intervals",
-  "link_to_project": "https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/",
-  "language": "python",
-  "tags": [
-    "interval scheduling",
-    "greedy algorithm",
-    "heap"
-  ],
-  "path": "algorithms/classical_problems/intervals_max_independent/main.py"
+    "title": "Find the maximum set of independent intervals",
+    "link_to_project": "https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/",
+    "language": "python",
+    "tags": [
+        "interval scheduling",
+        "greedy algorithm",
+        "heap"
+    ],
+    "path": "algorithms/classical_problems/intervals_max_independent/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

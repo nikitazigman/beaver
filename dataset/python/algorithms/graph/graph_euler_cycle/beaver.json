@@ -1,11 +1,18 @@
 {
-  "title": "Find Euler cycle in a graph",
-  "link_to_project": "https://www.geeksforgeeks.org/eulerian-path-and-circuit/",
-  "language": "python",
-  "tags": [
-    "graph",
-    "euler cycle",
-    "eulerian path"
-  ],
-  "path": "algorithms/graph/graph_euler_cycle/main.py"
+    "title": "Find Euler cycle in a graph",
+    "link_to_project": "https://www.geeksforgeeks.org/eulerian-path-and-circuit/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "euler cycle",
+        "eulerian path"
+    ],
+    "path": "algorithms/graph/graph_euler_cycle/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

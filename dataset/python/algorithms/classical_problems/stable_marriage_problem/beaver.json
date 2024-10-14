@@ -1,11 +1,18 @@
 {
-  "title": "Stable Marriage Problem Algorithm",
-  "link_to_project": "https://www.geeksforgeeks.org/stable-marriage-problem/",
-  "language": "python",
-  "tags": [
-    "stable marriage problem",
-    "matching algorithm",
-    "gale-shapley algorithm"
-  ],
-  "path": "algorithms/classical_problems/stable_marriage_problem/main.py"
+    "title": "Stable Marriage Problem Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/stable-marriage-problem/",
+    "language": "python",
+    "tags": [
+        "stable marriage problem",
+        "matching algorithm",
+        "gale-shapley algorithm"
+    ],
+    "path": "algorithms/classical_problems/stable_marriage_problem/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

@@ -1,12 +1,19 @@
 {
-  "title": "Robot problem using dynamic programming",
-  "link_to_project": "https://www.geeksforgeeks.org/unique-paths-in-a-grid-with-obstacles/",
-  "language": "python",
-  "tags": [
-    "robot problem",
-    "dynamic programming",
-    "matrix",
-    "grid paths"
-  ],
-  "path": "algorithms/classical_problems/robot_problem/main.py"
+    "title": "Robot problem using dynamic programming",
+    "link_to_project": "https://www.geeksforgeeks.org/unique-paths-in-a-grid-with-obstacles/",
+    "language": "python",
+    "tags": [
+        "robot problem",
+        "dynamic programming",
+        "matrix",
+        "grid paths"
+    ],
+    "path": "algorithms/classical_problems/robot_problem/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

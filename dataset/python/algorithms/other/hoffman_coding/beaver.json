@@ -1,12 +1,19 @@
 {
-  "title": "Huffman Coding",
-  "link_to_project": "https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/",
-  "language": "python",
-  "tags": [
-    "huffman coding",
-    "compression",
-    "data structures",
-    "greedy algorithm"
-  ],
-  "path": "algorithms/other/hoffman_coding/main.py"
+    "title": "Huffman Coding",
+    "link_to_project": "https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/",
+    "language": "python",
+    "tags": [
+        "huffman coding",
+        "compression",
+        "data structures",
+        "greedy algorithm"
+    ],
+    "path": "algorithms/other/hoffman_coding/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

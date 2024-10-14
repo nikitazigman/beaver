@@ -1,12 +1,19 @@
 {
-  "title": "Graph coloring using DSATUR algorithm",
-  "link_to_project": "https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/",
-  "language": "python",
-  "tags": [
-    "graph",
-    "coloring",
-    "dsatur",
-    "greedy algorithm"
-  ],
-  "path": "algorithms/graph/graph_dastur/main.py"
+    "title": "Graph coloring using DSATUR algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "coloring",
+        "dsatur",
+        "greedy algorithm"
+    ],
+    "path": "algorithms/graph/graph_dastur/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

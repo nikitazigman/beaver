@@ -1,13 +1,20 @@
 {
-  "title": "Sliding Window Algorithm to Check Subarray Sum Existence",
-  "link_to_project": "https://www.geeksforgeeks.org/find-subarray-with-given-sum/",
-  "language": "python",
-  "tags": [
-    "dynamic programming",
-    "sliding window",
-    "array",
-    "subarray sum",
-    "target sum"
-  ],
-  "path": "algorithms/classical_problems/subarray_sum/main.py"
+    "title": "Sliding Window Algorithm to Check Subarray Sum Existence",
+    "link_to_project": "https://www.geeksforgeeks.org/find-subarray-with-given-sum/",
+    "language": "python",
+    "tags": [
+        "dynamic programming",
+        "sliding window",
+        "array",
+        "subarray sum",
+        "target sum"
+    ],
+    "path": "algorithms/classical_problems/subarray_sum/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

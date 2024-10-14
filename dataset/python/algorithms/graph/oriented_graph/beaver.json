@@ -1,13 +1,20 @@
 {
-  "title": "Oriented Graph Implementation",
-  "link_to_project": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
-  "language": "python",
-  "tags": [
-    "graph",
-    "data structures",
-    "graph algorithms",
-    "depth first search",
-    "topological sort"
-  ],
-  "path": "algorithms/graph/oriented_graph/main.py"
+    "title": "Oriented Graph Implementation",
+    "link_to_project": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "data structures",
+        "graph algorithms",
+        "depth first search",
+        "topological sort"
+    ],
+    "path": "algorithms/graph/oriented_graph/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

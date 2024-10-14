@@ -1,11 +1,18 @@
 {
-  "title": "Graph implementation using adjacency matrix",
-  "link_to_project": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
-  "language": "python",
-  "tags": [
-    "graph",
-    "adjacency matrix",
-    "data structures"
-  ],
-  "path": "algorithms/graph/graph_matrix/main.py"
+    "title": "Graph implementation using adjacency matrix",
+    "link_to_project": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "adjacency matrix",
+        "data structures"
+    ],
+    "path": "algorithms/graph/graph_matrix/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

@@ -1,12 +1,19 @@
 {
-  "title": "Insertion Sort Algorithm",
-  "link_to_project": "https://www.geeksforgeeks.org/insertion-sort/",
-  "language": "python",
-  "tags": [
-    "insertion sort",
-    "sorting",
-    "data structures",
-    "comparison sort"
-  ],
-  "path": "algorithms/sort/insertion_sort/main.py"
+    "title": "Insertion Sort Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/insertion-sort/",
+    "language": "python",
+    "tags": [
+        "insertion sort",
+        "sorting",
+        "data structures",
+        "comparison sort"
+    ],
+    "path": "algorithms/sort/insertion_sort/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }

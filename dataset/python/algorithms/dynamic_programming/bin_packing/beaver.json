@@ -1,13 +1,20 @@
 {
-  "title": "Bin Packing Algorithms: Next Fit, First Fit, and Best Fit",
-  "link_to_project": "https://www.geeksforgeeks.org/bin-packing-problem-minimize-number-of-used-bins/",
-  "language": "python",
-  "tags": [
-    "bin packing",
-    "next fit",
-    "first fit",
-    "best fit",
-    "data structures"
-  ],
-  "path": "algorithms/dynamic_programming/bin_packing/main.py"
+    "title": "Bin Packing Algorithms: Next Fit, First Fit, and Best Fit",
+    "link_to_project": "https://www.geeksforgeeks.org/bin-packing-problem-minimize-number-of-used-bins/",
+    "language": "python",
+    "tags": [
+        "bin packing",
+        "next fit",
+        "first fit",
+        "best fit",
+        "data structures"
+    ],
+    "path": "algorithms/dynamic_programming/bin_packing/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
 }
