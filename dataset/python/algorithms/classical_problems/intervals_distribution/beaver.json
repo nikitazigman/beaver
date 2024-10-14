@@ -1,0 +1,19 @@
+{
+    "title": "Distribute intervals into the minimum number of non-overlapping groups",
+    "link_to_project": "https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/",
+    "language": "python",
+    "tags": [
+        "interval distribution",
+        "greedy algorithm",
+        "heap",
+        "scheduling"
+    ],
+    "path": "python/algorithms/classical_problems/intervals_distribution/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

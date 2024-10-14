@@ -1,0 +1,19 @@
+{
+    "title": "Rabin-Karp String Search Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/",
+    "language": "python",
+    "tags": [
+        "rabin-karp",
+        "string search",
+        "pattern matching",
+        "algorithm"
+    ],
+    "path": "python/algorithms/search/rk_search/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

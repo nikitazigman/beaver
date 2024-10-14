@@ -1,0 +1,19 @@
+{
+    "title": "Boyer-Moore String Search Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/",
+    "language": "python",
+    "tags": [
+        "boyer-moore",
+        "string search",
+        "pattern matching",
+        "algorithm"
+    ],
+    "path": "python/algorithms/search/bm_search/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

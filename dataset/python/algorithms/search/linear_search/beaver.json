@@ -1,0 +1,18 @@
+{
+    "title": "Linear Search Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/linear-search/",
+    "language": "python",
+    "tags": [
+        "search",
+        "searching algorithm",
+        "array search"
+    ],
+    "path": "python/algorithms/search/linear_search/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

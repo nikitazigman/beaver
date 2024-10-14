@@ -1,0 +1,20 @@
+{
+    "title": "Traveling Salesman Problem (TSP)",
+    "link_to_project": "https://www.geeksforgeeks.org/travelling-salesman-problem-using-dynamic-programming/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "tsp",
+        "traveling salesman problem",
+        "heuristic",
+        "optimization"
+    ],
+    "path": "python/algorithms/graph/graph_tsp/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

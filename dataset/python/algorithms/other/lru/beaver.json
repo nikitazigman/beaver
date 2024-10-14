@@ -1,0 +1,19 @@
+{
+    "title": "LRU (Least Recently Used) Cache",
+    "link_to_project": "https://www.geeksforgeeks.org/lru-cache-implementation/",
+    "language": "python",
+    "tags": [
+        "LRU cache",
+        "least recently used",
+        "cache",
+        "data structures"
+    ],
+    "path": "python/algorithms/other/lru/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

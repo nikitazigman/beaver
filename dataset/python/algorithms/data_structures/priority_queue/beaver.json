@@ -1,0 +1,18 @@
+{
+    "title": "Priority Queue implementation using a binary heap",
+    "link_to_project": "https://www.geeksforgeeks.org/priority-queue-set-1-introduction/",
+    "language": "python",
+    "tags": [
+        "priority queue",
+        "binary heap",
+        "data structures"
+    ],
+    "path": "python/algorithms/data_structures/priority_queue/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "title": "Binary Search Tree",
+    "link_to_project": "https://www.geeksforgeeks.org/binary-search-tree-data-structure/",
+    "language": "python",
+    "tags": [
+        "binary search tree",
+        "data structures",
+        "tree traversal",
+        "balancing"
+    ],
+    "path": "python/algorithms/data_structures/binary_search_tree/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

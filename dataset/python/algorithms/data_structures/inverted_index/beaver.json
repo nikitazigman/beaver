@@ -1,0 +1,19 @@
+{
+    "title": "Inverted Index for Document Search",
+    "link_to_project": "https://www.geeksforgeeks.org/inverted-index/",
+    "language": "python",
+    "tags": [
+        "inverted index",
+        "document search",
+        "text processing",
+        "algorithm"
+    ],
+    "path": "python/algorithms/data_structures/inverted_index/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

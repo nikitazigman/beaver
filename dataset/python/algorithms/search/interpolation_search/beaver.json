@@ -1,0 +1,18 @@
+{
+    "title": "Interpolation Search Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/interpolation-search/",
+    "language": "python",
+    "tags": [
+        "interpolation search",
+        "searching algorithm",
+        "array search"
+    ],
+    "path": "python/algorithms/search/interpolation_search/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

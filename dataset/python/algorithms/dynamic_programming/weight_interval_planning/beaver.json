@@ -1,0 +1,18 @@
+{
+    "title": "Weighted Interval Planning",
+    "link_to_project": "https://www.geeksforgeeks.org/weighted-job-scheduling-log-n-time/",
+    "language": "python",
+    "tags": [
+        "weighted interval scheduling",
+        "dynamic programming",
+        "greedy algorithm"
+    ],
+    "path": "python/algorithms/dynamic_programming/weight_interval_planning/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

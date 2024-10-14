@@ -1,0 +1,19 @@
+{
+    "title": "Subset Sum",
+    "link_to_project": "https://www.geeksforgeeks.org/subset-sum-problem-dp-25/",
+    "language": "python",
+    "tags": [
+        "dynamic programming",
+        "recursion",
+        "backtracking",
+        "subset sum"
+    ],
+    "path": "python/algorithms/dynamic_programming/subset_sum/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

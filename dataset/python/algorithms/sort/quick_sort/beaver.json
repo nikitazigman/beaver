@@ -1,0 +1,19 @@
+{
+    "title": "Quick Sort Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/quick-sort/",
+    "language": "python",
+    "tags": [
+        "quick sort",
+        "sorting",
+        "data structures",
+        "divide and conquer"
+    ],
+    "path": "python/algorithms/sort/quick_sort/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}

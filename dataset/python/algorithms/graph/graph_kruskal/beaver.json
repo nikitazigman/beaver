@@ -1,0 +1,20 @@
+{
+    "title": "Kruskal's Algorithm",
+    "link_to_project": "https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/",
+    "language": "python",
+    "tags": [
+        "graph",
+        "minimum spanning tree",
+        "kruskal",
+        "union find",
+        "greedy algorithm"
+    ],
+    "path": "python/algorithms/graph/graph_kruskal/main.py",
+    "authors": [
+        {
+            "name": "Pavel",
+            "last_name": "Eroshkin",
+            "email": "eroshkin321@gmail.com"
+        }
+    ]
+}
