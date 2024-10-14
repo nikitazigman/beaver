@@ -7,7 +7,7 @@
         "greedy algorithm",
         "heap"
     ],
-    "path": "algorithms/classical_problems/intervals_max_independent/main.py",
+    "path": "python/algorithms/classical_problems/intervals_max_independent/main.py",
     "authors": [
         {
             "name": "Pavel",

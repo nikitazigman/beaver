@@ -8,7 +8,7 @@
         "data structures",
         "heapq"
     ],
-    "path": "algorithms/sort/heap_sort/main.py",
+    "path": "python/algorithms/sort/heap_sort/main.py",
     "authors": [
         {
             "name": "Pavel",

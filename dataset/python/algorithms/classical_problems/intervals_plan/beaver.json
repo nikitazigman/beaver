@@ -8,7 +8,7 @@
         "heap",
         "scheduling"
     ],
-    "path": "algorithms/classical_problems/intervals_plan/main.py",
+    "path": "python/algorithms/classical_problems/intervals_plan/main.py",
     "authors": [
         {
             "name": "Pavel",

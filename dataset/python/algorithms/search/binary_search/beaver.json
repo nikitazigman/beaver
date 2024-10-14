@@ -7,7 +7,7 @@
         "searching algorithm",
         "array search"
     ],
-    "path": "algorithms/search/binary_search/main.py",
+    "path": "python/algorithms/search/binary_search/main.py",
     "authors": [
         {
             "name": "Pavel",

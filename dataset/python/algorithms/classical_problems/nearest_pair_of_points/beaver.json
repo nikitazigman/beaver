@@ -8,7 +8,7 @@
         "divide and conquer",
         "euclidean distance"
     ],
-    "path": "algorithms/classical_problems/nearest_pair_of_points/main.py",
+    "path": "python/algorithms/classical_problems/nearest_pair_of_points/main.py",
     "authors": [
         {
             "name": "Pavel",

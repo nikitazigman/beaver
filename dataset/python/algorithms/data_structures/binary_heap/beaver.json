@@ -6,7 +6,7 @@
         "binary heap",
         "data structures"
     ],
-    "path": "algorithms/data_structures/binary_heap/main.py",
+    "path": "python/algorithms/data_structures/binary_heap/main.py",
     "authors": [
         {
             "name": "Pavel",

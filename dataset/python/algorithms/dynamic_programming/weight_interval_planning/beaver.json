@@ -7,7 +7,7 @@
         "dynamic programming",
         "greedy algorithm"
     ],
-    "path": "algorithms/dynamic_programming/weight_interval_planning/main.py",
+    "path": "python/algorithms/dynamic_programming/weight_interval_planning/main.py",
     "authors": [
         {
             "name": "Pavel",

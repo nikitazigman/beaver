@@ -8,7 +8,7 @@
         "text processing",
         "algorithm"
     ],
-    "path": "algorithms/data_structures/inverted_index/main.py",
+    "path": "python/algorithms/data_structures/inverted_index/main.py",
     "authors": [
         {
             "name": "Pavel",

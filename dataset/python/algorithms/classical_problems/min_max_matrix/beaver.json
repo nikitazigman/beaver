@@ -8,7 +8,7 @@
         "minimum path sum",
         "grid"
     ],
-    "path": "algorithms/classical_problems/min_max_matrix/main.py",
+    "path": "python/algorithms/classical_problems/min_max_matrix/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -8,7 +8,7 @@
         "dsatur",
         "greedy algorithm"
     ],
-    "path": "algorithms/graph/graph_dastur/main.py",
+    "path": "python/algorithms/graph/graph_dastur/main.py",
     "authors": [
         {
             "name": "Pavel",

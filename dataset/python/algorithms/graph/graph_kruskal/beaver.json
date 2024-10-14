@@ -9,7 +9,7 @@
         "union find",
         "greedy algorithm"
     ],
-    "path": "algorithms/graph/graph_kruskal/main.py",
+    "path": "python/algorithms/graph/graph_kruskal/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -8,7 +8,7 @@
         "breadth first search",
         "coloring"
     ],
-    "path": "algorithms/graph/graph_is_bipartite/main.py",
+    "path": "python/algorithms/graph/graph_is_bipartite/main.py",
     "authors": [
         {
             "name": "Pavel",

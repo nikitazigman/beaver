@@ -9,7 +9,7 @@
         "depth first search",
         "topological sort"
     ],
-    "path": "algorithms/graph/oriented_graph/main.py",
+    "path": "python/algorithms/graph/oriented_graph/main.py",
     "authors": [
         {
             "name": "Pavel",

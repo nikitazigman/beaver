@@ -8,7 +8,7 @@
         "data structures",
         "divide and conquer"
     ],
-    "path": "algorithms/sort/merge_sort/main.py",
+    "path": "python/algorithms/sort/merge_sort/main.py",
     "authors": [
         {
             "name": "Pavel",

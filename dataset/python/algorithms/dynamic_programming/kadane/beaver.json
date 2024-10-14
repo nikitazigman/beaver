@@ -8,7 +8,7 @@
         "maximum subarray sum",
         "Kadane's Algorithm"
     ],
-    "path": "algorithms/dynamic_programming/kadane/main.py",
+    "path": "python/algorithms/dynamic_programming/kadane/main.py",
     "authors": [
         {
             "name": "Pavel",

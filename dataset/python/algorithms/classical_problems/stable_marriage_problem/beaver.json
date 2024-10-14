@@ -7,7 +7,7 @@
         "matching algorithm",
         "gale-shapley algorithm"
     ],
-    "path": "algorithms/classical_problems/stable_marriage_problem/main.py",
+    "path": "python/algorithms/classical_problems/stable_marriage_problem/main.py",
     "authors": [
         {
             "name": "Pavel",

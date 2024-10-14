@@ -8,7 +8,7 @@
         "backtracking",
         "subset sum"
     ],
-    "path": "algorithms/dynamic_programming/subset_sum/main.py",
+    "path": "python/algorithms/dynamic_programming/subset_sum/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -7,7 +7,7 @@
         "heapq",
         "data structures"
     ],
-    "path": "algorithms/dynamic_programming/k_merge/main.py",
+    "path": "python/algorithms/dynamic_programming/k_merge/main.py",
     "authors": [
         {
             "name": "Pavel",

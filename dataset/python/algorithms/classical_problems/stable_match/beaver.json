@@ -9,7 +9,7 @@
         "preferences",
         "estimations"
     ],
-    "path": "algorithms/classical_problems/stable_match/main.py",
+    "path": "python/algorithms/classical_problems/stable_match/main.py",
     "authors": [
         {
             "name": "Pavel",

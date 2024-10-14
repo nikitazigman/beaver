@@ -8,7 +8,7 @@
         "tree traversal",
         "balancing"
     ],
-    "path": "algorithms/data_structures/binary_search_tree/main.py",
+    "path": "python/algorithms/data_structures/binary_search_tree/main.py",
     "authors": [
         {
             "name": "Pavel",

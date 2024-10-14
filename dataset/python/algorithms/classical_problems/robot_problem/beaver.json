@@ -8,7 +8,7 @@
         "matrix",
         "grid paths"
     ],
-    "path": "algorithms/classical_problems/robot_problem/main.py",
+    "path": "python/algorithms/classical_problems/robot_problem/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -9,7 +9,7 @@
         "best fit",
         "data structures"
     ],
-    "path": "algorithms/dynamic_programming/bin_packing/main.py",
+    "path": "python/algorithms/dynamic_programming/bin_packing/main.py",
     "authors": [
         {
             "name": "Pavel",

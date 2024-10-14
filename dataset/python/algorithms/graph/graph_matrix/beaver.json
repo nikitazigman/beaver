@@ -7,7 +7,7 @@
         "adjacency matrix",
         "data structures"
     ],
-    "path": "algorithms/graph/graph_matrix/main.py",
+    "path": "python/algorithms/graph/graph_matrix/main.py",
     "authors": [
         {
             "name": "Pavel",

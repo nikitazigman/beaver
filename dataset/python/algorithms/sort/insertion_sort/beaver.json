@@ -8,7 +8,7 @@
         "data structures",
         "comparison sort"
     ],
-    "path": "algorithms/sort/insertion_sort/main.py",
+    "path": "python/algorithms/sort/insertion_sort/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -55,7 +55,8 @@ def python_checker(project: Path) -> None:
     with project.joinpath(BEAVER_FILE).open() as file:
         content = BeaverCodeSchema.model_validate_json(file.read())
 
-    path_to_code = PATH_TO_PYTHON_PROJECTS.joinpath(content.path)
+    path_to_code = PATH_TO_DATASET.joinpath(content.path)
+
     if not path_to_code.is_file():
         raise FileNotFoundError(f"File {path_to_code} not found")
 

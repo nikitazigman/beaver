@@ -8,7 +8,7 @@
         "prim",
         "greedy algorithm"
     ],
-    "path": "algorithms/graph/graph_prim/main.py",
+    "path": "python/algorithms/graph/graph_prim/main.py",
     "authors": [
         {
             "name": "Pavel",

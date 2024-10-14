@@ -8,7 +8,7 @@
         "cache",
         "data structures"
     ],
-    "path": "algorithms/other/lru/main.py",
+    "path": "python/algorithms/other/lru/main.py",
     "authors": [
         {
             "name": "Pavel",

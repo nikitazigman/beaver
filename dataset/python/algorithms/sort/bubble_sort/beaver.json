@@ -7,7 +7,7 @@
         "sorting",
         "data structures"
     ],
-    "path": "algorithms/sort/bubble_sort/main.py",
+    "path": "python/algorithms/sort/bubble_sort/main.py",
     "authors": [
         {
             "name": "Pavel",

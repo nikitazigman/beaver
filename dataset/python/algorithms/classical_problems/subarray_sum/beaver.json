@@ -9,7 +9,7 @@
         "subarray sum",
         "target sum"
     ],
-    "path": "algorithms/classical_problems/subarray_sum/main.py",
+    "path": "python/algorithms/classical_problems/subarray_sum/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -7,7 +7,7 @@
         "searching algorithm",
         "array search"
     ],
-    "path": "algorithms/search/interpolation_search/main.py",
+    "path": "python/algorithms/search/interpolation_search/main.py",
     "authors": [
         {
             "name": "Pavel",

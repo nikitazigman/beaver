@@ -9,7 +9,7 @@
         "heuristic",
         "optimization"
     ],
-    "path": "algorithms/graph/graph_tsp/main.py",
+    "path": "python/algorithms/graph/graph_tsp/main.py",
     "authors": [
         {
             "name": "Pavel",

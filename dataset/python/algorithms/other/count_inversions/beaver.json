@@ -8,7 +8,7 @@
         "divide and conquer",
         "data structures"
     ],
-    "path": "algorithms/other/count_inversions/main.py",
+    "path": "python/algorithms/other/count_inversions/main.py",
     "authors": [
         {
             "name": "Pavel",

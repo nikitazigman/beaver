@@ -8,7 +8,7 @@
         "gis",
         "greedy algorithm"
     ],
-    "path": "algorithms/graph/graph_gis_coloring/main.py",
+    "path": "python/algorithms/graph/graph_gis_coloring/main.py",
     "authors": [
         {
             "name": "Pavel",

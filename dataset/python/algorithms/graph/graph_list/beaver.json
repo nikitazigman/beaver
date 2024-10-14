@@ -9,7 +9,7 @@
         "breadth first search",
         "depth first search"
     ],
-    "path": "algorithms/graph/graph_list/main.py",
+    "path": "python/algorithms/graph/graph_list/main.py",
     "authors": [
         {
             "name": "Pavel",

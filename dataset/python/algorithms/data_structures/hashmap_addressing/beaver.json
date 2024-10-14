@@ -8,7 +8,7 @@
         "open addressing",
         "double hashing"
     ],
-    "path": "algorithms/data_structures/hashmap_addressing/main.py",
+    "path": "python/algorithms/data_structures/hashmap_addressing/main.py",
     "authors": [
         {
             "name": "Pavel",

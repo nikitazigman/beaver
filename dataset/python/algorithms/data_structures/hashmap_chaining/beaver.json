@@ -8,7 +8,7 @@
         "separate chaining",
         "linked list"
     ],
-    "path": "algorithms/data_structures/hashmap_chaining/main.py",
+    "path": "python/algorithms/data_structures/hashmap_chaining/main.py",
     "authors": [
         {
             "name": "Pavel",
