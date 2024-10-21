@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.sort.merge_sort.main import merge_sort
+from algorithms.sort.merge_sort_v2.main import merge_sort
 
 
 @pytest.mark.parametrize(
