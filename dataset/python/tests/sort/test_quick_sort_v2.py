@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.sort.quick_sort.main import quick_sort
+from algorithms.sort.quick_sort_v2.main import quick_sort2
 
 
 @pytest.mark.parametrize(
@@ -14,4 +14,4 @@ from algorithms.sort.quick_sort.main import quick_sort
     ],
 )
 def test_quick_sort(array: list[int], expected: list[int]) -> None:
-    assert quick_sort(array=array) == expected
+    assert quick_sort2(array=array) == expected
