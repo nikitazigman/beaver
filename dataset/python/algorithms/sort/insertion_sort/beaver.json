@@ -3,10 +3,7 @@
     "link_to_project": "https://www.geeksforgeeks.org/insertion-sort/",
     "language": "python",
     "tags": [
-        "insertion sort",
-        "sorting",
-        "data structures",
-        "comparison sort"
+        "sort"
     ],
     "path": "python/algorithms/sort/insertion_sort/main.py",
     "authors": [

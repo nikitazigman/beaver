@@ -4,8 +4,7 @@
     "language": "python",
     "tags": [
         "sort",
-        "sorting",
-        "data structures"
+        "hash table"
     ],
     "path": "python/algorithms/sort/count_sort/main.py",
     "authors": [
