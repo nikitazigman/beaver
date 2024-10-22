@@ -13,5 +13,5 @@ from algorithms.sort.heap_sort.main import heap_sort
         ([6, 5, 4, 3, 2, 1], [1, 2, 3, 4, 5, 6]),
     ],
 )
-def test_heap_sort(array, expected):
-    assert heap_sort(array) == expected
+def test_heap_sort(array: list[int], expected: list[int]) -> None:
+    assert heap_sort(array=array) == expected

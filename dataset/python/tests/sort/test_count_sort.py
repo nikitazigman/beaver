@@ -13,5 +13,5 @@ from algorithms.sort.count_sort.main import count_sort
         ([3, 6, 4, 1, 3, 4, 1, 4], [1, 1, 3, 3, 4, 4, 4, 6]),
     ],
 )
-def test_count_sort(array, expected):
-    assert count_sort(array) == expected
+def test_count_sort(array: list[int], expected: list[int]) -> None:
+    assert count_sort(arr=array) == expected

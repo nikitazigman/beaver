@@ -13,6 +13,6 @@ from algorithms.sort.bubble_sort.main import bubble_sort
         ([5, 4, 3, 2, 1], [1, 2, 3, 4, 5]),
     ],
 )
-def test_bubble_sort(array, expected):
-    bubble_sort(array)
+def test_bubble_sort(array: list[int], expected: list[int]) -> None:
+    bubble_sort(array=array)
     assert array == expected

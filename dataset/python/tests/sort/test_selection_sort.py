@@ -13,5 +13,5 @@ from algorithms.sort.selection_sort.main import selection_sort
         ([5, 4, 3, 2, 1], [1, 2, 3, 4, 5]),
     ],
 )
-def test_selection_sort(array, expected):
-    assert selection_sort(array) == expected
+def test_selection_sort(array: list[int], expected: list[int]) -> None:
+    assert selection_sort(array=array) == expected
