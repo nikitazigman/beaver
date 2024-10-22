@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.sort.count_sort.main import count_sort
+from algorithms.sort.count_sort_v2.main import count_sort
 
 
 @pytest.mark.parametrize(

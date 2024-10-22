@@ -1,9 +1,10 @@
 {
-    "title": "Counting Sort Algorithm",
+    "title": "Counting Sort Algorithm v2",
     "link_to_project": "https://www.geeksforgeeks.org/counting-sort/",
     "language": "python",
     "tags": [
-        "sort"
+        "sort",
+        "hash table"
     ],
     "path": "python/algorithms/sort/count_sort/main.py",
     "authors": [
