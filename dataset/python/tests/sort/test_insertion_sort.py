@@ -13,6 +13,6 @@ from algorithms.sort.insertion_sort.main import insertion_sort
         ([5, 4, 3, 2, 1], [1, 2, 3, 4, 5]),
     ],
 )
-def test_insertion_sort(array, expected):
-    insertion_sort(array)
+def test_insertion_sort(array: list[int], expected: list[int]) -> None:
+    insertion_sort(array=array)
     assert array == expected

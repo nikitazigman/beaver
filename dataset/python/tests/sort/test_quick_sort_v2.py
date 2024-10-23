@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.sort.merge_sort.main import merge_sort
+from algorithms.sort.quick_sort_v2.main import quick_sort2
 
 
 @pytest.mark.parametrize(
@@ -13,5 +13,5 @@ from algorithms.sort.merge_sort.main import merge_sort
         ([5, 5, 5, 5, 5], [5, 5, 5, 5, 5]),
     ],
 )
-def test_merge_sort(array: list[int], expected: list[int]) -> None:
-    assert merge_sort(array=array) == expected
+def test_quick_sort(array: list[int], expected: list[int]) -> None:
+    assert quick_sort2(array=array) == expected

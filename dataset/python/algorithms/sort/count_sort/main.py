@@ -1,12 +1,18 @@
-def count_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    max_element = max(arr)
-    count_map = {}
-    for element in arr:
-        count_map[element] = count_map.get(element, 0) + 1
-    result_array = []
-    for i in range(1, max_element + 1):
-        if i in count_map:
-            result_array.extend([i] * count_map[i])
+def count_sort(array: list[int]) -> list[int]:
+    if len(array) <= 1:
+        return array
+
+    min_element: int = min(array)
+
+    normalized_array: list[int] = [i - min_element for i in array]
+    max_normalized_element: int = max(normalized_array)
+
+    count_map: list[int] = [0] * (max_normalized_element + 1)
+    for i in normalized_array:
+        count_map[i] += 1
+
+    result_array: list[int] = []
+    for i in range(max_normalized_element + 1):
+        result_array.extend([i + min_element] * count_map[i])
+
     return result_array

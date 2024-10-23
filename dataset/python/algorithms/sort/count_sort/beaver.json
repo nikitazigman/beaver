@@ -3,9 +3,7 @@
     "link_to_project": "https://www.geeksforgeeks.org/counting-sort/",
     "language": "python",
     "tags": [
-        "sort",
-        "sorting",
-        "data structures"
+        "sort"
     ],
     "path": "python/algorithms/sort/count_sort/main.py",
     "authors": [

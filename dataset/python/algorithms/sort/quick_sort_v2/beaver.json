@@ -1,12 +1,12 @@
 {
-    "title": "Merge Sort Algorithm",
-    "link_to_project": "https://www.geeksforgeeks.org/merge-sort/",
+    "title": "Quick Sort Algorithm v2",
+    "link_to_project": "https://www.geeksforgeeks.org/quick-sort/",
     "language": "python",
     "tags": [
         "sort",
         "divide and conquer"
     ],
-    "path": "python/algorithms/sort/merge_sort/main.py",
+    "path": "python/algorithms/sort/quick_sort/main.py",
     "authors": [
         {
             "name": "Pavel",

@@ -3,9 +3,7 @@
     "link_to_project": "https://www.geeksforgeeks.org/quick-sort/",
     "language": "python",
     "tags": [
-        "quick sort",
-        "sorting",
-        "data structures",
+        "sort",
         "divide and conquer"
     ],
     "path": "python/algorithms/sort/quick_sort/main.py",
