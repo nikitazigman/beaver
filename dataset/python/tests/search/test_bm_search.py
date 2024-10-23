@@ -1,25 +1,16 @@
-from algorithms.search.bm_search.main import bm_search
+import pytest
+
+from algorithms.search.bm_search.main import boyer_moore_search
 
 
-def test_bm_search_found():
-    string = "HERE IS A SIMPLE EXAMPLE"
-    substring = "EXAMPLE"
-    assert bm_search(string, substring) == 17
-
-
-def test_bm_search_not_found():
-    string = "HERE IS A SIMPLE EXAMPLE"
-    substring = "NOTFOUND"
-    assert bm_search(string, substring) == -1
-
-
-def test_bm_search_at_start():
-    string = "EXAMPLE HERE IS A SIMPLE EXAMPLE"
-    substring = "EXAMPLE"
-    assert bm_search(string, substring) == 0
-
-
-def test_bm_search_at_end():
-    string = "HERE IS A SIMPLE EXAMPLE"
-    substring = "EXAMPLE"
-    assert bm_search(string, substring) == 17
+@pytest.mark.parametrize(
+    ["text", "pattern", "expected"],
+    [
+        pytest.param("HERE IS A SIMPLE EXAMPLE", "IS", 5, id="exists"),
+        pytest.param("HERE IS A ", "NOTFOUND", None, id="does not exists"),
+        pytest.param("HERE IS A SIMPLE EXAMPLE", "HERE", 0, id="at start"),
+        pytest.param("HERE IS A SIMPLE EXAMPLE", "EXAMPLE", 17, id="at end"),
+    ],
+)
+def test_bm_search(text: str, pattern: str, expected: int) -> None:
+    assert boyer_moore_search(text=text, pattern=pattern) == expected
