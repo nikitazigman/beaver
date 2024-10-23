@@ -1,43 +1,18 @@
+import pytest
+
 from algorithms.search.naive_search.main import naive_search
 
 
-def test_naive_search_found():
-    string = "ABABDABACDABABCABAB"
-    substring = "ABABCABAB"
-    assert naive_search(string, substring) == 10
-
-
-def test_naive_search_not_found():
-    string = "ABABDABACDABABCABAB"
-    substring = "ABCDEF"
-    assert naive_search(string, substring) == -1
-
-
-def test_naive_search_at_start():
-    string = "ABABCABAB"
-    substring = "ABAB"
-    assert naive_search(string, substring) == 0
-
-
-def test_naive_search_at_end():
-    string = "ABABDABACDABABCABAB"
-    substring = "CABAB"
-    assert naive_search(string, substring) == 14
-
-
-def test_naive_search_single_char():
-    string = "ABABDABACDABABCABAB"
-    substring = "D"
-    assert naive_search(string, substring) == 4
-
-
-def test_naive_search_same_string():
-    string = "ABABCABAB"
-    substring = "ABABCABAB"
-    assert naive_search(string, substring) == 0
-
-
-def test_naive_search_partial_match():
-    string = "AABAACAADAABAABA"
-    substring = "AABA"
-    assert naive_search(string, substring) == 0
+@pytest.mark.parametrize(
+    ["text", "pattern", "expected"],
+    [
+        pytest.param("ABABDABACDABABCABAB", "ABABCABAB", 10, id="exist"),
+        pytest.param("ABABDABACDABA", "ABCDEF", None, id="does not exist"),
+        pytest.param("ABABCABAB", "ABAB", 0, id="at start"),
+        pytest.param("ABABDABACDABABCABAB", "CABAB", 14, id="at end"),
+        pytest.param("ABABDAB", "D", 4, id="single character"),
+        pytest.param("ABABCABAB", "ABABCABAB", 0, id="the same text"),
+    ],
+)
+def test_naive_search(text: str, pattern: str, expected: int | None) -> None:
+    assert naive_search(text=text, pattern=pattern) == expected
