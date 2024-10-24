@@ -3,10 +3,9 @@
     "link_to_project": "https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/",
     "language": "python",
     "tags": [
-        "boyer-moore",
-        "string search",
-        "pattern matching",
-        "algorithm"
+        "string",
+        "search",
+        "substring search"
     ],
     "path": "python/algorithms/search/bm_search/main.py",
     "authors": [

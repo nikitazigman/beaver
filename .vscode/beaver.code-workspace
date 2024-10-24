@@ -1,25 +1,25 @@
 {
     "folders": [
 		{
-			"path": "../dataset"
-		},
-		{
-			"path": "../backend/apps/beaver_etl"
+			"path": "../IaC"
 		},
 		{
 			"path": "../backend/apps/beaver_api"
 		},
 		{
-			"path": ".."
+			"path": "../backend/apps/beaver_etl"
 		},
 		{
 			"path": "../backend/apps/beaver_linter"
 		},
 		{
+			"path": ".."
+		},
+		{
 			"path": "../frontend/beaver_terminal"
 		},
 		{
-			"path": "../IaC"
+			"path": "../dataset/python"
 		}
 	], 
 	"settings": {
@@ -37,6 +37,7 @@
 		"python.testing.pytestEnabled": true,
 		"cSpell.words": [
 			"docstrings",
+			"Eroshkin",
 			"filterset",
 			"forcelist",
 			"pymongo",

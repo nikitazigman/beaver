@@ -3,9 +3,7 @@
     "link_to_project": "https://www.geeksforgeeks.org/binary-search/",
     "language": "python",
     "tags": [
-        "search",
-        "searching algorithm",
-        "array search"
+        "search"
     ],
     "path": "python/algorithms/search/binary_search/main.py",
     "authors": [
