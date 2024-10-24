@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.search.bm_search.main import boyer_moore_search
+from algorithms.substring_search.bm_search.main import boyer_moore_search
 
 
 @pytest.mark.parametrize(

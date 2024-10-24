@@ -1,4 +1,4 @@
-from algorithms.search.kmp_search.main import kmp_search
+from algorithms.substring_search.kmp_search.main import kmp_search
 
 
 def test_kmp_search_found():

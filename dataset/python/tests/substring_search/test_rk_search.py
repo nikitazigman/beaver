@@ -1,4 +1,4 @@
-from algorithms.search.rk_search.main import rk_search
+from algorithms.substring_search.rk_search.main import rk_search
 
 
 def test_rk_search_found():

@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.search.naive_search.main import naive_search
+from algorithms.substring_search.naive_search.main import naive_search
 
 
 @pytest.mark.parametrize(
