@@ -3,6 +3,7 @@
     "link_to_project": "https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/",
     "language": "python",
     "tags": [
+        "string",
         "search",
         "substring search"
     ],

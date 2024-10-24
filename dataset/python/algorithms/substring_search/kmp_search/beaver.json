@@ -3,10 +3,9 @@
     "link_to_project": "https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/",
     "language": "python",
     "tags": [
-        "kmp",
-        "string search",
-        "pattern matching",
-        "algorithm"
+        "string",
+        "search",
+        "substring search"
     ],
     "path": "python/algorithms/search/kmp_search/main.py",
     "authors": [
