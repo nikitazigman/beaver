@@ -37,6 +37,7 @@
 		"python.testing.pytestEnabled": true,
 		"cSpell.words": [
 			"docstrings",
+			"Eroshkin",
 			"filterset",
 			"forcelist",
 			"pymongo",
