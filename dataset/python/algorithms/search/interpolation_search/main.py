@@ -1,19 +1,28 @@
-def interpolation_search(array, element):
-    left = 0
-    right = len(array) - 1
+def interpolation_search(array: list[int], element: int) -> int | None:
+    left: int = 0
+    right: int = len(array) - 1
+
+    def interpolate() -> int:
+        pointer_dist: int = right - left
+        value_dist: int = array[right] - array[left]
+        error_dist: int = element - array[left]
+
+        position: float = left + ((error_dist * pointer_dist) / value_dist)
+
+        return int(position)
+
     while left <= right and array[left] != array[right]:
-        mid = int(
-            left
-            + (element - array[left])
-            * (right - left)
-            / (array[right] - array[left])
-        )
+        mid: int = interpolate()
+
         if mid >= len(array):
-            return -1
-        elif array[mid] == element:
+            return None
+
+        if array[mid] == element:
             return mid
-        elif array[mid] < element:
+
+        if array[mid] < element:
             left = mid + 1
         else:
             right = mid - 1
-    return -1
+
+    return None
