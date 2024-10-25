@@ -7,8 +7,8 @@
         "search",
         "substring search"
     ],
-    "path": "python/algorithms/search/rk_search/main.py",
-    "authors": [
+    "path": "python/algorithms/substring_search/rk_search/main.py",
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

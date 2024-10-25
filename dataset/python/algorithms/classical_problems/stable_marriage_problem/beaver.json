@@ -8,7 +8,7 @@
         "gale-shapley algorithm"
     ],
     "path": "python/algorithms/classical_problems/stable_marriage_problem/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

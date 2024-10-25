@@ -10,7 +10,7 @@
         "optimization"
     ],
     "path": "python/algorithms/graph/graph_tsp/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

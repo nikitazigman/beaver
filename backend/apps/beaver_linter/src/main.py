@@ -14,12 +14,12 @@ def not_empty(value: str) -> str:
 
 NonEmptyStr = Annotated[str, AfterValidator(not_empty)]
 BEAVER_FILE = "beaver.json"
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
+ROOT_DIR: Path = Path(__file__).resolve().parent.parent.parent.parent.parent
 PATH_TO_DATASET: Path = ROOT_DIR.joinpath("dataset").absolute()
 PATH_TO_PYTHON_PROJECTS: Path = PATH_TO_DATASET.joinpath("python")
 
 
-class Author(BaseModel):
+class Contributor(BaseModel):
     name: NonEmptyStr
     last_name: NonEmptyStr
     email: NonEmptyStr
@@ -31,7 +31,7 @@ class BeaverCodeSchema(BaseModel):
     language: NonEmptyStr
     tags: list[NonEmptyStr]
     path: NonEmptyStr
-    authors: list[Author]
+    contributors: list[Contributor]
 
 
 def find_projects(path: Path, key_file: str) -> list[Path]:

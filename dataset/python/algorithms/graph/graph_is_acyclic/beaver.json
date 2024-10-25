@@ -8,7 +8,7 @@
         "cycle detection"
     ],
     "path": "python/algorithms/graph/graph_is_acyclic/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",
