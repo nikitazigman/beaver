@@ -3,10 +3,9 @@
     "link_to_project": "https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/",
     "language": "python",
     "tags": [
-        "rabin-karp",
-        "string search",
-        "pattern matching",
-        "algorithm"
+        "string",
+        "search",
+        "substring search"
     ],
     "path": "python/algorithms/search/rk_search/main.py",
     "authors": [

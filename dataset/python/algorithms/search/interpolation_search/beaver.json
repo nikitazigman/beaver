@@ -3,9 +3,7 @@
     "link_to_project": "https://www.geeksforgeeks.org/interpolation-search/",
     "language": "python",
     "tags": [
-        "interpolation search",
-        "searching algorithm",
-        "array search"
+        "search"
     ],
     "path": "python/algorithms/search/interpolation_search/main.py",
     "authors": [

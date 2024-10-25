@@ -3,10 +3,9 @@
     "link_to_project": "https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/",
     "language": "python",
     "tags": [
-        "naive search",
-        "string search",
-        "pattern matching",
-        "algorithm"
+        "string",
+        "search",
+        "substring search"
     ],
     "path": "python/algorithms/search/naive_search/main.py",
     "authors": [
