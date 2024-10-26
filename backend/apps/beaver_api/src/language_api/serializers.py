@@ -3,13 +3,13 @@ from rest_framework.serializers import ModelSerializer
 
 
 class LanguageSerializer(ModelSerializer):
-    class Meta:
+    class Meta:  # type: ignore
         model = Language
-        fields = (
+        fields: tuple = (
             "id",
             "name",
         )
-        read_only_fields = (
+        read_only_fields: tuple = (
             "id",
             "name",
         )

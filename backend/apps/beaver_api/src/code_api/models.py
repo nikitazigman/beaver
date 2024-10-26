@@ -1,4 +1,5 @@
 from beaver_api.models import TimeStampMixin, UUIDMixin
+from contributors.models import Contributor
 from django.db import models
 from language_api.models import Language
 from seal.models import SealableModel
@@ -21,10 +22,13 @@ class CodeDocument(UUIDMixin, TimeStampMixin, SealableModel):  # type: ignore
         null=True,
     )
     tags: models.ManyToManyField = models.ManyToManyField(
-        Tag, related_name="code_documents"
+        to=Tag, related_name="code_documents"
     )
     last_synchronization: models.DateTimeField = models.DateTimeField(
         null=False, blank=False
+    )
+    contributors: models.ManyToManyField = models.ManyToManyField(
+        to=Contributor, related_name="code_documents"
     )
 
     def __str__(self) -> str:
