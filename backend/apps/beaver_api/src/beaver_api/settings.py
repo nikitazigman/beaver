@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "tags_api.apps.TagsApiConfig",
     "language_api.apps.LanguageApiConfig",
     "users.apps.UsersConfig",
+    "contributors.apps.ContributorsConfig",
 ]
 
 MIDDLEWARE = [
