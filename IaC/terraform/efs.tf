@@ -7,7 +7,7 @@ resource "aws_security_group" "efs_sg" {
     from_port   = 2049 # NFS port
     to_port     = 2049
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] 
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 

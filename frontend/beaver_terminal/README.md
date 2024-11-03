@@ -45,5 +45,5 @@ Contributions are welcome! If you'd like to contribute, please follow these step
 4. Push to the branch (git push origin feature/YourFeature).
 4. Open a pull request.
 
-### License 
+### License
 This project is licensed under the GNU GENERAL PUBLIC LICENSE.

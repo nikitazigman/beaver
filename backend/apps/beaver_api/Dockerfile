@@ -36,6 +36,3 @@ WORKDIR $APP_PATH
 COPY  . ${APP_PATH}
 
 RUN poetry install
-
-
-

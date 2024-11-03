@@ -21,7 +21,7 @@
 		{
 			"path": "../dataset/python"
 		}
-	], 
+	],
 	"settings": {
 		"ruff.enable": true,
 		"ruff.lint.run": "onSave",
