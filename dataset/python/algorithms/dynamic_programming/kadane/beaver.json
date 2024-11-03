@@ -9,7 +9,7 @@
         "Kadane's Algorithm"
     ],
     "path": "python/algorithms/dynamic_programming/kadane/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

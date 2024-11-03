@@ -8,7 +8,7 @@
         "eulerian path"
     ],
     "path": "python/algorithms/graph/graph_euler_cycle/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

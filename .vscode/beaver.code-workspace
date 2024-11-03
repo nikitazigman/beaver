@@ -21,7 +21,7 @@
 		{
 			"path": "../dataset/python"
 		}
-	], 
+	],
 	"settings": {
 		"ruff.enable": true,
 		"ruff.lint.run": "onSave",
@@ -36,6 +36,7 @@
 		"python.testing.unittestEnabled": false,
 		"python.testing.pytestEnabled": true,
 		"cSpell.words": [
+			"codedocument",
 			"docstrings",
 			"Eroshkin",
 			"filterset",

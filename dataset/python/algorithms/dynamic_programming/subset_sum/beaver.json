@@ -9,7 +9,7 @@
         "subset sum"
     ],
     "path": "python/algorithms/dynamic_programming/subset_sum/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

@@ -36,7 +36,7 @@ class Code(TextArea, inherit_bindings=False):
         &:focus {
             border: none;
         }
-    }   
+    }
     """
 
     BINDINGS = []

@@ -10,7 +10,7 @@
         "topological sort"
     ],
     "path": "python/algorithms/graph/oriented_graph/main.py",
-    "authors": [
+    "contributors": [
         {
             "name": "Pavel",
             "last_name": "Eroshkin",

@@ -164,5 +164,5 @@ cython_debug/
 # beaver api
 backend/apps/beaver_api/static
 
-# terraform 
+# terraform
 .terraform/
