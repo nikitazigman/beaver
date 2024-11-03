@@ -1,7 +1,9 @@
 from code_api.models import CodeDocument
 from code_api.services import (
-    get_or_create_obj_by_names,
+    bulk_ger_or_create_contributors,
+    bulk_get_or_create_obj_by_names,
 )
+from contributors.models import Contributor
 from contributors.serializers import (
     ContributorBulkSerializer,
     ContributorSerializer,
@@ -18,16 +20,30 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
         for data in validated_data:
             tag_names.update(data["tags"])
 
-        tags: list[Tag] = get_or_create_obj_by_names(
+        tags: list[Tag] = bulk_get_or_create_obj_by_names(
             names=list(tag_names), model_class=Tag
         )
         return {tag.name: tag for tag in tags}
+
+    def get_contributors_mappings(
+        self, validated_data: list[dict]
+    ) -> dict[str, Contributor]:
+        contributors_data: list[dict] = []
+        for data in validated_data:
+            contributors_data.extend(data["contributors"])
+
+        contributors: list[Contributor] = bulk_ger_or_create_contributors(
+            contributors=contributors_data
+        )
+        return {
+            contributor.address: contributor for contributor in contributors
+        }
 
     def get_language_mappings(
         self, validated_data: list[dict]
     ) -> dict[str, Language]:
         language_names = set(data["language"] for data in validated_data)
-        languages: list[Language] = get_or_create_obj_by_names(
+        languages: list[Language] = bulk_get_or_create_obj_by_names(
             names=list(language_names), model_class=Language
         )
         return {language.name: language for language in languages}
@@ -59,14 +75,30 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
             for tag_name in data["tags"]
         ]
 
+    def create_contributors_through_code(
+        self,
+        code_object: CodeDocument,
+        data: dict,
+        contributors_mapping: dict[str, Contributor],
+    ) -> list[Model]:
+        return [
+            code_object.contributors.through(
+                codedocument_id=code_object.id,
+                contributor_id=contributors_mapping[contributor["address"]].id,
+            )
+            for contributor in data["contributors"]
+        ]
+
     def bulk_create_code_docs(
         self,
         tag_mapping: dict[str, Tag],
+        contributors_mapping: dict[str, Contributor],
         language_mapping: dict[str, Language],
         validated_data: list[dict],
     ) -> list[CodeDocument]:
         code_objects: list[CodeDocument] = []
         code_through_tags: list = []
+        code_through_contributors: list = []
 
         for data in validated_data:
             code_doc: CodeDocument = self.create_code_objects(
@@ -79,10 +111,22 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
             )
             code_through_tags.extend(through_objects)
 
+            through_contributors: list[
+                Model
+            ] = self.create_contributors_through_code(
+                code_object=code_doc,
+                data=data,
+                contributors_mapping=contributors_mapping,
+            )
+            code_through_contributors.extend(through_contributors)
+
         new_code_docs: list[CodeDocument] = CodeDocument.objects.bulk_create(
             objs=code_objects
         )
         CodeDocument.tags.through.objects.bulk_create(code_through_tags)
+        CodeDocument.contributors.through.objects.bulk_create(
+            code_through_contributors
+        )
 
         return new_code_docs
 
@@ -93,10 +137,14 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
         language_mapping: dict[str, Language] = self.get_language_mappings(
             validated_data=validated_data
         )
+        contributors_mapping: dict[
+            str, Contributor
+        ] = self.get_contributors_mappings(validated_data=validated_data)
 
         return self.bulk_create_code_docs(
             tag_mapping=tag_mapping,
             language_mapping=language_mapping,
+            contributors_mapping=contributors_mapping,
             validated_data=validated_data,
         )
 

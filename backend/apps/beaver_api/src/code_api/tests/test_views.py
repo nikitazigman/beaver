@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from datetime import datetime, timedelta
 
 import pytest
@@ -13,7 +14,7 @@ from users.models import BeaverUser
 
 
 @pytest.fixture(autouse=True, scope="class")
-def setup_db():
+def setup_db() -> Generator[None, None, None]:
     Tag.objects.create(id="939551ed-b25d-4dec-9258-733277616709", name="tag1")
     Tag.objects.create(id="b7c16bf7-d4ad-404f-9402-f41d4cefdc53", name="tag2")
     Language.objects.create(
@@ -32,9 +33,9 @@ def setup_db():
 
 class BulkUpdateViewTestCase(APITestCase):
     @classmethod
-    def setUpTestData(self):
-        last_synchronization = datetime.now() - timedelta(days=1)
-        code_document_1 = CodeDocument.objects.create(
+    def setUpTestData(self) -> None:
+        last_synchronization: datetime = datetime.now() - timedelta(days=1)
+        code_document_1: CodeDocument = CodeDocument.objects.create(
             title="Test document 1",
             code="print('Test Code 1')",
             link_to_project="https://leetcode.com/problems/longest-common-prefix/",
@@ -45,7 +46,7 @@ class BulkUpdateViewTestCase(APITestCase):
             [Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")]
         )
 
-        code_document_2 = CodeDocument.objects.create(
+        code_document_2: CodeDocument = CodeDocument.objects.create(
             title="Test document 2",
             code="print('Test Code 2')",
             link_to_project="https://leetcode.com/problems/reverse-integer/",
@@ -57,7 +58,7 @@ class BulkUpdateViewTestCase(APITestCase):
         )
 
         self.url = reverse("code-document-bulk-update")
-        self.valid_data = [
+        self.valid_data: list[dict] = [
             {
                 "title": "Test document 1",
                 "code": "print('Updated code 1')",
@@ -65,6 +66,13 @@ class BulkUpdateViewTestCase(APITestCase):
                 "language": "Python",
                 "tags": ["tag1", "tag2"],
                 "last_synchronization": last_synchronization,
+                "contributors": [
+                    {
+                        "name": "John",
+                        "last_name": "Doe",
+                        "address": "test@test.com",
+                    }
+                ],
             },
             {
                 "title": "Test document 2",
@@ -73,18 +81,27 @@ class BulkUpdateViewTestCase(APITestCase):
                 "language": "Python",
                 "tags": ["tag1", "tag2"],
                 "last_synchronization": last_synchronization,
+                "contributors": [
+                    {
+                        "name": "John",
+                        "last_name": "Doe",
+                        "address": "test@test.com",
+                    }
+                ],
             },
         ]
 
     def setUp(self):
         # Create a user and obtain a token for authentication
-        self.user = BeaverUser.objects.create_user(username='testuser', password='testpassword')
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.user: BeaverUser = BeaverUser.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.token: Token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_bulk_update_code_documents_with_valid_data(self):
         response = self.client.post(
-            self.url, data=self.valid_data, format="json"
+            path=self.url, data=self.valid_data, format="json"
         )
 
         updated_code_documents = CodeDocument.objects.all()
@@ -109,6 +126,13 @@ class BulkUpdateViewTestCase(APITestCase):
                 "language": "Python",
                 "tags": ["tag1", "tag2"],
                 "last_synchronization": datetime.now(),
+                "contributors": [
+                    {
+                        "name": "John",
+                        "last_name": "Doe",
+                        "address": "test@test.com",
+                    }
+                ],
             }
         ]
 
@@ -155,9 +179,11 @@ class BulkDeleteViewTestCase(APITestCase):
 
     def setUp(self):
         # Create a user and obtain a token for authentication
-        self.user = BeaverUser.objects.create_user(username='testuser', password='testpassword')
+        self.user = BeaverUser.objects.create_user(
+            username="testuser", password="testpassword"
+        )
         self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_bulk_delete_code_documents(self):
         self.assertEqual(CodeDocument.objects.count(), 2)
