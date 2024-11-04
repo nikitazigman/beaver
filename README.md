@@ -29,7 +29,7 @@ python beaver_cli
 
 
 ## How to Contribute
-First, install [pre-commit](https://pre-commit.com/) and set up the hooks in your Git environment. This small step can save you a lot of time by catching issues early.
+First, install [pre-commit](https://pre-commit.com/) and set up the hooks in your Git environment `pre-commit install`. This small step can save you a lot of time by catching issues early.
 
 ### Adding or Improving Algorithms in the Dataset
 To contribute an algorithm or enhance an existing one, create a Pull Request with your changes. Be sure to include a beaver.json file, which contains the metadata needed to parse and store your algorithm in the database. Once your PR is merged, your algorithm will automatically sync with the cloud database.
@@ -49,5 +49,11 @@ To contribute an algorithm or enhance an existing one, create a Pull Request wit
 
 3. Testing: Ensure that your algorithm includes tests to validate its functionality.
 
-### Code style
-The code must adhere to the guidelines outlined in [PEP 8 – Style Guide for Python Code](peps.python.org). Ensure that the line length does not exceed 80 characters. Additionally, the code should be fully typed, with exceptions allowed only when a third-party library lacks a stub file.
+### Contributing to the Beaver Project Source Code
+If you're interested in contributing to the Beaver Project source code, you likely already know your way around! Here are a few key points to keep in mind:
+
+* Typing: Please ensure all code is fully typed—no shortcuts on type annotations.
+* PEP 8 Compliance: This should be straightforward with pre-commit and ruff to handle linting automatically.
+* Scope of Changes: Keep your PRs focused. Avoid large, multi-purpose PRs; limit them to essential code changes for the task at hand. Try not to mix refactoring, bug fixes, or new features in a single PR. If you can break a large PR into smaller parts, please do so.
+
+*Note: You may notice I sometimes break my own rules... perks of being the maintainer, I guess!*
