@@ -2,13 +2,6 @@
 
 Beaver is a command-line application that combines typing practice with algorithm learning. Inspired by Monkeytype and LeetCode, it provides a fun and educational way to improve your coding skills and typing speed by having you type out classical algorithms in a Text User Interface (TUI) environment.
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
 
 ## Features
 
