@@ -77,7 +77,7 @@ class BeaverCli(App):
             settings: SettingsScreen = self.SCREENS["settings"]
             language, tag = settings.language, settings.tag
 
-            game_display.load_new_game(language, tag)
+            game_display.load_new_game(language=language, tags=tag)
             game_display.focus()
         except NoMatches:
             self.mount(GameDisplay())
