@@ -35,10 +35,14 @@ class CodeService(ICodeService):
         if language:
             params.append(("language", language))
 
-        response = self.session.get(
-            self.resource_path,
-            params=params,
-        )
+        try:
+            response = self.session.get(
+                self.resource_path,
+                params=params,
+            )
 
-        response.raise_for_status()
-        return CodeDocument.model_validate_json(response.text)
+            response.raise_for_status()
+            return CodeDocument.model_validate_json(response.text)
+
+        except Exception as e:
+            raise ConnectionError(f"Failed to fetch code document: {e}")

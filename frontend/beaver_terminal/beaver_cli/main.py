@@ -2,6 +2,7 @@ from beaver_cli.components.code import (
     Code,
     UserCompletedCode,
 )
+from beaver_cli.components.error_message import ErrorMessage
 from beaver_cli.components.footer import BeaverFooter
 from beaver_cli.components.game_display import GameDisplay
 from beaver_cli.components.header import BeaverHeader
@@ -74,13 +75,18 @@ class BeaverCli(App):
 
         try:
             game_display = self.query_one(GameDisplay)
+            game_display.loading = True
             settings: SettingsScreen = self.SCREENS["settings"]
             language, tag = settings.language, settings.tag
 
             game_display.load_new_game(language=language, tags=tag)
             game_display.focus()
+            game_display.loading = False
         except NoMatches:
             self.mount(GameDisplay())
+
+        except Exception as e:
+            self.push_screen(ErrorMessage(str(e)))
 
     def action_toggle_dark(self) -> None:
         super().action_toggle_dark()
