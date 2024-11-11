@@ -48,25 +48,13 @@ class ResultDisplay(Container, inherit_css=False):
         return statistic
 
     def compose(self) -> Generator[Widget, None, None]:
-        errors = self.compute_average_events_per_minute(
-            self.statistic.typing_errors
-        )
-        events = self.compute_average_events_per_minute(
-            self.statistic.typing_events
-        )
-        accuracy = 1 - len(self.statistic.typing_errors) / len(
-            self.statistic.typing_events
-        )
+        errors = self.compute_average_events_per_minute(self.statistic.typing_errors)
+        events = self.compute_average_events_per_minute(self.statistic.typing_events)
+        accuracy = 1 - len(self.statistic.typing_errors) / len(self.statistic.typing_events)
         yield Label(f"Total characters: {len(self.statistic.typing_events)}")
         yield Label(f"Total typos: {len(self.statistic.typing_errors)}")
         yield Label(f"Accuracy: {accuracy:.2%}")
         yield Label("Typing Errors")
-        yield Sparkline(
-            data=errors,
-            summary_function=max,
-        )
+        yield Sparkline(data=errors, summary_function=max)
         yield Label("Characters per minute")
-        yield Sparkline(
-            data=events,
-            summary_function=max,
-        )
+        yield Sparkline(data=events, summary_function=max)

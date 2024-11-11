@@ -16,16 +16,12 @@ class ICodeService(ABC):
 
 
 class CodeService(ICodeService):
-    resource_path = (
-        f"{settings.service_url}/api/v1/code_documents/code_document/"
-    )
+    resource_path = f"{settings.service_url}/api/v1/code_documents/code_document/"
 
     def __init__(self, session: Session) -> None:
         self.session = session
 
-    def get_code_document(
-        self, tags: list[str] = None, language: str = None
-    ) -> CodeDocument:
+    def get_code_document(self, tags: list[str] = None, language: str = None) -> CodeDocument:
         params = []
 
         if tags:

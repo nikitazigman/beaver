@@ -17,9 +17,7 @@ class ProjectParser(IParser):
 
     def parse(self, project: Path) -> ParserCodeSchema:
         code_info_json: str = project.joinpath(self.beaver_file).read_text()
-        code_info: InfoCodeSchema = InfoCodeSchema.model_validate_json(
-            json_data=code_info_json
-        )
+        code_info: InfoCodeSchema = InfoCodeSchema.model_validate_json(json_data=code_info_json)
         code: str = self.path_to_dataset.joinpath(code_info.path).read_text()
 
         return ParserCodeSchema(

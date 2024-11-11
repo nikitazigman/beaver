@@ -13,7 +13,5 @@ from algorithms.search.linear_search.main import linear_search
         pytest.param([10, 20, 30, 40, 50], 50, 4, id="last element"),
     ],
 )
-def test_linear_search(
-    array: list[int], element: int, expected: int | None
-) -> None:
+def test_linear_search(array: list[int], element: int, expected: int | None) -> None:
     assert linear_search(array=array, element=element) == expected

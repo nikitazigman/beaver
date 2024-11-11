@@ -12,15 +12,9 @@ def is_bipartite(graph):
         parts[current_color].append(vertex)
         visited_vertices.add(vertex)
         for adjacent_vertex in graph.get_vertex_environment(vertex):
-            if (
-                adjacent_vertex in visited_vertices
-                and colors[vertex] == colors[adjacent_vertex]
-            ):
+            if adjacent_vertex in visited_vertices and colors[vertex] == colors[adjacent_vertex]:
                 return False, []
-            elif (
-                adjacent_vertex not in visited_vertices
-                and adjacent_vertex not in queue
-            ):
+            elif adjacent_vertex not in visited_vertices and adjacent_vertex not in queue:
                 queue.append(adjacent_vertex)
                 proper_color[adjacent_vertex] = not current_color
     return True, [parts[1], parts[0]]

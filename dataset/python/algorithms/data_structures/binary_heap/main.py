@@ -25,10 +25,7 @@ class BinaryHeap:
     def _bubble_up(self):
         parent_index = (len(self.values) - 1) // 2
         element_index = len(self.values) - 1
-        while (
-            self.compare(self.values[parent_index], self.values[element_index])
-            and element_index > 0
-        ):
+        while self.compare(self.values[parent_index], self.values[element_index]) and element_index > 0:
             self._swap(parent_index, element_index)
             element_index = parent_index
             parent_index = (parent_index - 1) // 2
@@ -65,16 +62,12 @@ class BinaryHeap:
         left_child = self._left_child_index(parent_index)
         right_child = self._right_child_index(parent_index)
         indexes = [parent_index, left_child, right_child]
-        valid_indexes = [
-            index for index in indexes if self._is_valid_index(index)
-        ]
+        valid_indexes = [index for index in indexes if self._is_valid_index(index)]
         return self._get_max_element_index(valid_indexes)
 
     def _get_max_element_index(self, indexes):
         max_element_index = indexes[0]
         for index in indexes:
-            if self.compare(
-                self.values[max_element_index], self.values[index]
-            ):
+            if self.compare(self.values[max_element_index], self.values[index]):
                 max_element_index = index
         return max_element_index

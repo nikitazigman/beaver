@@ -19,6 +19,4 @@ def test_euler_cycle():
     graph.add_edge(4, 6)
     graph.add_edge(4, 7)
     graph.add_edge(5, 7)
-    assert [1, 2, 4, 6, 5, 7, 4, 5, 3, 6, 2, 3, 1] == find_euler_cycle(
-        graph, 1
-    )
+    assert [1, 2, 4, 6, 5, 7, 4, 5, 3, 6, 2, 3, 1] == find_euler_cycle(graph, 1)

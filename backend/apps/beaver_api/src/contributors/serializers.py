@@ -3,15 +3,9 @@ from rest_framework import serializers
 
 
 class ContributorBulkSerializer(serializers.Serializer):
-    name = serializers.CharField(
-        required=True, allow_blank=False, allow_null=False
-    )
-    last_name = serializers.CharField(
-        required=True, allow_blank=False, allow_null=False
-    )
-    address = serializers.EmailField(
-        required=True, allow_blank=False, allow_null=False
-    )
+    name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    last_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    address = serializers.EmailField(required=True, allow_blank=False, allow_null=False)
 
 
 class ContributorSerializer(serializers.ModelSerializer):

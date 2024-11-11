@@ -24,24 +24,17 @@ def best_fit(elements):
     return _fit(elements, _find_best_fit_container_index)
 
 
-def _find_first_fit_container_index(
-    containers_sum, unfilled_containers, element
-):
+def _find_first_fit_container_index(containers_sum, unfilled_containers, element):
     for i in unfilled_containers:
         if containers_sum[i] + element <= 1:
             return i
     return None
 
 
-def _find_best_fit_container_index(
-    containers_sum, unfilled_containers, element
-):
+def _find_best_fit_container_index(containers_sum, unfilled_containers, element):
     result_index = None
     for i in unfilled_containers:
-        if containers_sum[i] + element <= 1 and (
-            not result_index
-            or containers_sum[i] > containers_sum[result_index]
-        ):
+        if containers_sum[i] + element <= 1 and (not result_index or containers_sum[i] > containers_sum[result_index]):
             result_index = i
     return result_index
 
@@ -51,9 +44,7 @@ def _fit(elements, find_container_index):
     unfilled_containers = set([0])
     containers_sum = {0: 0}
     for element in elements:
-        container_index = find_container_index(
-            containers_sum, unfilled_containers, element
-        )
+        container_index = find_container_index(containers_sum, unfilled_containers, element)
         if container_index is not None:
             container = containers[container_index]
             container.append(element)

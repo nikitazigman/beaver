@@ -67,13 +67,9 @@ class GameDisplay(Container):
     def get_game_statistic(self) -> Statistic:
         return self.statistic
 
-    def load_new_game(
-        self, language: str = None, tags: list[str] = None
-    ) -> None:
+    def load_new_game(self, language: str = None, tags: list[str] = None) -> None:
         with Session() as session:
-            code_document = CodeService(session).get_code_document(
-                language=language, tags=tags
-            )
+            code_document = CodeService(session).get_code_document(language=language, tags=tags)
 
         [widget.remove() for widget in self.query()]
 
@@ -88,9 +84,7 @@ class GameDisplay(Container):
                 prefix="# Title:",
                 id="info-title",
             ),
-            InfoDisplay(
-                str(code_document.tags), prefix="# Tags:", id="info-tags"
-            ),
+            InfoDisplay(str(code_document.tags), prefix="# Tags:", id="info-tags"),
             Code(
                 language=code_document.language,
                 read_only=True,

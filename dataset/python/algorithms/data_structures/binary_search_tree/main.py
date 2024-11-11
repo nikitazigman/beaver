@@ -1,5 +1,4 @@
 class BinarySearchTree:
-
     def __init__(self):
         self.root = None
 
@@ -88,7 +87,6 @@ class BinarySearchTree:
         return bypass_post_order_helper(self.root)
 
     def find_node_with_parent(self, value):
-
         def find_node_with_parent_helper(node, parent):
             if node is None:
                 return [None, None]
@@ -117,13 +115,10 @@ class BinarySearchTree:
         return None
 
     def height_tree(self, node):
-
         def height_tree_helper(node):
             if node is None:
                 return 0
-            return 1 + max(
-                height_tree_helper(node.left), height_tree_helper(node.right)
-            )
+            return 1 + max(height_tree_helper(node.left), height_tree_helper(node.right))
 
         return height_tree_helper(node)
 
@@ -164,17 +159,12 @@ class BinarySearchTree:
             return
         node, parent = self.find_node_with_parent(value)
         while not node.has_direct_child(root) and root != node:
-            rotate = (
-                self.right_rotation
-                if node.value < parent.value
-                else self.left_rotation
-            )
+            rotate = self.right_rotation if node.value < parent.value else self.left_rotation
             node = rotate(parent.value)
             node, parent = self.find_node_with_parent(node.value)
         return node
 
     def balance(self):
-
         def balance_helper(node):
             if node is None:
                 return
@@ -190,18 +180,13 @@ class BinarySearchTree:
         balance_helper(self.root)
 
     def is_balanced(self):
-
         def is_balanced_helper(node):
             if node is None:
                 return True
-            diff = abs(
-                self.height_tree(node.left) - self.height_tree(node.right)
-            )
+            diff = abs(self.height_tree(node.left) - self.height_tree(node.right))
             if diff > 1:
                 return False
-            return is_balanced_helper(node.left) and is_balanced_helper(
-                node.right
-            )
+            return is_balanced_helper(node.left) and is_balanced_helper(node.right)
 
         return is_balanced_helper(self.root)
 
@@ -219,7 +204,6 @@ class BinarySearchTree:
 
 
 class Node:
-
     def __init__(self, value=None, left=None, right=None, parent_node=None):
         self.value = value
         self.left = left
@@ -233,19 +217,12 @@ class Node:
         return self.left is None and self.right is None
 
     def count_children(self):
-
         def count_children_helper(node):
             if node is None:
                 return 0
-            return (
-                1
-                + count_children_helper(node.left)
-                + count_children_helper(node.right)
-            )
+            return 1 + count_children_helper(node.left) + count_children_helper(node.right)
 
-        return count_children_helper(self.left) + count_children_helper(
-            self.right
-        )
+        return count_children_helper(self.left) + count_children_helper(self.right)
 
     def remove_child(self, child):
         if self.left == child:

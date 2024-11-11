@@ -24,9 +24,7 @@ urlpatterns: list[URLPattern | URLResolver] = [
     path("admin/", admin.site.urls),
     path("api/v1/code_documents/", include("code_api.urls"), name="code_api"),
     path("api/v1/tags/", include("tags_api.urls"), name="tag_api"),
-    path(
-        "api/v1/languages/", include("language_api.urls"), name="language_api"
-    ),
+    path("api/v1/languages/", include("language_api.urls"), name="language_api"),
 ]
 
 if settings.DEBUG:

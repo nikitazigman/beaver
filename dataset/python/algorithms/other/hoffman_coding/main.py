@@ -21,9 +21,7 @@ def get_huffman_code(input_str):
     while len(priority_queue) > 1:
         node1 = heapq.heappop(priority_queue)
         node2 = heapq.heappop(priority_queue)
-        parent_node = Node(
-            (node1.value[0] + node2.value[0], None), left=node1, right=node2
-        )
+        parent_node = Node((node1.value[0] + node2.value[0], None), left=node1, right=node2)
         node1.set_parent(parent_node)
         node2.set_parent(parent_node)
         heapq.heappush(priority_queue, parent_node)
@@ -35,9 +33,7 @@ def get_huffman_code(input_str):
 
 def decode_huffman_code(byte_array, huffman_dictionary):
     bit_string = "".join(format(byte, "08b") for byte in byte_array)
-    reverse_huffman_dictionary = get_reverse_huffman_dictionary(
-        huffman_dictionary
-    )
+    reverse_huffman_dictionary = get_reverse_huffman_dictionary(huffman_dictionary)
     encoded_text = remove_extra_padding(bit_string)
     decoded_text = decode_text(encoded_text, reverse_huffman_dictionary)
     return decoded_text
@@ -86,9 +82,7 @@ def create_huffman_dictionary(char_nodes):
         temp = node
         byte_sequence = ""
         while temp.parent_node is not None:
-            byte_sequence = (
-                "0" if temp == temp.parent_node.left else "1"
-            ) + byte_sequence
+            byte_sequence = ("0" if temp == temp.parent_node.left else "1") + byte_sequence
             temp = temp.parent_node
         huffman_dictionary[node.value[1]] = byte_sequence
     return huffman_dictionary

@@ -13,9 +13,7 @@ def tsp(graph):
                 current_cycle[j % len(graph)],
                 current_cycle[i],
             )
-            if (
-                new_length := graph.cycle_weight(current_cycle)
-            ) < best_cycle_weight:
+            if (new_length := graph.cycle_weight(current_cycle)) < best_cycle_weight:
                 best_cycle = current_cycle[:]
                 best_cycle_weight = new_length
                 improvement = True

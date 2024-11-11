@@ -20,32 +20,20 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
         for data in validated_data:
             tag_names.update(data["tags"])
 
-        tags: list[Tag] = bulk_get_or_create_obj_by_names(
-            names=list(tag_names), model_class=Tag
-        )
+        tags: list[Tag] = bulk_get_or_create_obj_by_names(names=list(tag_names), model_class=Tag)
         return {tag.name: tag for tag in tags}
 
-    def get_contributors_mappings(
-        self, validated_data: list[dict]
-    ) -> dict[str, Contributor]:
+    def get_contributors_mappings(self, validated_data: list[dict]) -> dict[str, Contributor]:
         contributors_data: list[dict] = []
         for data in validated_data:
             contributors_data.extend(data["contributors"])
 
-        contributors: list[Contributor] = bulk_ger_or_create_contributors(
-            contributors=contributors_data
-        )
-        return {
-            contributor.address: contributor for contributor in contributors
-        }
+        contributors: list[Contributor] = bulk_ger_or_create_contributors(contributors=contributors_data)
+        return {contributor.address: contributor for contributor in contributors}
 
-    def get_language_mappings(
-        self, validated_data: list[dict]
-    ) -> dict[str, Language]:
+    def get_language_mappings(self, validated_data: list[dict]) -> dict[str, Language]:
         language_names = set(data["language"] for data in validated_data)
-        languages: list[Language] = bulk_get_or_create_obj_by_names(
-            names=list(language_names), model_class=Language
-        )
+        languages: list[Language] = bulk_get_or_create_obj_by_names(names=list(language_names), model_class=Language)
         return {language.name: language for language in languages}
 
     def create_code_objects(
@@ -101,9 +89,7 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
         code_through_contributors: list = []
 
         for data in validated_data:
-            code_doc: CodeDocument = self.create_code_objects(
-                data=data, language_mapping=language_mapping
-            )
+            code_doc: CodeDocument = self.create_code_objects(data=data, language_mapping=language_mapping)
             code_objects.append(code_doc)
 
             through_objects: list[Model] = self.create_code_through_tags(
@@ -111,35 +97,23 @@ class CodeDocumentListSerializer(serializers.ListSerializer):
             )
             code_through_tags.extend(through_objects)
 
-            through_contributors: list[
-                Model
-            ] = self.create_contributors_through_code(
+            through_contributors: list[Model] = self.create_contributors_through_code(
                 code_object=code_doc,
                 data=data,
                 contributors_mapping=contributors_mapping,
             )
             code_through_contributors.extend(through_contributors)
 
-        new_code_docs: list[CodeDocument] = CodeDocument.objects.bulk_create(
-            objs=code_objects
-        )
+        new_code_docs: list[CodeDocument] = CodeDocument.objects.bulk_create(objs=code_objects)
         CodeDocument.tags.through.objects.bulk_create(code_through_tags)
-        CodeDocument.contributors.through.objects.bulk_create(
-            code_through_contributors
-        )
+        CodeDocument.contributors.through.objects.bulk_create(code_through_contributors)
 
         return new_code_docs
 
     def create(self, validated_data: list[dict]) -> list[CodeDocument]:
-        tag_mapping: dict[str, Tag] = self.get_tag_mappings(
-            validated_data=validated_data
-        )
-        language_mapping: dict[str, Language] = self.get_language_mappings(
-            validated_data=validated_data
-        )
-        contributors_mapping: dict[
-            str, Contributor
-        ] = self.get_contributors_mappings(validated_data=validated_data)
+        tag_mapping: dict[str, Tag] = self.get_tag_mappings(validated_data=validated_data)
+        language_mapping: dict[str, Language] = self.get_language_mappings(validated_data=validated_data)
+        contributors_mapping: dict[str, Contributor] = self.get_contributors_mappings(validated_data=validated_data)
 
         return self.bulk_create_code_docs(
             tag_mapping=tag_mapping,
@@ -175,9 +149,7 @@ class CodeDocumentBulkSerializer(serializers.ModelSerializer):
     tags = serializers.ListField(child=serializers.CharField())
     language = serializers.CharField()
     link_to_project = serializers.CharField()
-    contributors = serializers.ListField(
-        child=ContributorBulkSerializer(), required=False
-    )
+    contributors = serializers.ListField(child=ContributorBulkSerializer(), required=False)
 
     class Meta:  # type: ignore
         model = CodeDocument

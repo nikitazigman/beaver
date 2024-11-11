@@ -27,9 +27,7 @@ class GetRandomCodeDocumentView(GenericAPIView):
     filterset_class = CodeDocumentFilter
 
     def get(self, request: Request, *args, **kwargs) -> Response:
-        queryset: QuerySet[CodeDocument] = self.filter_queryset(
-            queryset=self.get_queryset()
-        )
+        queryset: QuerySet[CodeDocument] = self.filter_queryset(queryset=self.get_queryset())
 
         documents_count: int = queryset.count()
         if documents_count == 0:

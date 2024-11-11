@@ -13,7 +13,5 @@ from algorithms.search.binary_search.main import binary_search
         pytest.param([10, 20, 30, 40, 50], 50, 4, id="last element"),
     ],
 )
-def test_binary_search(
-    array: list[int], element: int, expected: int | None
-) -> None:
+def test_binary_search(array: list[int], element: int, expected: int | None) -> None:
     assert binary_search(array=array, element=element) == expected
