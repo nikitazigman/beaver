@@ -1,0 +1,13 @@
+ErrorMessage {
+    align: center top;
+}
+
+#message {
+    padding-top: 1;
+    padding-bottom: 3;
+    padding-right: 2;
+    padding-left: 2;
+    align: center top;
+    content-align: center middle;
+    text-style: bold;
+}

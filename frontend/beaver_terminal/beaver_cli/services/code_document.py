@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from beaver_cli.schemas.code_document import CodeDocument
 from beaver_cli.settings.settings import get_settings
 
+from requests import HTTPError
 from requests.sessions import Session
 
 
@@ -44,5 +45,15 @@ class CodeService(ICodeService):
             response.raise_for_status()
             return CodeDocument.model_validate_json(response.text)
 
+        except HTTPError as e:
+            if e.response.status_code == 404:
+                raise FileNotFoundError(
+                    "The requested code document could not be found. "
+                    "Please try a different combination of tags or language, "
+                    "as the specified document may not yet exist in the database."
+                )
+            else:
+                raise ConnectionError(f"An error occurred while fetching the code document: {e}")
+
         except Exception as e:
-            raise ConnectionError(f"Failed to fetch code document: {e}")
+            raise ConnectionError(f"An unexpected error occurred while fetching the code document: {e}")
