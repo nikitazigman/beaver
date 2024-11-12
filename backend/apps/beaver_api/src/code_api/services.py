@@ -4,6 +4,7 @@ from typing import TypeVar
 from code_api.models import CodeDocument
 from contributors.models import Contributor
 from django.db.models import Model, QuerySet
+from tags_api.models import Tag
 
 
 T = TypeVar("T", bound=Model)
@@ -57,4 +58,16 @@ def delete_docs_before_timestamp(
     docs_to_delete: QuerySet[CodeDocument] = queryset.filter(
         last_synchronization__lt=timestamp
     )
+    docs_to_keep: QuerySet[CodeDocument] = queryset.exclude(
+        last_synchronization__lt=timestamp
+    )
+    tags_to_delete: QuerySet[Tag] = Tag.objects.exclude(
+        code_documents__in=docs_to_keep
+    )
+    contributors_to_delete: QuerySet[
+        Contributor
+    ] = Contributor.objects.exclude(code_documents__in=docs_to_keep)
+
+    tags_to_delete.delete()
+    contributors_to_delete.delete()
     docs_to_delete.delete()
