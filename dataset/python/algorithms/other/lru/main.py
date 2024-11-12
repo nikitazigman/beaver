@@ -17,9 +17,7 @@ class LruDict:
             self.remove_old()
         self.__dict[key] = Node(value, self.__last_updated_key, None)
         if self.__last_updated_key is not None:
-            self.__dict[self.__last_updated_key] = self.__dict[
-                self.__last_updated_key
-            ]._replace(next=key)
+            self.__dict[self.__last_updated_key] = self.__dict[self.__last_updated_key]._replace(next=key)
         self.__last_updated_key = key
         if self.__old_key is None and len(self.__dict) > 0:
             self.__old_key = key
@@ -30,9 +28,7 @@ class LruDict:
             old_key = self.__old_key
             self.__old_key = old_node.next
             if self.__old_key:
-                self.__dict[self.__old_key] = self.__dict[
-                    self.__old_key
-                ]._replace(prev=None)
+                self.__dict[self.__old_key] = self.__dict[self.__old_key]._replace(prev=None)
             del self.__dict[old_key]
 
             if len(self.__dict) == 0:
@@ -45,24 +41,14 @@ class LruDict:
             if key != self.__last_updated_key:
                 node_prev = node.prev
                 node_next = node.next
-                self.__dict[self.__last_updated_key] = self.__dict[
-                    self.__last_updated_key
-                ]._replace(next=key)
-                self.__dict[key] = self.__dict[key]._replace(
-                    prev=self.__last_updated_key, next=None
-                )
+                self.__dict[self.__last_updated_key] = self.__dict[self.__last_updated_key]._replace(next=key)
+                self.__dict[key] = self.__dict[key]._replace(prev=self.__last_updated_key, next=None)
 
                 if node_prev is not None:
-                    self.__dict[node_prev] = self.__dict[node_prev]._replace(
-                        next=node_next
-                    )
-                    self.__dict[node_next] = self.__dict[node_next]._replace(
-                        prev=node_prev
-                    )
+                    self.__dict[node_prev] = self.__dict[node_prev]._replace(next=node_next)
+                    self.__dict[node_next] = self.__dict[node_next]._replace(prev=node_prev)
                 else:
-                    self.__dict[node_next] = self.__dict[node_next]._replace(
-                        prev=None
-                    )
+                    self.__dict[node_next] = self.__dict[node_next]._replace(prev=None)
 
                 if key == self.__old_key:
                     self.__old_key = node_next

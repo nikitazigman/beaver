@@ -14,9 +14,7 @@ def is_acyclic_graph(graph):
             if adjacent_vertex not in visited_vertices:
                 previous_vertex = vertex
                 return is_acyclic_graph_helper(adjacent_vertex)
-            elif adjacent_vertex != previous_vertex and colors.get(
-                adjacent_vertex
-            ):
+            elif adjacent_vertex != previous_vertex and colors.get(adjacent_vertex):
                 return False
         colors[vertex] = False
         return True

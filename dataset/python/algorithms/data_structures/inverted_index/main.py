@@ -5,11 +5,11 @@ def inverted_index(documents, stopwords=None):
     stopwords = stopwords or []
     index = defaultdict(lambda: set())
     for document in documents:
-        words = document['data'].split()
+        words = document["data"].split()
         for word in words:
             if word in stopwords:
                 continue
-            index[word].add(document['id'])
+            index[word].add(document["id"])
     return index
 
 

@@ -12,6 +12,7 @@ from textual.widgets import Footer, Select, SelectionList, Static
 
 ASSETS_FOLDER_PATH = Path(__file__).parent.parent / "assets"
 
+
 class SettingsScreen(ModalScreen[None]):
     language: str | None = None
     tag: list[str] | None = None
@@ -27,7 +28,12 @@ class SettingsScreen(ModalScreen[None]):
                 language_items = self._get_items(session, LanguageService, "get_all_languages")
                 tag_items = self._get_items(session, TagService, "get_all_tags")
 
-                yield Select([(index, language) for index, language in language_items], prompt="Select language", allow_blank=False, id="settings_screen_language")
+                yield Select(
+                    [(index, language) for index, language in language_items],
+                    prompt="Select language",
+                    allow_blank=False,
+                    id="settings_screen_language",
+                )
                 yield SelectionList(*[(index, tag) for index, tag in tag_items], id="settings_screen_tags")
 
             yield Footer()

@@ -10,9 +10,7 @@ def stable_marriage_problem(man_p, girl_p):
             pairs[preferred_girl] = available_man
         else:
             current_man = pairs[preferred_girl]
-            if girl_p[preferred_girl].index(current_man) > girl_p[
-                preferred_girl
-            ].index(available_man):
+            if girl_p[preferred_girl].index(current_man) > girl_p[preferred_girl].index(available_man):
                 pairs[preferred_girl] = available_man
                 available_mans.pop()
                 available_mans.append(current_man)

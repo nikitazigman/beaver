@@ -45,9 +45,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "tags",
-                    models.ManyToManyField(
-                        related_name="code_documents", to="tags_api.tag"
-                    ),
+                    models.ManyToManyField(related_name="code_documents", to="tags_api.tag"),
                 ),
             ],
             options={

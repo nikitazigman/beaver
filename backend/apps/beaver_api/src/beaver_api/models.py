@@ -4,9 +4,7 @@ from django.db import models
 
 
 class UUIDMixin(models.Model):
-    id: models.UUIDField = models.UUIDField(
-        primary_key=True, editable=False, default=uuid4
-    )
+    id: models.UUIDField = models.UUIDField(primary_key=True, editable=False, default=uuid4)
 
     class Meta:
         abstract = True

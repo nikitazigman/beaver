@@ -1,5 +1,4 @@
 class PriorityQueue:
-
     def __init__(self):
         self.binary_heap = BinaryHeap(lambda a, b: a[1] < b[1])
 
@@ -16,7 +15,6 @@ class PriorityQueue:
 
 
 class BinaryHeap:
-
     def __init__(self, compare, elements=[]):
         self.compare = compare
         self.values = []
@@ -43,10 +41,7 @@ class BinaryHeap:
     def _bubble_up(self):
         parent_index = (len(self.values) - 1) // 2
         element_index = len(self.values) - 1
-        while (
-            self.compare(self.values[parent_index], self.values[element_index])
-            and element_index > 0
-        ):
+        while self.compare(self.values[parent_index], self.values[element_index]) and element_index > 0:
             self._swap(parent_index, element_index)
             element_index = parent_index
             parent_index = (parent_index - 1) // 2
@@ -56,9 +51,7 @@ class BinaryHeap:
         child_to_swap = self._get_child_to_swap(index)
         while child_to_swap != index:
             self._swap(index, child_to_swap)
-            index, child_to_swap = child_to_swap, self._get_child_to_swap(
-                child_to_swap
-            )
+            index, child_to_swap = child_to_swap, self._get_child_to_swap(child_to_swap)
 
     def _swap(self, i, j):
         self.values[i], self.values[j] = self.values[j], self.values[i]
@@ -82,16 +75,12 @@ class BinaryHeap:
         left_child = self._left_child_index(parent_index)
         right_child = self._right_child_index(parent_index)
         indexes = [parent_index, left_child, right_child]
-        valid_indexes = [
-            index for index in indexes if self._is_valid_index(index)
-        ]
+        valid_indexes = [index for index in indexes if self._is_valid_index(index)]
         return self._get_max_element_index(valid_indexes)
 
     def _get_max_element_index(self, indexes):
         max_element_index = indexes[0]
         for index in indexes:
-            if self.compare(
-                self.values[max_element_index], self.values[index]
-            ):
+            if self.compare(self.values[max_element_index], self.values[index]):
                 max_element_index = index
         return max_element_index

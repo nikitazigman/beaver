@@ -7,29 +7,16 @@ from tags_api.models import Tag
 
 
 class CodeDocument(UUIDMixin, TimeStampMixin, SealableModel):  # type: ignore
-    title: models.CharField = models.CharField(
-        max_length=255, blank=False, null=False, unique=True
-    )
+    title: models.CharField = models.CharField(max_length=255, blank=False, null=False, unique=True)
     code: models.TextField = models.TextField(blank=False, null=False)
-    link_to_project: models.URLField = models.URLField(
-        blank=False, null=False, unique=False
-    )
+    link_to_project: models.URLField = models.URLField(blank=False, null=False, unique=False)
 
     language: models.ForeignKey = models.ForeignKey(
-        Language,
-        on_delete=models.DO_NOTHING,
-        related_name="code_documents",
-        null=True,
+        Language, on_delete=models.DO_NOTHING, related_name="code_documents", null=True
     )
-    tags: models.ManyToManyField = models.ManyToManyField(
-        to=Tag, related_name="code_documents"
-    )
-    last_synchronization: models.DateTimeField = models.DateTimeField(
-        null=False, blank=False
-    )
-    contributors: models.ManyToManyField = models.ManyToManyField(
-        to=Contributor, related_name="code_documents"
-    )
+    tags: models.ManyToManyField = models.ManyToManyField(to=Tag, related_name="code_documents")
+    last_synchronization: models.DateTimeField = models.DateTimeField(null=False, blank=False)
+    contributors: models.ManyToManyField = models.ManyToManyField(to=Contributor, related_name="code_documents")
 
     def __str__(self) -> str:
         return f"{self.language}/{self.title}"

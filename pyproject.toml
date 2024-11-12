@@ -10,7 +10,7 @@ plugins = ["pydantic.mypy"]
 # Never enforce `E501` (line length violations).
 lint.ignore = ["E501"]
 exclude = [".git", "docs", "build", "dist", "venv"]
-line-length = 79
+line-length = 120
 target-version = "py312"
 lint.fixable = [
     "A",

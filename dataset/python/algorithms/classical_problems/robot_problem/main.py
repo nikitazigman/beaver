@@ -2,10 +2,12 @@ def robot_problem(n):
     matrix = create_matrix(n)
     return matrix[n - 1][n - 1]
 
+
 def create_matrix(n):
     matrix = [[0] * n for _ in range(n)]
     fill_matrix(matrix)
     return matrix
+
 
 def fill_matrix(matrix):
     length = len(matrix)

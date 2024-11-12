@@ -6,13 +6,10 @@ class Command(BaseCommand):
     help = "Creates Admin User if it does not exist"
 
     def handle(self, *args, **options):
-        user = BeaverUser.objects.create_superuser(
-            username="django_superuser", password="SuperUser123!"
-        )
+        user = BeaverUser.objects.create_superuser(username="django_superuser", password="SuperUser123!")
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Admin user created: {user.username}, SuperUser123!"
-                " Don't forget to change the password!"
+                f"Admin user created: {user.username}, SuperUser123!" " Don't forget to change the password!"
             )
         )

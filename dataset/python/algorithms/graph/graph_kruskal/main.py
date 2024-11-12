@@ -20,8 +20,6 @@ def kruskal(graph):
 
 
 def is_valid_edge(edge, graph, components):
-    if graph.is_edge_in_graph(edge) or components.find(
-        edge[0]
-    ) == components.find(edge[1]):
+    if graph.is_edge_in_graph(edge) or components.find(edge[0]) == components.find(edge[1]):
         return False
     return True

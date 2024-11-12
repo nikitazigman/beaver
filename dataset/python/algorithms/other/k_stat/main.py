@@ -12,14 +12,13 @@ def k_stat(arr, position):
 # N*log(k**2)
 def k_stat2(arr, position):
     assert position < len(arr)
-    heap = [-arr[idx] for idx in range(position+1)]
+    heap = [-arr[idx] for idx in range(position + 1)]
     heapify(heap)
-    for idx in range(position+1, len(arr)):
+    for idx in range(position + 1, len(arr)):
         if -arr[idx] > heap[0]:
             heappop(heap)
             heappush(heap, -arr[idx])
     return -heappop(heap)
-
 
 
 # Average O(n), worst O(n**2)
@@ -51,8 +50,8 @@ def k_stat3(arr, position):
         if idx == position:
             return arr[position]
         elif idx > position:
-            return k_stat3_helper(left, idx-1)
+            return k_stat3_helper(left, idx - 1)
         else:
             return k_stat3_helper(idx + 1, right)
 
-    return k_stat3_helper(0, len(arr)-1)
+    return k_stat3_helper(0, len(arr) - 1)
