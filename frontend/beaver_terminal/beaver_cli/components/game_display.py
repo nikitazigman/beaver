@@ -102,9 +102,7 @@ class GameDisplay(Container):
                 prefix="# Title:",
                 id="info-title",
             ),
-            InfoDisplay(
-                str(code_document.tags), prefix="# Tags:", id="info-tags"
-            ),
+            InfoDisplay(str(code_document.tags), prefix="# Tags:", id="info-tags"),
             Code(
                 language=code_document.language,
                 read_only=True,

@@ -10,10 +10,10 @@ from textual.widgets import Footer, Markdown, Static
 ASSETS_FOLDER_PATH = Path(__file__).parent.parent / "assets"
 HELP_CONTENT_PATH = ASSETS_FOLDER_PATH / "help.md"
 
-class HelpScreen(ModalScreen[None]):
-    CSS_PATH = ASSETS_FOLDER_PATH /  "help_screen.tcss"
-    BINDINGS = [Binding("escape", "app.pop_screen", "Close", show=True)]
 
+class HelpScreen(ModalScreen[None]):
+    CSS_PATH = ASSETS_FOLDER_PATH / "help_screen.tcss"
+    BINDINGS = [Binding("escape", "app.pop_screen", "Close", show=True)]
 
     def compose(self) -> ComposeResult:
         with ScrollableContainer(id="help_screen_container"):

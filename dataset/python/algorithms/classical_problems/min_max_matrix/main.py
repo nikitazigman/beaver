@@ -11,7 +11,5 @@ def min_path_matrix(weights):
 
     for i in range(1, len(weights)):
         for j in range(1, len(weights[0])):
-            dp_weights[i][j] = weights[i][j] + min(
-                dp_weights[i - 1][j], dp_weights[i][j - 1]
-            )
+            dp_weights[i][j] = weights[i][j] + min(dp_weights[i - 1][j], dp_weights[i][j - 1])
     return dp_weights[bottom_border][right_border]

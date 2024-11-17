@@ -16,9 +16,7 @@ class ILanguageService(ABC):
 
 
 class LanguageService(ILanguageService):
-    resource_path = (
-        f"{settings.service_url}/api/v1/languages/"
-    )
+    resource_path = f"{settings.service_url}/api/v1/languages/"
 
     def __init__(self, session: Session) -> None:
         self.session = session

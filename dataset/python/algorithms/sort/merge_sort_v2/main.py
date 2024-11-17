@@ -34,9 +34,7 @@ def merge_sort(array: list[int]) -> list[int]:
         for i in range(left1, right2 + 1):
             arr[i] = buffer[i]
 
-    def merge_sort(
-        array: list[int], left: int, right: int, buffer: list[int]
-    ) -> None:
+    def merge_sort(array: list[int], left: int, right: int, buffer: list[int]) -> None:
         if left >= right:
             return
 

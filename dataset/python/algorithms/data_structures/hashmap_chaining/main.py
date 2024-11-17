@@ -24,9 +24,7 @@ class HashMapChains:
     def put(self, key, value):
         index = self.get_hash(key, self.capacity)
         bucket = self.buckets[index]
-        founded_entry = next(
-            (entry for entry in bucket if entry.key == key), None
-        )
+        founded_entry = next((entry for entry in bucket if entry.key == key), None)
         if founded_entry is not None:
             founded_entry.value = value
         else:
@@ -36,17 +34,13 @@ class HashMapChains:
     def get(self, key):
         index = self.get_hash(key, self.capacity)
         bucket = self.buckets[index]
-        return next(
-            (entry.value for entry in bucket if entry.key == key), None
-        )
+        return next((entry.value for entry in bucket if entry.key == key), None)
 
     def get_size(self):
         return self.size
 
 
-def get_metrics(
-    hash_fn, size=30007, keys_size=37000, random_range=50000, value=5
-):
+def get_metrics(hash_fn, size=30007, keys_size=37000, random_range=50000, value=5):
     map = HashMapChains(size, hash_fn)
     for i in range(keys_size):
         random_key = random.randint(1, random_range)
@@ -76,6 +70,4 @@ def get_medium_chain_length(map):
 
 
 def get_max_chain_length(map):
-    return reduce(
-        lambda max_chain, bucket: max(max_chain, len(bucket)), map.buckets, 0
-    )
+    return reduce(lambda max_chain, bucket: max(max_chain, len(bucket)), map.buckets, 0)

@@ -3,7 +3,6 @@ import itertools
 
 
 class Graph:
-
     def __init__(self):
         self.adjacency_list = {}
         self.costs = {}
@@ -20,12 +19,8 @@ class Graph:
     def add_edge(self, vertex1, vertex2, cost=0):
         if vertex1 == vertex2:
             return
-        self.adjacency_list[vertex1] = (
-            self.adjacency_list.get(vertex1) or []
-        ) + [vertex2]
-        self.adjacency_list[vertex2] = (
-            self.adjacency_list.get(vertex2) or []
-        ) + [vertex1]
+        self.adjacency_list[vertex1] = (self.adjacency_list.get(vertex1) or []) + [vertex2]
+        self.adjacency_list[vertex2] = (self.adjacency_list.get(vertex2) or []) + [vertex1]
         self.costs[(vertex1, vertex2)] = cost
         self.costs[(vertex2, vertex1)] = cost
 
@@ -34,16 +29,10 @@ class Graph:
             self.add_edge(*edge)
 
     def get_edge_cost(self, edge):
-        return (
-            self.costs.get(edge)
-            if edge in self.costs
-            else self.costs.get(edge[::-1], 0)
-        )
+        return self.costs.get(edge) if edge in self.costs else self.costs.get(edge[::-1], 0)
 
     def remove_edge(self, vertex1, vertex2):
-        list1, list2 = self.adjacency_list.get(
-            vertex1
-        ), self.adjacency_list.get(vertex2)
+        list1, list2 = self.adjacency_list.get(vertex1), self.adjacency_list.get(vertex2)
         if list1 is None or list2 is None:
             raise Exception("There is no such edge!")
         index1, index2 = list1.index(vertex2), list2.index(vertex1)
@@ -69,9 +58,7 @@ class Graph:
 
     def is_edge_in_graph(self, edge):
         vertex1, vertex2 = edge[0], edge[1]
-        list1, list2 = self.adjacency_list.get(
-            vertex1
-        ), self.adjacency_list.get(vertex2)
+        list1, list2 = self.adjacency_list.get(vertex1), self.adjacency_list.get(vertex2)
         if list1 is not None and vertex2 in list1:
             return True
         if list2 is not None and vertex1 in list2:
@@ -104,16 +91,11 @@ class Graph:
         while len(queue) > 0:
             vertex = queue.pop(0)
             used_vertices.add(vertex)
-            unvisited_vertices = [
-                v
-                for v in self.adjacency_list[vertex]
-                if v not in used_vertices and v not in queue
-            ]
+            unvisited_vertices = [v for v in self.adjacency_list[vertex] if v not in used_vertices and v not in queue]
             queue += unvisited_vertices
             yield vertex
 
     def depth_first_search(self):
-
         def depth_first_search_helper(current_vertex):
             visited_vertices.add(current_vertex)
             vertices_list.append(current_vertex)
@@ -139,9 +121,7 @@ class Graph:
         collected_vertices = set(itertools.chain.from_iterable(components))
         while collected_vertices != vertices:
             difference = vertices - collected_vertices
-            components.append(
-                list(self.breadth_first_search(difference.pop()))
-            )
+            components.append(list(self.breadth_first_search(difference.pop())))
             collected_vertices = set(itertools.chain.from_iterable(components))
         return components
 

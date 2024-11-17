@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="codedocument",
             name="contributors",
-            field=models.ManyToManyField(
-                related_name="code_documents", to="contributors.contributor"
-            ),
+            field=models.ManyToManyField(related_name="code_documents", to="contributors.contributor"),
         ),
     ]

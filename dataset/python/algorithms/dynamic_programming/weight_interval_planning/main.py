@@ -2,20 +2,16 @@ from functools import lru_cache
 
 
 def weight_interval_planning(intervals):
-
     @lru_cache(1000)
     def weight_interval_planning_helper(index):
         if index == -1:
             return 0
         return max(
-            sorted_intervals[index][1]
-            + weight_interval_planning_helper(prev_intervals[index]),
+            sorted_intervals[index][1] + weight_interval_planning_helper(prev_intervals[index]),
             weight_interval_planning_helper(index - 1),
         )
 
-    sorted_intervals = sorted(
-        intervals, key=lambda interval_weight: interval_weight[0][1]
-    )
+    sorted_intervals = sorted(intervals, key=lambda interval_weight: interval_weight[0][1])
     prev_intervals = get_prev_intervals(sorted_intervals)
     return weight_interval_planning_helper(len(intervals) - 1)
 

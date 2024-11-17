@@ -17,12 +17,8 @@ from users.models import BeaverUser
 def setup_db() -> Generator[None, None, None]:
     Tag.objects.create(id="939551ed-b25d-4dec-9258-733277616709", name="tag1")
     Tag.objects.create(id="b7c16bf7-d4ad-404f-9402-f41d4cefdc53", name="tag2")
-    Language.objects.create(
-        id="e4e7b1b0-6b7b-4d6b-8b0f-6e1c7f7b3f2f", name="Python"
-    )
-    Language.objects.create(
-        id="a5cda6e9-8f10-4430-87a9-8a7ef78f054a", name="JavaScript"
-    )
+    Language.objects.create(id="e4e7b1b0-6b7b-4d6b-8b0f-6e1c7f7b3f2f", name="Python")
+    Language.objects.create(id="a5cda6e9-8f10-4430-87a9-8a7ef78f054a", name="JavaScript")
 
     yield
 
@@ -42,9 +38,7 @@ class BulkUpdateViewTestCase(APITestCase):
             language=Language.objects.get(name="Python"),
             last_synchronization=last_synchronization,
         )
-        code_document_1.tags.set(
-            [Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")]
-        )
+        code_document_1.tags.set([Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")])
 
         code_document_2: CodeDocument = CodeDocument.objects.create(
             title="Test document 2",
@@ -53,9 +47,7 @@ class BulkUpdateViewTestCase(APITestCase):
             language=Language.objects.get(name="Python"),
             last_synchronization=last_synchronization,
         )
-        code_document_2.tags.set(
-            [Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")]
-        )
+        code_document_2.tags.set([Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")])
 
         self.url = reverse("code-document-bulk-update")
         self.valid_data: list[dict] = [
@@ -93,16 +85,12 @@ class BulkUpdateViewTestCase(APITestCase):
 
     def setUp(self):
         # Create a user and obtain a token for authentication
-        self.user: BeaverUser = BeaverUser.objects.create_user(
-            username="testuser", password="testpassword"
-        )
+        self.user: BeaverUser = BeaverUser.objects.create_user(username="testuser", password="testpassword")
         self.token: Token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_bulk_update_code_documents_with_valid_data(self):
-        response = self.client.post(
-            path=self.url, data=self.valid_data, format="json"
-        )
+        response = self.client.post(path=self.url, data=self.valid_data, format="json")
 
         updated_code_documents = CodeDocument.objects.all()
 
@@ -158,9 +146,7 @@ class BulkDeleteViewTestCase(APITestCase):
             language=Language.objects.get(name="Python"),
             last_synchronization=self.last_sync,
         )
-        code_document_1.tags.set(
-            [Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")]
-        )
+        code_document_1.tags.set([Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")])
 
         code_document_2 = CodeDocument.objects.create(
             id="19d5a9e6-f960-4014-a496-efa752d0855c",
@@ -170,27 +156,21 @@ class BulkDeleteViewTestCase(APITestCase):
             language=Language.objects.get(name="Python"),
             last_synchronization=datetime.now() - timedelta(days=2),
         )
-        code_document_2.tags.set(
-            [Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")]
-        )
+        code_document_2.tags.set([Tag.objects.get(name="tag1"), Tag.objects.get(name="tag2")])
 
         self.url = reverse("code-document-bulk-delete")
         self.valid_data = {"timestamp": self.last_sync}
 
     def setUp(self):
         # Create a user and obtain a token for authentication
-        self.user = BeaverUser.objects.create_user(
-            username="testuser", password="testpassword"
-        )
+        self.user = BeaverUser.objects.create_user(username="testuser", password="testpassword")
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_bulk_delete_code_documents(self):
         self.assertEqual(CodeDocument.objects.count(), 2)
 
-        response = self.client.post(
-            self.url, data=self.valid_data, format="json"
-        )
+        response = self.client.post(self.url, data=self.valid_data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(CodeDocument.objects.count(), 1)

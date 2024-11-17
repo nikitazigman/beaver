@@ -4,17 +4,12 @@ def count_inversions(array, n):
 
 
 def _count_inversions_helper(array, temp_array, left, right):
-
     inversion_count = 0
 
     if left < right:
         mid = (left + right) // 2
-        inversion_count += _count_inversions_helper(
-            array, temp_array, left, mid
-        )
-        inversion_count += _count_inversions_helper(
-            array, temp_array, mid + 1, right
-        )
+        inversion_count += _count_inversions_helper(array, temp_array, left, mid)
+        inversion_count += _count_inversions_helper(array, temp_array, mid + 1, right)
         inversion_count += merge_and_count(array, temp_array, left, mid, right)
 
     return inversion_count
@@ -27,7 +22,6 @@ def merge_and_count(array, temp_array, left, mid, right):
     inversion_count = 0
 
     while i <= mid and j <= right:
-
         if array[i] <= array[j]:
             temp_array[k] = array[i]
             k += 1

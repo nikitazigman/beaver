@@ -16,9 +16,7 @@ class ITagService(ABC):
 
 
 class TagService(ITagService):
-    resource_path = (
-        f"{settings.service_url}/api/v1/tags/"
-    )
+    resource_path = f"{settings.service_url}/api/v1/tags/"
 
     def __init__(self, session: Session) -> None:
         self.session = session

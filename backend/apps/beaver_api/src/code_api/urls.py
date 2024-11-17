@@ -4,22 +4,11 @@ from code_api.views import (
     GetRandomCodeDocumentView,
 )
 from django.urls import path
+from django.urls.resolvers import URLPattern
 
 
-urlpatterns = [
-    path(
-        "code_document/",
-        GetRandomCodeDocumentView.as_view(),
-        name="code_document",
-    ),
-    path(
-        "bulk_update/",
-        CodeDocumentBulkUpdateView.as_view(),
-        name="code-document-bulk-update",
-    ),
-    path(
-        "bulk_delete/",
-        CodeDocumentBulkDeleteView.as_view(),
-        name="code-document-bulk-delete",
-    ),
+urlpatterns: list[URLPattern] = [
+    path(route="code_document/", view=GetRandomCodeDocumentView.as_view(), name="code_document"),
+    path(route="bulk_update/", view=CodeDocumentBulkUpdateView.as_view(), name="code-document-bulk-update"),
+    path(route="bulk_delete/", view=CodeDocumentBulkDeleteView.as_view(), name="code-document-bulk-delete"),
 ]

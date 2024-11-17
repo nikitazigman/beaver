@@ -18,9 +18,7 @@ def get_current_task_definition(client, cluster, service):
     help="Docker image URL for the updated application",
     required=True,
 )
-@click.option(
-    "--container-name", help="Name of the container to update", required=True
-)
+@click.option("--container-name", help="Name of the container to update", required=True)
 def deploy(cluster, service, image, container_name):
     client = boto3.client("ecs")
 

@@ -1,5 +1,4 @@
 class Graph:
-
     def __init__(self, size=100):
         self.size = size
         self.adjacent_matrix = [[0] * size for _ in range(size)]

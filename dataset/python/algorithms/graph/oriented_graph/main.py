@@ -1,5 +1,4 @@
 class Graph:
-
     def __init__(self):
         self.adjacency_list = {}
         self.costs = {}
@@ -14,9 +13,7 @@ class Graph:
             self.add_vertex(vertex)
 
     def add_edge(self, vertex1, vertex2, cost=0):
-        self.adjacency_list[vertex1] = (
-            self.adjacency_list.get(vertex1) or []
-        ) + [vertex2]
+        self.adjacency_list[vertex1] = (self.adjacency_list.get(vertex1) or []) + [vertex2]
         self.adjacency_list[vertex2] = self.adjacency_list.get(vertex2) or []
         self.costs[(vertex1, vertex2)] = cost
 
@@ -36,7 +33,6 @@ class Graph:
         return self.costs.get(edge)
 
     def depth_first_search(self):
-
         def depth_first_search_helper(current_vertex):
             visited_vertices.add(current_vertex)
             vertices_list.append(current_vertex)
@@ -49,27 +45,19 @@ class Graph:
         visited_vertices = set()
         vertices_list = []
         incoming_vertices = self._get_incoming_vertices()
-        start_vertices = [
-            vertex
-            for (vertex, income) in incoming_vertices.items()
-            if len(income) == 0
-        ]
+        start_vertices = [vertex for (vertex, income) in incoming_vertices.items() if len(income) == 0]
         for vertex in start_vertices:
             depth_first_search_helper(vertex)
         return vertices_list
 
     def topological_sort(self):
-
         def topological_sort_helper(vertex):
             topological_path.append(vertex)
             visited_vertices.add(vertex)
             for adjacency_vertex in self.get_vertex_environment(vertex):
                 if (
                     adjacency_vertex not in visited_vertices
-                    and len(
-                        incoming_vertices[adjacency_vertex] - visited_vertices
-                    )
-                    == 0
+                    and len(incoming_vertices[adjacency_vertex] - visited_vertices) == 0
                 ):
                     topological_sort_helper(adjacency_vertex)
 
@@ -77,11 +65,7 @@ class Graph:
             return []
         visited_vertices = set()
         incoming_vertices = self._get_incoming_vertices()
-        start_vertices = [
-            vertex
-            for (vertex, income) in incoming_vertices.items()
-            if len(income) == 0
-        ]
+        start_vertices = [vertex for (vertex, income) in incoming_vertices.items() if len(income) == 0]
         topological_path = []
         for vertex in start_vertices:
             topological_sort_helper(vertex)
