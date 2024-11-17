@@ -40,6 +40,7 @@ class CodeService(ICodeService):
             response = self.session.get(
                 self.resource_path,
                 params=params,
+                timeout=5,
             )
 
             response.raise_for_status()

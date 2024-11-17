@@ -8,14 +8,23 @@ class ErrorMessage(Static):
             background: $panel;
             padding: 1 2;
             align: center middle;
-
+            width: 100%;
         }
+
+        #error-container {
+            background: $boost;
+            padding: 2 4;
+            border: heavy $error;
+            width: 90%;
+            max-width: 90%;
+        }
+
         #error {
             margin-bottom: 1;
             text-style: bold;
             content-align-horizontal: center;
             content-align-vertical: middle;
-            width: auto;
+            width: 100%;
             text-align: center;
         }
     """
@@ -25,4 +34,5 @@ class ErrorMessage(Static):
         self.message = message
 
     def compose(self):
-        yield Static(f"Error: {self.message}\n\nPress ^n to retry", id="error")
+        with Static(id="error-container"):
+            yield Static(f"Error: {self.message}\n\nPress ^n to retry", id="error")
