@@ -82,9 +82,7 @@ class GameDisplay(Container):
     def load_new_game(
         self, language: str = None, tags: list[str] = None
     ) -> None:
-        self.loading = True
         code_document: CodeDocument | None = self.fetch_code_document(language=language, tags=tags)
-        self.loading = False
 
         if code_document is None:
             return
