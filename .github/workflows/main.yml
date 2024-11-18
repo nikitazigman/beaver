@@ -33,6 +33,10 @@ jobs:
     needs: linting
     uses: ./.github/workflows/beaver_api.yml
 
+  beaver_python_dataset:
+    needs: linting
+    uses: ./.github/workflows/python_dataset.yml
+
   dataset_changes:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
@@ -76,7 +80,7 @@ jobs:
           base: master
           filters: |
             beaver_terminal:
-              - 'frontend/beaver_terminal/beaver_cli/**'
+              - 'frontend/beaver_terminal/**'
 
   call_cli_workflow:
     needs: [linting, cli_changes]
