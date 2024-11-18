@@ -76,7 +76,7 @@ jobs:
           base: master
           filters: |
             beaver_terminal:
-              - 'frontend/beaver_terminal/beaver_cli/**'
+              - 'frontend/beaver_terminal/**'
 
   call_cli_workflow:
     needs: [linting, cli_changes]
