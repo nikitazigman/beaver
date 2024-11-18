@@ -79,6 +79,7 @@ class BeaverCli(App):
 
             game_display.load_new_game(language=language, tags=tag)
             game_display.focus()
+
         except NoMatches:
             self.mount(GameDisplay())
 

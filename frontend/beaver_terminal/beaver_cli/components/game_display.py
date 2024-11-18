@@ -7,8 +7,10 @@ from beaver_cli.components.code import (
     UserErrorEvent,
     UserStartTyping,
 )
+from beaver_cli.components.error_message import ErrorMessage
 from beaver_cli.components.info_label import InfoDisplay
 from beaver_cli.components.time_label import TimeDisplay
+from beaver_cli.schemas.code_document import CodeDocument
 from beaver_cli.schemas.statistic import Statistic
 from beaver_cli.services.code_document import CodeService
 from beaver_cli.utils.session import Session
@@ -67,9 +69,23 @@ class GameDisplay(Container):
     def get_game_statistic(self) -> Statistic:
         return self.statistic
 
-    def load_new_game(self, language: str = None, tags: list[str] = None) -> None:
-        with Session() as session:
-            code_document = CodeService(session).get_code_document(language=language, tags=tags)
+    def fetch_code_document(self, language: str = None, tags: list[str] = None) -> CodeDocument | None:
+        try:
+            with Session() as session:
+                return CodeService(session).get_code_document(language=language, tags=tags)
+        except Exception as e:
+            [widget.remove() for widget in self.query()]
+            self.mount(ErrorMessage(str(e)))
+            return None
+
+
+    def load_new_game(
+        self, language: str = None, tags: list[str] = None
+    ) -> None:
+        code_document: CodeDocument | None = self.fetch_code_document(language=language, tags=tags)
+
+        if code_document is None:
+            return
 
         [widget.remove() for widget in self.query()]
 
