@@ -12,7 +12,7 @@ settings = get_settings()
 
 class ICodeService(ABC):
     @abstractmethod
-    def get_code_document(self, tag_name: str, language: str) -> CodeDocument:
+    def get_code_document(self, tags: list[str] | None = None, language: str | None = None) -> CodeDocument:
         "Get a random code document"
 
 
@@ -22,7 +22,7 @@ class CodeService(ICodeService):
     def __init__(self, session: Session) -> None:
         self.session = session
 
-    def get_code_document(self, tags: list[str] = None, language: str = None) -> CodeDocument:
+    def get_code_document(self, tags: list[str] | None = None, language: str | None = None) -> CodeDocument:
         params = []
 
         if tags:

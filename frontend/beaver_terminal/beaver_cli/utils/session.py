@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Self
 
 import requests
 
@@ -9,7 +8,7 @@ from requests.adapters import HTTPAdapter, Retry
 
 class ISession(ABC):
     @abstractmethod
-    def __enter__(self) -> Self:
+    def __enter__(self) -> requests.Session:
         "Enter the context manager"
 
     @abstractmethod
@@ -18,7 +17,7 @@ class ISession(ABC):
         exc_type: type[Exception],
         exc_value: Exception,
         traceback: TracebackType,
-    ):
+    ) -> None:
         "Exit the context manager"
 
 
@@ -36,7 +35,7 @@ class Session(ISession):
     def close_session(self) -> None:
         self.session.close()
 
-    def __enter__(self) -> ISession:
+    def __enter__(self) -> requests.Session:
         self.start_session()
         return self.session
 
