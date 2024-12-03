@@ -1,3 +1,5 @@
+import webbrowser
+
 from beaver_cli.components.code import (
     Code,
     UserCompletedCode,
@@ -10,8 +12,9 @@ from beaver_cli.components.result_display import ResultDisplay
 from beaver_cli.components.settings_screen import SettingsScreen
 
 from textual import on
-from textual.app import App, ComposeResult, NoMatches
+from textual.app import App, ComposeResult
 from textual.binding import Binding
+from textual.css.query import NoMatches
 
 
 class BeaverCli(App):
@@ -93,6 +96,9 @@ class BeaverCli(App):
 
     def action_show_settings(self) -> None:
         self.push_screen("settings")
+
+    def action_open_link(self, link_to_code: str) -> None:
+        webbrowser.open(url=link_to_code)
 
 
 def main() -> None:
