@@ -1,5 +1,7 @@
 import webbrowser
 
+from queue import Queue
+
 from beaver_cli.components.code import (
     Code,
     UserCompletedCode,
@@ -11,6 +13,7 @@ from beaver_cli.components.help_screen import HelpScreen
 from beaver_cli.components.result_display import ResultDisplay
 from beaver_cli.components.settings_screen import SettingsScreen
 from beaver_cli.schemas.statistic import Statistic
+from beaver_cli.services.api import BeaverAPIService
 
 from textual import on
 from textual.app import App, ComposeResult
@@ -51,6 +54,10 @@ class BeaverCli(App):
     ]
 
     SCREENS = {"settings": SettingsScreen()}
+
+    def __init__(self, beaver_api: BeaverAPIService, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.beaver_api: BeaverAPIService = beaver_api
 
     def compose(self) -> ComposeResult:
         yield BeaverHeader(name="Beaver CLI")
@@ -104,8 +111,10 @@ class BeaverCli(App):
 
 
 def main() -> None:
-    app = BeaverCli()
-    app.run()
+    queue = Queue(maxsize=5)
+    with BeaverAPIService(queue=queue) as beaver_api:
+        app = BeaverCli(beaver_api=beaver_api)
+        app.run()
 
 
 if __name__ == "__main__":
