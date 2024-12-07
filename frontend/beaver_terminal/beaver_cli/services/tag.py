@@ -1,33 +1,24 @@
-from abc import ABC, abstractmethod
-
 from beaver_cli.schemas.tags import Tag
-from beaver_cli.settings.settings import get_settings
+from beaver_cli.settings.settings import Settings, get_settings
 
+from requests import Response
 from requests.sessions import Session
 
 
-settings = get_settings()
+settings: Settings = get_settings()
 
 
-class ITagService(ABC):
-    @abstractmethod
-    def get_all_tags() -> list[Tag]:
-        "Get all tags"
-
-
-class TagService(ITagService):
-    resource_path = f"{settings.service_url}/api/v1/tags/"
+class TagService:
+    resource_path: str = f"{settings.service_url}/api/v1/tags/"
 
     def __init__(self, session: Session) -> None:
-        self.session = session
+        self.session: Session = session
 
     def get_all_tags(
         self,
-    ) -> Tag:
-        response = self.session.get(
-            self.resource_path,
-        )
+    ) -> list[Tag]:
+        response: Response = self.session.get(url=self.resource_path)
         response.raise_for_status()
 
-        tag_data = response.json()["results"]
-        return [Tag.model_validate(tag) for tag in tag_data]
+        tag_data: list[dict] = response.json()["results"]
+        return [Tag.model_validate(obj=tag) for tag in tag_data]

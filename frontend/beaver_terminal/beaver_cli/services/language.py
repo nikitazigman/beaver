@@ -1,33 +1,22 @@
-from abc import ABC, abstractmethod
-
 from beaver_cli.schemas.language import Language
-from beaver_cli.settings.settings import get_settings
+from beaver_cli.settings.settings import Settings, get_settings
 
+from requests import Response
 from requests.sessions import Session
 
 
-settings = get_settings()
+settings: Settings = get_settings()
 
 
-class ILanguageService(ABC):
-    @abstractmethod
-    def get_all_languages() -> list[Language]:
-        "Get all languages"
-
-
-class LanguageService(ILanguageService):
-    resource_path = f"{settings.service_url}/api/v1/languages/"
+class LanguageService:
+    resource_path: str = f"{settings.service_url}/api/v1/languages/"
 
     def __init__(self, session: Session) -> None:
-        self.session = session
+        self.session: Session = session
 
-    def get_all_languages(
-        self,
-    ) -> Language:
-        response = self.session.get(
-            self.resource_path,
-        )
+    def get_all_languages(self) -> list[Language]:
+        response: Response = self.session.get(url=self.resource_path)
         response.raise_for_status()
 
-        languages_data = response.json()["results"]
-        return [Language.model_validate(language) for language in languages_data]
+        languages_data: list[dict] = response.json()["results"]
+        return [Language.model_validate(obj=language) for language in languages_data]

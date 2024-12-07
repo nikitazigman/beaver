@@ -10,6 +10,7 @@ from beaver_cli.components.header import BeaverHeader
 from beaver_cli.components.help_screen import HelpScreen
 from beaver_cli.components.result_display import ResultDisplay
 from beaver_cli.components.settings_screen import SettingsScreen
+from beaver_cli.schemas.statistic import Statistic
 
 from textual import on
 from textual.app import App, ComposeResult
@@ -20,31 +21,31 @@ from textual.css.query import NoMatches
 class BeaverCli(App):
     CSS_PATH = "main.tcss"
 
-    BINDINGS = [
-        Binding("ctrl+c", "quit", "Quit", show=True, priority=True),
+    BINDINGS: list[Binding] = [  # type: ignore
+        Binding(key="ctrl+c", action="quit", description="Quit", show=True, priority=True),
         Binding(
-            "ctrl+n",
-            "load_new_game",
-            "Next",
+            key="ctrl+n",
+            action="load_new_game",
+            description="Next",
             show=True,
             priority=True,
         ),
         Binding(
-            "ctrl+d",
-            "toggle_dark",
-            "Toggle dark mode",
+            key="ctrl+d",
+            action="toggle_dark",
+            description="Toggle dark mode",
             show=True,
         ),
         Binding(
-            "f1",
-            "show_help",
-            "Show help",
+            key="f1",
+            action="show_help",
+            description="Show help",
             show=True,
         ),
         Binding(
-            "f2",
-            "show_settings",
-            "Show settings",
+            key="f2",
+            action="show_settings",
+            description="Show settings",
             show=True,
         ),
     ]
@@ -56,10 +57,10 @@ class BeaverCli(App):
         yield GameDisplay()
         yield BeaverFooter()
 
-    @on(UserCompletedCode)
+    @on(message_type=UserCompletedCode)
     def show_statistics(self, event: UserCompletedCode) -> None:
-        game_display = self.query_one(GameDisplay)
-        statistic = game_display.get_game_statistic()
+        game_display: GameDisplay = self.query_one(selector=GameDisplay)
+        statistic: Statistic = game_display.get_game_statistic()
         game_display.remove()
 
         self.mount(
@@ -71,14 +72,15 @@ class BeaverCli(App):
 
     def action_load_new_game(self) -> None:
         try:
-            self.query_one(ResultDisplay).remove()
+            self.query_one(selector=ResultDisplay).remove()
         except NoMatches:
             ...
 
         try:
-            game_display = self.query_one(GameDisplay)
-            settings: SettingsScreen = self.SCREENS["settings"]
-            language, tag = settings.language, settings.tag
+            game_display: GameDisplay = self.query_one(selector=GameDisplay)
+            settings: SettingsScreen = self.SCREENS["settings"]  # type: ignore
+            language: str | None = settings.language
+            tag: list[str] | None = settings.tag
 
             game_display.load_new_game(language=language, tags=tag)
             game_display.focus()
@@ -88,14 +90,14 @@ class BeaverCli(App):
 
     def action_toggle_dark(self) -> None:
         super().action_toggle_dark()
-        code_widget: Code = self.query_one("#code")
+        code_widget: Code = self.query_one(selector="#code")  # type: ignore
         code_widget.theme = "vscode_dark" if self.dark else "github_light"
 
     def action_show_help(self) -> None:
-        self.push_screen(HelpScreen())
+        self.push_screen(screen=HelpScreen())
 
     def action_show_settings(self) -> None:
-        self.push_screen("settings")
+        self.push_screen(screen="settings")
 
     def action_open_link(self, link_to_code: str) -> None:
         webbrowser.open(url=link_to_code)

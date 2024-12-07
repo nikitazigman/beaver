@@ -1,46 +1,32 @@
-from abc import ABC, abstractmethod
-
 from beaver_cli.schemas.code_document import CodeDocument
 from beaver_cli.settings.settings import get_settings
 
-from requests import HTTPError
+from requests import HTTPError, Response
 from requests.sessions import Session
 
 
 settings = get_settings()
 
 
-class ICodeService(ABC):
-    @abstractmethod
-    def get_code_document(self, tags: list[str] | None = None, language: str | None = None) -> CodeDocument:
-        "Get a random code document"
-
-
-class CodeService(ICodeService):
-    resource_path = f"{settings.service_url}/api/v1/code_documents/code_document/"
+class CodeService:
+    resource_path: str = f"{settings.service_url}/api/v1/code_documents/code_document/"
 
     def __init__(self, session: Session) -> None:
-        self.session = session
+        self.session: Session = session
 
     def get_code_document(self, tags: list[str] | None = None, language: str | None = None) -> CodeDocument:
-        params = []
+        tags = tags or []
 
-        if tags:
-            for tag in tags:
-                params.append(("tags", tag))
+        params: list[tuple[str, str]] = [("tags", tag) for tag in tags]
 
         if language:
             params.append(("language", language))
 
         try:
-            response = self.session.get(
-                self.resource_path,
-                params=params,
-                timeout=5,
-            )
+            response: Response = self.session.get(url=self.resource_path, params=params, timeout=5)
 
             response.raise_for_status()
-            return CodeDocument.model_validate_json(response.text)
+            return CodeDocument.model_validate_json(json_data=response.text)
 
         except HTTPError as e:
             if e.response.status_code == 404:
