@@ -1,17 +1,21 @@
 import webbrowser
 
-from queue import Queue
+from contextlib import suppress
+from queue import Empty, Queue
 
 from beaver_cli.components.code import (
     Code,
     UserCompletedCode,
 )
+from beaver_cli.components.error_message import ErrorMessage
+from beaver_cli.components.error_screen import ErrorScreen
 from beaver_cli.components.footer import BeaverFooter
 from beaver_cli.components.game_display import GameDisplay
 from beaver_cli.components.header import BeaverHeader
 from beaver_cli.components.help_screen import HelpScreen
 from beaver_cli.components.result_display import ResultDisplay
 from beaver_cli.components.settings_screen import SettingsScreen
+from beaver_cli.schemas.code_document import CodeDocument
 from beaver_cli.schemas.statistic import Statistic
 from beaver_cli.services.api import BeaverAPIService
 
@@ -53,8 +57,6 @@ class BeaverCli(App):
         ),
     ]
 
-    SCREENS = {"settings": SettingsScreen()}
-
     def __init__(self, beaver_api: BeaverAPIService, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.beaver_api: BeaverAPIService = beaver_api
@@ -70,30 +72,45 @@ class BeaverCli(App):
         statistic: Statistic = game_display.get_game_statistic()
         game_display.remove()
 
-        self.mount(
-            ResultDisplay(
-                statistic=statistic,
-                intervals=20,
-            )
-        )
+        self.mount(ResultDisplay(statistic=statistic, intervals=20))
 
     def action_load_new_game(self) -> None:
-        try:
+        with suppress(NoMatches):
             self.query_one(selector=ResultDisplay).remove()
-        except NoMatches:
-            ...
+        with suppress(NoMatches):
+            self.query_one(selector=ErrorMessage).remove()
+
+        if len(self.screen_stack) > 1:
+            self.pop_screen()
 
         try:
             game_display: GameDisplay = self.query_one(selector=GameDisplay)
-            settings: SettingsScreen = self.SCREENS["settings"]  # type: ignore
-            language: str | None = settings.language
-            tag: list[str] | None = settings.tag
+            code_document: CodeDocument | None = self.beaver_api.get_code_document()
 
-            game_display.load_new_game(language=language, tags=tag)
-            game_display.focus()
+            if code_document is None:
+                self.beaver_api.set_settings(tags=[], language=None)
+                self.push_screen(
+                    screen=ErrorScreen(
+                        error_message="The requested code document could not be found. "
+                        "Please try a different combination of tags or language, "
+                        "as the specified document may not yet exist in the database."
+                    )
+                )
+
+            else:
+                game_display.load_new_game(code_document=code_document)
+                game_display.focus()
+                return
 
         except NoMatches:
             self.mount(GameDisplay())
+
+        except Empty as e:
+            self.push_screen(
+                screen=ErrorScreen(error_message=f"An unexpected error occurred while fetching the code document: {e}")
+            )
+
+        self.beaver_api.set_settings(tags=[], language=None)
 
     def action_toggle_dark(self) -> None:
         super().action_toggle_dark()
@@ -104,7 +121,7 @@ class BeaverCli(App):
         self.push_screen(screen=HelpScreen())
 
     def action_show_settings(self) -> None:
-        self.push_screen(screen="settings")
+        self.push_screen(screen=SettingsScreen(beaver_api=self.beaver_api))
 
     def action_open_link(self, link_to_code: str) -> None:
         webbrowser.open(url=link_to_code)

@@ -1,0 +1,17 @@
+#error_screen_container {
+    align: center middle;
+    max-width: 70%;
+    height: auto;
+    max-height: 80%;
+    background: $panel;
+}
+
+#error_screen_title {
+    text-align: center;
+    color: $accent;
+    text-style: bold;
+    align: center middle;
+    padding-bottom: 2;
+    padding-top: 1;
+
+}

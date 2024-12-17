@@ -1,4 +1,5 @@
-from queue import Queue
+from contextlib import suppress
+from queue import Empty, Queue
 from threading import Event, Thread
 from types import TracebackType
 from typing import Self
@@ -48,17 +49,21 @@ class BeaverAPIService:
     def get_all_tags(self) -> list[Tag]:
         return self.tag_api.get_all_tags()
 
-    def get_code_document(self) -> CodeDocument:
-        return self.queue.get()
+    def get_code_document(self) -> CodeDocument | None:
+        return self.queue.get(timeout=1)  # 1 sec timeout
 
     def _clear_queue(self) -> None:
-        self.queue.queue.clear()
+        with suppress(Empty):
+            while True:
+                self.queue.get_nowait()
 
     def _background_task(self) -> None:
         while self._running.is_set():
-            doc: CodeDocument = self.code_api.get_code_document(
-                tags=self.selected_tags, language=self.selected_language
-            )
+            doc: CodeDocument | None = None
+
+            with suppress(HTTPError):
+                doc = self.code_api.get_code_document(tags=self.selected_tags, language=self.selected_language)
+
             self.queue.put(item=doc)
 
     def __enter__(self) -> Self:
@@ -69,9 +74,9 @@ class BeaverAPIService:
 
     def __exit__(self, exc_type: type[Exception], exc_value: Exception, traceback: TracebackType) -> None:
         self._running.clear()
+        self._clear_queue()
         self.thread.join()
         self.session.close()
-        self._clear_queue()
 
 
 class CodeAPI:
@@ -86,24 +91,10 @@ class CodeAPI:
         if language:
             params.append(("language", language))
 
-        try:
-            response: Response = self.session.get(url=self.resource_path, params=params, timeout=5)
+        response: Response = self.session.get(url=self.resource_path, params=params, timeout=5)
 
-            response.raise_for_status()
-            return CodeDocument.model_validate_json(json_data=response.text)
-
-        except HTTPError as e:
-            if e.response.status_code == 404:
-                raise FileNotFoundError(
-                    "The requested code document could not be found. "
-                    "Please try a different combination of tags or language, "
-                    "as the specified document may not yet exist in the database."
-                )
-            else:
-                raise ConnectionError(f"An error occurred while fetching the code document: {e}")
-
-        except Exception as e:
-            raise ConnectionError(f"An unexpected error occurred while fetching the code document: {e}")
+        response.raise_for_status()
+        return CodeDocument.model_validate_json(json_data=response.text)
 
 
 class LanguageAPI:
