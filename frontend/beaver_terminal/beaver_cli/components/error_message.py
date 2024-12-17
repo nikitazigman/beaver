@@ -1,4 +1,3 @@
-
 from textual.widgets import Static
 
 
