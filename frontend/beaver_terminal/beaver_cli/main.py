@@ -63,7 +63,13 @@ class BeaverCli(App):
 
     def compose(self) -> ComposeResult:
         yield BeaverHeader(name="Beaver CLI")
-        yield GameDisplay()
+
+        game_display = GameDisplay()
+        self.mount(game_display)
+
+        if (code_document := self.beaver_api.get_code_document()) is not None:
+            game_display.load_new_game(code_document=code_document)
+
         yield BeaverFooter()
 
     @on(message_type=UserCompletedCode)
