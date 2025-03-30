@@ -12,11 +12,7 @@
                 "ecr:GetDownloadUrlForLayer",
                 "ecr:BatchGetImage",
                 "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "elasticfilesystem:ClientMount",
-                "elasticfilesystem:ClientWrite",
-                "elasticfilesystem:ClientRootAccess",
-                "elasticfilesystem:DescribeFileSystems"
+                "logs:PutLogEvents"
             ],
             "Resource": "*"
         }

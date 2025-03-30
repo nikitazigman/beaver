@@ -1,24 +1,31 @@
 {
     "folders": [
 		{
+			"name": "IaC",
 			"path": "../IaC"
 		},
 		{
+			"name": "beaver_api",
 			"path": "../backend/apps/beaver_api"
 		},
 		{
+			"name": "beaver_etl",
 			"path": "../backend/apps/beaver_etl"
 		},
 		{
+			"name": "beaver_linter",
 			"path": "../backend/apps/beaver_linter"
 		},
 		{
+			"name": "beaver",
 			"path": ".."
 		},
 		{
+			"name": "beaver_terminal",
 			"path": "../frontend/beaver_terminal"
 		},
 		{
+			"name": "python",
 			"path": "../dataset/python"
 		}
 	],
@@ -45,7 +52,11 @@
 			"Renderable",
 			"Sparkline",
 			"testcontainers",
-			"yasg"
+			"yasg",
+			"fargate",
+			"awslogs",
+			"appautoscaling",
+			"cooldown"
 		]
 	},
 	"launch": {
