@@ -8,8 +8,8 @@ resource "aws_route53_record" "site_domain" {
   type    = "A"
 
   alias {
-    name                   = aws_lb.main.dns_name
-    zone_id                = aws_lb.main.zone_id
+    name                   = aws_lb.production.dns_name
+    zone_id                = aws_lb.production.zone_id
     evaluate_target_health = true
   }
 }

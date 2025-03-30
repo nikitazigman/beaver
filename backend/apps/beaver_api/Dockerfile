@@ -2,6 +2,9 @@ FROM python:3.12-slim AS beaver_api
 
 ARG APP_PATH=/opt/app
 
+
+
+
 ENV PYTHONUNBUFFERED=1 \
   # Prevents python creating .pyc files
   PYTHONDONTWRITEBYTECODE=1 \
@@ -29,6 +32,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 # Install poetry - respects $POETRY_VERSION & $POETRY_HOME
 RUN curl -sSL https://install.python-poetry.org | python3 -
+
 
 
 # Copy app code to WORKDIR
