@@ -27,6 +27,10 @@
 		{
 			"name": "python",
 			"path": "../dataset/python"
+		},
+		{
+			"name": "beaver_api_v2",
+			"path": "../backend/apps/beaver_api_v2"
 		}
 	],
 	"settings": {
