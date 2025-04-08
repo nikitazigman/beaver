@@ -3,7 +3,7 @@
 CREATE TABLE languages(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    update_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE,
 
     name VARCHAR(255)
 );
@@ -50,7 +50,7 @@ CREATE TABLE tags_scripts(
 CREATE TABLE contributors_scripts(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
-    contributor_id UUID REFERENCES tags(id) ON DELETE CASCADE,
+    contributor_id UUID REFERENCES contributors(id) ON DELETE CASCADE,
     script_id UUID REFERENCES scripts(id) ON DELETE CASCADE,
 
     UNIQUE(contributor_id, script_id)

@@ -1,15 +1,34 @@
 package main
 
 import (
-	"beaver-api/internal/api/storage"
+	"beaver-api/internal/storage"
+	"context"
 	"fmt"
-	"log"
+	"os"
+
+	"github.com/jackc/pgx/v5"
 )
 
+const (
+	fmtDBString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
+	host = "localhost"
+	user = "beaver_api"
+	password = "beaver_api"
+	dbname = "beaver_api_db"
+	port = 5432
+)
+
+
 func main() {
-	db, err := storage.NewDB("localhost", 5432, "postgres", "postgres", "beaver")
+	url := fmt.Sprintf(fmtDBString, host,user,password,dbname,port)
+
+	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
 	}
-	fmt.Println(db)
+	defer conn.Close(context.Background())
+
+	s := storage.New(conn)
+	fmt.Println(s)
 }
