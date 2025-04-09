@@ -35,7 +35,6 @@
 	],
 	"settings": {
 		"ruff.enable": true,
-		"ruff.lint.run": "onSave",
 		"[python]": {
 			"editor.defaultFormatter": "charliermarsh.ruff",
 			"editor.formatOnSave": true,
@@ -60,7 +59,8 @@
 			"fargate",
 			"awslogs",
 			"appautoscaling",
-			"cooldown"
+			"cooldown",
+			"pgtype"
 		]
 	},
 	"launch": {

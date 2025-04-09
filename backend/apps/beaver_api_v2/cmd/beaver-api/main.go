@@ -1,9 +1,13 @@
 package main
 
 import (
+	"beaver-api/internal/app"
+	"beaver-api/internal/business"
 	"beaver-api/internal/storage"
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 
 	"github.com/jackc/pgx/v5"
@@ -29,6 +33,17 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
-	s := storage.New(conn)
-	fmt.Println(s)
+	tr := storage.New(conn)
+	ts := business.NewTagService(tr)
+	r := app.New(ts)
+
+	s := &http.Server{
+		Addr:         fmt.Sprintf(":%d", 8000),
+		Handler:      r,
+	}
+
+	log.Println("Starting server " + s.Addr)
+	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatal("Server startup failed")
+	}
 }
