@@ -1,31 +1,5 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE languages(
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE,
-
-    name VARCHAR(255)
-);
-
-CREATE TABLE tags(
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE,
-
-    name VARCHAR(255)
-);
-
-CREATE TABLE contributors(
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE,
-
-    name VARCHAR(255),
-    last_name VARCHAR(255),
-    email_address VARCHAR(1024)
-);
-
 CREATE TABLE scripts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -62,7 +36,4 @@ CREATE TABLE contributors_scripts(
 DROP TABLE contributors_scripts;
 DROP TABLE tags_scripts;
 DROP TABLE scripts;
-DROP TABLE contributors;
-DROP TABLE tags;
-DROP TABLE languages;
 -- +goose StatementEnd

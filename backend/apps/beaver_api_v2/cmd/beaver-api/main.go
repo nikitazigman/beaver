@@ -1,15 +1,19 @@
 package main
 
 import (
-	"beaver-api/internal/app"
-	"beaver-api/internal/business"
-	"beaver-api/internal/storage"
+	"beaver-api/internal/app/languageapp"
+	"beaver-api/internal/app/tagapp"
+	"beaver-api/internal/business/languagebus"
+	"beaver-api/internal/business/tagbus"
+	"beaver-api/internal/storage/languagedb"
+	"beaver-api/internal/storage/tagdb"
 	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -33,9 +37,18 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
-	tr := storage.New(conn)
-	ts := business.NewTagService(tr)
-	r := app.New(ts)
+
+	r := chi.NewRouter()
+	r.Route("/v1", func(r chi.Router){
+		tagDB := tagdb.New(conn)
+		tagService := tagbus.NewTagService(tagDB)
+		langDB := languagedb.New(conn)
+		langService := languagebus.NewLangService(langDB)
+
+		tagapp.New(r, tagService)
+		languageapp.New(r, langService)
+	})
+
 
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%d", 8000),

@@ -1,10 +1,41 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "internal/storage/queries"
-    schema: "internal/storage/migrations"
+    queries: "internal/storage/contributordb/queries"
+    schema: "internal/storage/contributordb/migrations"
     gen:
       go:
         sql_package: "pgx/v5"
-        package: "storage"
-        out: "internal/storage"
+        package: "contributordb"
+        out: "internal/storage/contributordb"
+
+  - engine: "postgresql"
+    queries: "internal/storage/tagdb/queries"
+    schema: "internal/storage/tagdb/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "tagdb"
+        out: "internal/storage/tagdb"
+
+  - engine: "postgresql"
+    queries: "internal/storage/languagedb/queries"
+    schema: "internal/storage/languagedb/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "languagedb"
+        out: "internal/storage/languagedb"
+
+  - engine: "postgresql"
+    queries: "internal/storage/scriptdb/queries"
+    schema:
+      - "internal/storage/scriptdb/migrations"
+      - "internal/storage/tagdb/migrations"
+      - "internal/storage/languagedb/migrations"
+      - "internal/storage/contributordb/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "scriptdb"
+        out: "internal/storage/scriptdb"

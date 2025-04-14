@@ -3,7 +3,7 @@
 //   sqlc v1.28.0
 // source: contributors.sql
 
-package storage
+package contributordb
 
 import (
 	"context"

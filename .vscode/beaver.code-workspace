@@ -60,7 +60,14 @@
 			"awslogs",
 			"appautoscaling",
 			"cooldown",
-			"pgtype"
+			"pgtype",
+			"tagdb",
+			"tagbus",
+			"DBSTRING",
+			"languagedb",
+			"languagebus",
+			"contributordb",
+			"scriptdb"
 		]
 	},
 	"launch": {

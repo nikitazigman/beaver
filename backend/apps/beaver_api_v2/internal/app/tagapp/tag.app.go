@@ -1,17 +1,17 @@
-package app
+package tagapp
 
 import (
-	"beaver-api/internal/business"
+	"beaver-api/internal/business/tagbus"
 	"encoding/json"
 	"net/http"
 	"strconv"
 )
 
 type TagController struct {
-	service *business.TagService
+	service *tagbus.TagService
 }
 
-func newTagController(ts *business.TagService) *TagController{
+func newTagController(ts *tagbus.TagService) *TagController{
 	return &TagController{
 		service: ts,
 	}

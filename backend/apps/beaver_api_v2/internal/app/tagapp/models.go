@@ -1,6 +1,6 @@
-package app
+package tagapp
 
-import "beaver-api/internal/business"
+import "beaver-api/internal/business/tagbus"
 
 type GetTagDTO struct {
 	ID string `json:"id"`
@@ -14,7 +14,7 @@ type GetTagsDTO struct {
 }
 
 
-func BusTagsToGetTagsDTO(bts []business.Tag, offset int, size int)GetTagsDTO{
+func BusTagsToGetTagsDTO(bts []tagbus.Tag, offset int, size int)GetTagsDTO{
 	v := make([]GetTagDTO, len(bts))
 	for i, bt :=range bts{
 		v[i] = GetTagDTO{

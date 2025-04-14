@@ -1,4 +1,4 @@
-package business
+package busconributor
 
 import "github.com/google/uuid"
 
