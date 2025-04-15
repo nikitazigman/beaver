@@ -1,10 +1,13 @@
 package main
 
 import (
+	"beaver-api/internal/app/contributorapp"
 	"beaver-api/internal/app/languageapp"
 	"beaver-api/internal/app/tagapp"
+	"beaver-api/internal/business/contributorbus"
 	"beaver-api/internal/business/languagebus"
 	"beaver-api/internal/business/tagbus"
+	"beaver-api/internal/storage/contributordb"
 	"beaver-api/internal/storage/languagedb"
 	"beaver-api/internal/storage/tagdb"
 	"context"
@@ -44,9 +47,12 @@ func main() {
 		tagService := tagbus.NewTagService(tagDB)
 		langDB := languagedb.New(conn)
 		langService := languagebus.NewLangService(langDB)
+		contribDB := contributordb.New(conn)
+		contribService := contributorbus.NewContribService(contribDB)
 
 		tagapp.New(r, tagService)
 		languageapp.New(r, langService)
+		contributorapp.New(r, contribService)
 	})
 
 

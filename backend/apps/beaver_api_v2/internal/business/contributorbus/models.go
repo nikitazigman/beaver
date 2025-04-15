@@ -1,4 +1,4 @@
-package busconributor
+package contributorbus
 
 import (
 	"beaver-api/internal/storage/contributordb"
@@ -16,7 +16,7 @@ type Contributor struct {
 
 func toBusContrib(contrib contributordb.Contributor) (Contributor, error) {
 	if !(contrib.ID.Valid || contrib.Name.Valid || contrib.LastName.Valid || contrib.EmailAddress.Valid) {
-		return Contributor{}, errors.New("Some of the Contributor fields are not Valid")
+		return Contributor{}, errors.New("some of the Contributor fields are not Valid")
 	}
 
 	contribBus := Contributor{

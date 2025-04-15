@@ -1,4 +1,4 @@
-package busconributor
+package contributorbus
 
 import (
 	"beaver-api/internal/storage/contributordb"
@@ -9,7 +9,14 @@ type ContribService struct {
 	repo *contributordb.Queries
 }
 
-func (cs *ContribService) ListContributors(ctx context.Context, offset int, size int) ([]Contributor, error) {
+
+func NewContribService(r *contributordb.Queries)*ContribService{
+	return &ContribService{
+		repo: r,
+	}
+}
+
+func (cs *ContribService) RetrieveContributors(ctx context.Context, offset int, size int) ([]Contributor, error) {
 	qp := contributordb.ListContributorsParams{Offset: int32(offset), Limit: int32(size)}
 
 	contrDB, err := cs.repo.ListContributors(ctx, qp)
