@@ -1,15 +1,15 @@
 package main
 
 import (
-	"beaver-api/internal/app/contributorapp"
-	"beaver-api/internal/app/languageapp"
-	"beaver-api/internal/app/tagapp"
-	"beaver-api/internal/business/contributorbus"
-	"beaver-api/internal/business/languagebus"
-	"beaver-api/internal/business/tagbus"
-	"beaver-api/internal/storage/contributordb"
-	"beaver-api/internal/storage/languagedb"
-	"beaver-api/internal/storage/tagdb"
+	contrapp "beaver-api/internal/app/contributor"
+	langapp "beaver-api/internal/app/language"
+	tagapp "beaver-api/internal/app/tag"
+	contrbiz "beaver-api/internal/business/contributor"
+	langbiz "beaver-api/internal/business/language"
+	tagbiz "beaver-api/internal/business/tag"
+	contrdb "beaver-api/internal/db/contributor"
+	langdb "beaver-api/internal/db/language"
+	tagdb "beaver-api/internal/db/tag"
 	"context"
 	"fmt"
 	"log"
@@ -22,16 +22,15 @@ import (
 
 const (
 	fmtDBString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
-	host = "localhost"
-	user = "beaver_api"
-	password = "beaver_api"
-	dbname = "beaver_api_db"
-	port = 5432
+	host        = "localhost"
+	user        = "beaver_api"
+	password    = "beaver_api"
+	dbname      = "beaver_api_db"
+	port        = 5432
 )
 
-
 func main() {
-	url := fmt.Sprintf(fmtDBString, host,user,password,dbname,port)
+	url := fmt.Sprintf(fmtDBString, host, user, password, dbname, port)
 
 	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
@@ -40,25 +39,23 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
-
 	r := chi.NewRouter()
-	r.Route("/v1", func(r chi.Router){
+	r.Route("/v1", func(r chi.Router) {
 		tagDB := tagdb.New(conn)
-		tagService := tagbus.NewTagService(tagDB)
-		langDB := languagedb.New(conn)
-		langService := languagebus.NewLangService(langDB)
-		contribDB := contributordb.New(conn)
-		contribService := contributorbus.NewContribService(contribDB)
+		tagService := tagbiz.NewService(tagDB)
+		langDB := langdb.New(conn)
+		langService := langbiz.NewService(langDB)
+		contribDB := contrdb.New(conn)
+		contribService := contrbiz.NewService(contribDB)
 
 		tagapp.New(r, tagService)
-		languageapp.New(r, langService)
-		contributorapp.New(r, contribService)
+		langapp.New(r, langService)
+		contrapp.New(r, contribService)
 	})
 
-
 	s := &http.Server{
-		Addr:         fmt.Sprintf(":%d", 8000),
-		Handler:      r,
+		Addr:    fmt.Sprintf(":%d", 8000),
+		Handler: r,
 	}
 
 	log.Println("Starting server " + s.Addr)

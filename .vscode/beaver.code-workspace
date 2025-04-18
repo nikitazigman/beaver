@@ -1,5 +1,5 @@
 {
-    "folders": [
+	"folders": [
 		{
 			"name": "IaC",
 			"path": "../IaC"
@@ -43,6 +43,9 @@
 				"source.organizeImports.ruff": "explicit"
 			}
 		},
+		"[go]": {
+			"editor.formatOnSave": true
+		},
 		"python.testing.unittestEnabled": false,
 		"python.testing.pytestEnabled": true,
 		"cSpell.words": [
@@ -74,14 +77,16 @@
 		"version": "0.2.0",
 		"configurations": [
 			{
-                "name": "Python: Debug Tests",
-                "type": "debugpy",
-                "request": "launch",
-                "program": "${file}",
-                "purpose": ["debug-test"],
-                "console": "integratedTerminal",
-                "justMyCode": false
-            }
+				"name": "Python: Debug Tests",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${file}",
+				"purpose": [
+					"debug-test"
+				],
+				"console": "integratedTerminal",
+				"justMyCode": false
+			}
 		]
 	}
 }
