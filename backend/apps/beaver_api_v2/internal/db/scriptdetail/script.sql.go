@@ -8,17 +8,21 @@ package scriptdetail
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const count = `-- name: Count :one
-SELECT COUNT(*) FROM scripts_details WHERE tag_id = $1 AND contributor_id = $2 AND language_id = $3
+SELECT COUNT(*) FROM scripts_details
+WHERE
+    (tag_id = $1 OR $1 IS NULL) AND
+    (contributor_id = $2 OR $2 IS NULL) AND
+    (language_id = $3 OR $3 IS NULL)
 `
 
 type CountParams struct {
-	TagID         uuid.UUID
-	ContributorID uuid.UUID
-	LanguageID    uuid.UUID
+	TagID         pgtype.UUID
+	ContributorID pgtype.UUID
+	LanguageID    pgtype.UUID
 }
 
 func (q *Queries) Count(ctx context.Context, arg CountParams) (int64, error) {

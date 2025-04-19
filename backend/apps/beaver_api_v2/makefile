@@ -1,13 +1,25 @@
 # Define environment variable names
-SCRIPT_DETAIL_MIGRATION_DIR := ./internal/storage/script_detail_db/migrations
-SCRIPT_MIGRATION_DIR := ./internal/storage/script_db/migrations
-TAG_MIGRATION_DIR := ./internal/storage/tag_db/migrations
-CONTRIBUTOR_MIGRATION_DIR := ./internal/storage/contributor_db/migrations
-LANGUAGE_MIGRATION_DIR := ./internal/storage/language_db/migrations
+SCRIPT_DETAIL_MIGRATION_DIR := ./internal/db/scriptdetail/migrations
+SCRIPT_MIGRATION_DIR := ./internal/db/script/migrations
+TAG_MIGRATION_DIR := ./internal/db/tag/migrations
+CONTRIBUTOR_MIGRATION_DIR := ./internal/db/contributor/migrations
+LANGUAGE_MIGRATION_DIR := ./internal/db/language/migrations
 GOOSE_DRIVER := postgres
 GOOSE_DBSTRING := ${GOOSE_DRIVER}://$(PG_USER):$(PG_PASSWORD)@$(PG_HOST):$(PG_PORT)/$(PG_DB)
+DB_NAME=beaver_api_db
+DB_USER=beaver_api
+DB_PASSWORD=beaver_api
+DB_HOST=localhost
+SQL_FILE=./utils/demo_data.sql
+
+connect_db:
+	PGPASSWORD=$(DB_PASSWORD) psql -U $(DB_USER) -h $(DB_HOST) -d $(DB_NAME)
+
+demo_data:
+	PGPASSWORD=$(DB_PASSWORD) psql -U $(DB_USER) -h $(DB_HOST) -d $(DB_NAME) -f $(SQL_FILE)
+
 # Apply all migrations
-migrate: migrate_tag migrate_language migrate_contributor migrate_script migrate_script
+migrate: migrate_tag migrate_language migrate_contributor migrate_script migrate_script_detail
 
 migrate_tag:
 	@echo "Running migrations for tag..."
