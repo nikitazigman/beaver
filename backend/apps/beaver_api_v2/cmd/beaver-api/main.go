@@ -3,13 +3,18 @@ package main
 import (
 	contrapp "beaver-api/internal/app/contributor"
 	langapp "beaver-api/internal/app/language"
+	scriptdetailapp "beaver-api/internal/app/scriptdetail"
 	tagapp "beaver-api/internal/app/tag"
 	contrbiz "beaver-api/internal/business/contributor"
 	langbiz "beaver-api/internal/business/language"
+	scriptdetailbiz "beaver-api/internal/business/scriptdetail"
 	tagbiz "beaver-api/internal/business/tag"
+
 	contrdb "beaver-api/internal/db/contributor"
 	langdb "beaver-api/internal/db/language"
+	scriptdetaildb "beaver-api/internal/db/scriptdetail"
 	tagdb "beaver-api/internal/db/tag"
+
 	"context"
 	"fmt"
 	"log"
@@ -47,10 +52,12 @@ func main() {
 		langService := langbiz.NewService(langDB)
 		contribDB := contrdb.New(conn)
 		contribService := contrbiz.NewService(contribDB)
-
+		scriptDB := scriptdetaildb.New(conn)
+		scriptService := scriptdetailbiz.New(scriptDB)
 		tagapp.New(r, tagService)
 		langapp.New(r, langService)
 		contrapp.New(r, contribService)
+		scriptdetailapp.New(r, scriptService)
 	})
 
 	s := &http.Server{

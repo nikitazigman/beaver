@@ -8,50 +8,58 @@ package scriptdetail
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const count = `-- name: Count :one
-SELECT COUNT(*) FROM scripts_details
-WHERE
-    (tag_id = $1 OR $1 IS NULL) AND
-    (contributor_id = $2 OR $2 IS NULL) AND
-    (language_id = $3 OR $3 IS NULL)
+const random = `-- name: Random :many
+SELECT script_id, script_title, script_code, script_link_to_project, language_id, language_name, tag_id, tag_name, contributor_id, contributor_name, contributor_last_name, contributor_email_address FROM scripts_details
+WHERE script_id = (
+SELECT script_id FROM scripts_details AS sd
+    WHERE
+        (sd.tag_id = ANY($1::uuid[]) OR $1 IS NULL) AND
+        (sd.contributor_id = ANY($2::uuid[]) OR $2 IS NULL) AND
+        (sd.language_id = $3::uuid OR $3 IS NULL)
+    ORDER BY RANDOM()
+    LIMIT 1
+)
 `
 
-type CountParams struct {
-	TagID         pgtype.UUID
-	ContributorID pgtype.UUID
-	LanguageID    pgtype.UUID
+type RandomParams struct {
+	TagIDs     []uuid.UUID
+	ContribIDs []uuid.UUID
+	LanguageID pgtype.UUID
 }
 
-func (q *Queries) Count(ctx context.Context, arg CountParams) (int64, error) {
-	row := q.db.QueryRow(ctx, count, arg.TagID, arg.ContributorID, arg.LanguageID)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
-}
-
-const getDetailedScript = `-- name: GetDetailedScript :one
-SELECT script_id, script_title, script_code, script_link_to_project, language_id, language_name, tag_id, tag_name, contributor_id, contributor_name, contributor_last_name, contributor_email_address FROM scripts_details OFFSET $1 LIMIT 1
-`
-
-func (q *Queries) GetDetailedScript(ctx context.Context, offset int32) (ScriptsDetail, error) {
-	row := q.db.QueryRow(ctx, getDetailedScript, offset)
-	var i ScriptsDetail
-	err := row.Scan(
-		&i.ScriptID,
-		&i.ScriptTitle,
-		&i.ScriptCode,
-		&i.ScriptLinkToProject,
-		&i.LanguageID,
-		&i.LanguageName,
-		&i.TagID,
-		&i.TagName,
-		&i.ContributorID,
-		&i.ContributorName,
-		&i.ContributorLastName,
-		&i.ContributorEmailAddress,
-	)
-	return i, err
+func (q *Queries) Random(ctx context.Context, arg RandomParams) ([]ScriptsDetail, error) {
+	rows, err := q.db.Query(ctx, random, arg.TagIDs, arg.ContribIDs, arg.LanguageID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ScriptsDetail
+	for rows.Next() {
+		var i ScriptsDetail
+		if err := rows.Scan(
+			&i.ScriptID,
+			&i.ScriptTitle,
+			&i.ScriptCode,
+			&i.ScriptLinkToProject,
+			&i.LanguageID,
+			&i.LanguageName,
+			&i.TagID,
+			&i.TagName,
+			&i.ContributorID,
+			&i.ContributorName,
+			&i.ContributorLastName,
+			&i.ContributorEmailAddress,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

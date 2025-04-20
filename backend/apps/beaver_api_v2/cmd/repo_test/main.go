@@ -36,14 +36,16 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(tagID)
-	qp := scriptdetail.CountParams{
-		TagID:         pgtype.UUID{},
-		LanguageID:    pgtype.UUID{},
-		ContributorID: pgtype.UUID{},
+	qp := scriptdetail.RandomParams{
+		TagIDs:     nil,
+		LanguageID: pgtype.UUID{},
+		ContribIDs: nil,
 	}
-	count, err := q.Count(context.Background(), qp)
+	scripts, err := q.Random(context.Background(), qp)
 	if err != nil {
 		fmt.Print(err)
 	}
-	fmt.Println("scripts count", count)
+	for i, script := range scripts {
+		fmt.Println(i, script.ScriptTitle.String, script.LanguageName.String, script.TagName.String, script.ContributorName.String)
+	}
 }
