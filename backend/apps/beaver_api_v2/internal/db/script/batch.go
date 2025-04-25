@@ -18,157 +18,6 @@ var (
 	ErrBatchAlreadyClosed = errors.New("batch already closed")
 )
 
-const addContributors = `-- name: AddContributors :batchexec
-INSERT INTO contributors_scripts (contributor_id, script_id) VALUES($1, $2)
-`
-
-type AddContributorsBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-type AddContributorsParams struct {
-	ContributorID pgtype.UUID
-	ScriptID      pgtype.UUID
-}
-
-func (q *Queries) AddContributors(ctx context.Context, arg []AddContributorsParams) *AddContributorsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range arg {
-		vals := []interface{}{
-			a.ContributorID,
-			a.ScriptID,
-		}
-		batch.Queue(addContributors, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &AddContributorsBatchResults{br, len(arg), false}
-}
-
-func (b *AddContributorsBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *AddContributorsBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
-const addTags = `-- name: AddTags :batchexec
-INSERT INTO tags_scripts (tag_id, script_id) VALUES($1, $2)
-`
-
-type AddTagsBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-type AddTagsParams struct {
-	TagID    pgtype.UUID
-	ScriptID pgtype.UUID
-}
-
-func (q *Queries) AddTags(ctx context.Context, arg []AddTagsParams) *AddTagsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range arg {
-		vals := []interface{}{
-			a.TagID,
-			a.ScriptID,
-		}
-		batch.Queue(addTags, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &AddTagsBatchResults{br, len(arg), false}
-}
-
-func (b *AddTagsBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *AddTagsBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
-const createScripts = `-- name: CreateScripts :batchexec
-INSERT INTO scripts (title, code, link_to_project, language_id) VALUES($1, $2, $3, $4)
-`
-
-type CreateScriptsBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-type CreateScriptsParams struct {
-	Title         pgtype.Text
-	Code          pgtype.Text
-	LinkToProject pgtype.Text
-	LanguageID    pgtype.UUID
-}
-
-func (q *Queries) CreateScripts(ctx context.Context, arg []CreateScriptsParams) *CreateScriptsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range arg {
-		vals := []interface{}{
-			a.Title,
-			a.Code,
-			a.LinkToProject,
-			a.LanguageID,
-		}
-		batch.Queue(createScripts, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &CreateScriptsBatchResults{br, len(arg), false}
-}
-
-func (b *CreateScriptsBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *CreateScriptsBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
 const deleteScripts = `-- name: DeleteScripts :batchexec
 DELETE FROM scripts WHERE id = $1
 `
@@ -212,29 +61,35 @@ func (b *DeleteScriptsBatchResults) Close() error {
 	return b.br.Close()
 }
 
-const removeContributors = `-- name: RemoveContributors :batchexec
-DELETE FROM contributors_scripts WHERE id = $1
+const linkContributors = `-- name: LinkContributors :batchexec
+INSERT INTO contributors_scripts (contributor_id, script_id) VALUES($1, $2) ON CONFLICT (id) DO NOTHING
 `
 
-type RemoveContributorsBatchResults struct {
+type LinkContributorsBatchResults struct {
 	br     pgx.BatchResults
 	tot    int
 	closed bool
 }
 
-func (q *Queries) RemoveContributors(ctx context.Context, id []uuid.UUID) *RemoveContributorsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range id {
-		vals := []interface{}{
-			a,
-		}
-		batch.Queue(removeContributors, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &RemoveContributorsBatchResults{br, len(id), false}
+type LinkContributorsParams struct {
+	ContributorID pgtype.UUID
+	ScriptID      pgtype.UUID
 }
 
-func (b *RemoveContributorsBatchResults) Exec(f func(int, error)) {
+func (q *Queries) LinkContributors(ctx context.Context, arg []LinkContributorsParams) *LinkContributorsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range arg {
+		vals := []interface{}{
+			a.ContributorID,
+			a.ScriptID,
+		}
+		batch.Queue(linkContributors, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &LinkContributorsBatchResults{br, len(arg), false}
+}
+
+func (b *LinkContributorsBatchResults) Exec(f func(int, error)) {
 	defer b.br.Close()
 	for t := 0; t < b.tot; t++ {
 		if b.closed {
@@ -250,34 +105,40 @@ func (b *RemoveContributorsBatchResults) Exec(f func(int, error)) {
 	}
 }
 
-func (b *RemoveContributorsBatchResults) Close() error {
+func (b *LinkContributorsBatchResults) Close() error {
 	b.closed = true
 	return b.br.Close()
 }
 
-const removeTags = `-- name: RemoveTags :batchexec
-DELETE FROM tags_scripts WHERE id = $1
+const linkTags = `-- name: LinkTags :batchexec
+INSERT INTO tags_scripts (tag_id, script_id) VALUES($1, $2) ON CONFLICT (id) DO NOTHING
 `
 
-type RemoveTagsBatchResults struct {
+type LinkTagsBatchResults struct {
 	br     pgx.BatchResults
 	tot    int
 	closed bool
 }
 
-func (q *Queries) RemoveTags(ctx context.Context, id []uuid.UUID) *RemoveTagsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range id {
-		vals := []interface{}{
-			a,
-		}
-		batch.Queue(removeTags, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &RemoveTagsBatchResults{br, len(id), false}
+type LinkTagsParams struct {
+	TagID    pgtype.UUID
+	ScriptID pgtype.UUID
 }
 
-func (b *RemoveTagsBatchResults) Exec(f func(int, error)) {
+func (q *Queries) LinkTags(ctx context.Context, arg []LinkTagsParams) *LinkTagsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range arg {
+		vals := []interface{}{
+			a.TagID,
+			a.ScriptID,
+		}
+		batch.Queue(linkTags, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &LinkTagsBatchResults{br, len(arg), false}
+}
+
+func (b *LinkTagsBatchResults) Exec(f func(int, error)) {
 	defer b.br.Close()
 	for t := 0; t < b.tot; t++ {
 		if b.closed {
@@ -293,7 +154,146 @@ func (b *RemoveTagsBatchResults) Exec(f func(int, error)) {
 	}
 }
 
-func (b *RemoveTagsBatchResults) Close() error {
+func (b *LinkTagsBatchResults) Close() error {
+	b.closed = true
+	return b.br.Close()
+}
+
+const unlinkContributors = `-- name: UnlinkContributors :batchexec
+DELETE FROM contributors_scripts WHERE id = $1
+`
+
+type UnlinkContributorsBatchResults struct {
+	br     pgx.BatchResults
+	tot    int
+	closed bool
+}
+
+func (q *Queries) UnlinkContributors(ctx context.Context, id []uuid.UUID) *UnlinkContributorsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range id {
+		vals := []interface{}{
+			a,
+		}
+		batch.Queue(unlinkContributors, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &UnlinkContributorsBatchResults{br, len(id), false}
+}
+
+func (b *UnlinkContributorsBatchResults) Exec(f func(int, error)) {
+	defer b.br.Close()
+	for t := 0; t < b.tot; t++ {
+		if b.closed {
+			if f != nil {
+				f(t, ErrBatchAlreadyClosed)
+			}
+			continue
+		}
+		_, err := b.br.Exec()
+		if f != nil {
+			f(t, err)
+		}
+	}
+}
+
+func (b *UnlinkContributorsBatchResults) Close() error {
+	b.closed = true
+	return b.br.Close()
+}
+
+const unlinkTags = `-- name: UnlinkTags :batchexec
+DELETE FROM tags_scripts WHERE id = $1
+`
+
+type UnlinkTagsBatchResults struct {
+	br     pgx.BatchResults
+	tot    int
+	closed bool
+}
+
+func (q *Queries) UnlinkTags(ctx context.Context, id []uuid.UUID) *UnlinkTagsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range id {
+		vals := []interface{}{
+			a,
+		}
+		batch.Queue(unlinkTags, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &UnlinkTagsBatchResults{br, len(id), false}
+}
+
+func (b *UnlinkTagsBatchResults) Exec(f func(int, error)) {
+	defer b.br.Close()
+	for t := 0; t < b.tot; t++ {
+		if b.closed {
+			if f != nil {
+				f(t, ErrBatchAlreadyClosed)
+			}
+			continue
+		}
+		_, err := b.br.Exec()
+		if f != nil {
+			f(t, err)
+		}
+	}
+}
+
+func (b *UnlinkTagsBatchResults) Close() error {
+	b.closed = true
+	return b.br.Close()
+}
+
+const upsertScripts = `-- name: UpsertScripts :batchexec
+INSERT INTO scripts (title, code, link_to_project, language_id) VALUES($1, $2, $3, $4) ON CONFLICT (id) DO NOTHING
+`
+
+type UpsertScriptsBatchResults struct {
+	br     pgx.BatchResults
+	tot    int
+	closed bool
+}
+
+type UpsertScriptsParams struct {
+	Title         pgtype.Text
+	Code          pgtype.Text
+	LinkToProject pgtype.Text
+	LanguageID    pgtype.UUID
+}
+
+func (q *Queries) UpsertScripts(ctx context.Context, arg []UpsertScriptsParams) *UpsertScriptsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range arg {
+		vals := []interface{}{
+			a.Title,
+			a.Code,
+			a.LinkToProject,
+			a.LanguageID,
+		}
+		batch.Queue(upsertScripts, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &UpsertScriptsBatchResults{br, len(arg), false}
+}
+
+func (b *UpsertScriptsBatchResults) Exec(f func(int, error)) {
+	defer b.br.Close()
+	for t := 0; t < b.tot; t++ {
+		if b.closed {
+			if f != nil {
+				f(t, ErrBatchAlreadyClosed)
+			}
+			continue
+		}
+		_, err := b.br.Exec()
+		if f != nil {
+			f(t, err)
+		}
+	}
+}
+
+func (b *UpsertScriptsBatchResults) Close() error {
 	b.closed = true
 	return b.br.Close()
 }

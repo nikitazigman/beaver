@@ -4,3 +4,33 @@
 // source: script.sql
 
 package script
+
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
+
+const getTagScriptIDs = `-- name: GetTagScriptIDs :many
+SELECT id from tags_scripts WHERE id = ANY($1::UUID[])
+`
+
+func (q *Queries) GetTagScriptIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, getTagScriptIDs, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var id uuid.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

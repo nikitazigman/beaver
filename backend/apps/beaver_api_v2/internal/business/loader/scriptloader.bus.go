@@ -5,6 +5,7 @@ import (
 	"beaver-api/internal/business/language"
 	"beaver-api/internal/business/script"
 	"beaver-api/internal/business/tag"
+	"context"
 	"time"
 )
 
@@ -29,28 +30,31 @@ func New(
 	}
 }
 
-func (s *Service) LoadScripts([]ScriptDetail) error {
-	// get set of tags to create
-	// get set of contributors to create
-	// get set of languages to create
+// TODO: transaction
+func (s *Service) LoadScripts(ctx context.Context, scripts []ScriptDetail, timestamp time.Time) error {
+	loader := toEntities(scripts, timestamp)
 
-	// load languages to db -> get map[Name]ID
-
-	// create script models using the language mapping
-	// load script models to db -> get map[Title]ID
-
-	// load tags to db -> get map[Name]ID
-	// load contributors to db -> get map[EmailAddress]ID
-
-	//create script-tags models using the script and tags mappings
-	// load the script-tags to db
-
-	// create contrib-script models using script and contribs mappings
-	// load the contrib-script to db
-
+	if err := s.langService.UpsertLanguages(ctx, loader.langs); err != nil {
+		return err
+	}
+	if err := s.contribService.UpsertContributors(ctx, loader.contributors); err != nil {
+		return err
+	}
+	if err := s.tagService.CreateTags(ctx, loader.tags); err != nil {
+		return err
+	}
+	if err := s.scriptService.UpsertScripts(ctx, loader.scripts); err != nil {
+		return err
+	}
+	if err := s.scriptService.LinkTags(ctx, loader.tagScript); err != nil {
+		return err
+	}
+	if err := s.scriptService.LinkContributors(ctx, loader.contribScript); err != nil {
+		return err
+	}
 	return nil
 }
 
-func (s *Service) RemoveOldScripts(timestamp time.Time) error {
+func (s *Service) RemoveOldScripts(ctx context.Context, timestamp time.Time) error {
 	return nil
 }

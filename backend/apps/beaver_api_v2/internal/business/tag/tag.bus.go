@@ -46,7 +46,7 @@ func (ts *Service) CreateTags(ctx context.Context, tags []Tag) error {
 	}
 
 	var tagErr error
-	ts.q.CreateTags(ctx, names).Exec(func(i int, err error) {
+	ts.q.UpsertTags(ctx, names).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			tagErr = err

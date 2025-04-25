@@ -18,57 +18,6 @@ var (
 	ErrBatchAlreadyClosed = errors.New("batch already closed")
 )
 
-const createContributors = `-- name: CreateContributors :batchexec
-INSERT INTO contributors (name, last_name, email_address) VALUES($1, $2, $3)
-`
-
-type CreateContributorsBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-type CreateContributorsParams struct {
-	Name         pgtype.Text
-	LastName     pgtype.Text
-	EmailAddress pgtype.Text
-}
-
-func (q *Queries) CreateContributors(ctx context.Context, arg []CreateContributorsParams) *CreateContributorsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range arg {
-		vals := []interface{}{
-			a.Name,
-			a.LastName,
-			a.EmailAddress,
-		}
-		batch.Queue(createContributors, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &CreateContributorsBatchResults{br, len(arg), false}
-}
-
-func (b *CreateContributorsBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *CreateContributorsBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
 const deleteContributors = `-- name: DeleteContributors :batchexec
 DELETE FROM contributors WHERE id = $1
 `
@@ -108,6 +57,57 @@ func (b *DeleteContributorsBatchResults) Exec(f func(int, error)) {
 }
 
 func (b *DeleteContributorsBatchResults) Close() error {
+	b.closed = true
+	return b.br.Close()
+}
+
+const upsertContributors = `-- name: UpsertContributors :batchexec
+INSERT INTO contributors (name, last_name, email_address) VALUES($1, $2, $3) ON CONFLICT (id) DO NOTHING
+`
+
+type UpsertContributorsBatchResults struct {
+	br     pgx.BatchResults
+	tot    int
+	closed bool
+}
+
+type UpsertContributorsParams struct {
+	Name         pgtype.Text
+	LastName     pgtype.Text
+	EmailAddress pgtype.Text
+}
+
+func (q *Queries) UpsertContributors(ctx context.Context, arg []UpsertContributorsParams) *UpsertContributorsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range arg {
+		vals := []interface{}{
+			a.Name,
+			a.LastName,
+			a.EmailAddress,
+		}
+		batch.Queue(upsertContributors, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &UpsertContributorsBatchResults{br, len(arg), false}
+}
+
+func (b *UpsertContributorsBatchResults) Exec(f func(int, error)) {
+	defer b.br.Close()
+	for t := 0; t < b.tot; t++ {
+		if b.closed {
+			if f != nil {
+				f(t, ErrBatchAlreadyClosed)
+			}
+			continue
+		}
+		_, err := b.br.Exec()
+		if f != nil {
+			f(t, err)
+		}
+	}
+}
+
+func (b *UpsertContributorsBatchResults) Close() error {
 	b.closed = true
 	return b.br.Close()
 }

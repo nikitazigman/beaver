@@ -18,49 +18,6 @@ var (
 	ErrBatchAlreadyClosed = errors.New("batch already closed")
 )
 
-const createTags = `-- name: CreateTags :batchexec
-INSERT INTO tags (name) VALUES($1)
-`
-
-type CreateTagsBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-func (q *Queries) CreateTags(ctx context.Context, name []pgtype.Text) *CreateTagsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range name {
-		vals := []interface{}{
-			a,
-		}
-		batch.Queue(createTags, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &CreateTagsBatchResults{br, len(name), false}
-}
-
-func (b *CreateTagsBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *CreateTagsBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
 const deleteTags = `-- name: DeleteTags :batchexec
 DELETE FROM tags WHERE id = $1
 `
@@ -100,6 +57,49 @@ func (b *DeleteTagsBatchResults) Exec(f func(int, error)) {
 }
 
 func (b *DeleteTagsBatchResults) Close() error {
+	b.closed = true
+	return b.br.Close()
+}
+
+const upsertTags = `-- name: UpsertTags :batchexec
+INSERT INTO tags (name) VALUES($1) ON CONFLICT (id) DO NOTHING
+`
+
+type UpsertTagsBatchResults struct {
+	br     pgx.BatchResults
+	tot    int
+	closed bool
+}
+
+func (q *Queries) UpsertTags(ctx context.Context, name []pgtype.Text) *UpsertTagsBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range name {
+		vals := []interface{}{
+			a,
+		}
+		batch.Queue(upsertTags, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &UpsertTagsBatchResults{br, len(name), false}
+}
+
+func (b *UpsertTagsBatchResults) Exec(f func(int, error)) {
+	defer b.br.Close()
+	for t := 0; t < b.tot; t++ {
+		if b.closed {
+			if f != nil {
+				f(t, ErrBatchAlreadyClosed)
+			}
+			continue
+		}
+		_, err := b.br.Exec()
+		if f != nil {
+			f(t, err)
+		}
+	}
+}
+
+func (b *UpsertTagsBatchResults) Close() error {
 	b.closed = true
 	return b.br.Close()
 }

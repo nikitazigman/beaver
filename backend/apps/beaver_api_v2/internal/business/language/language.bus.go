@@ -39,13 +39,13 @@ func (s *Service) RetrieveLanguages(ctx context.Context, offset int, size int) (
 }
 
 // TODO: should return ids
-func (s *Service) CreateLanguages(ctx context.Context, ls []Language) error {
+func (s *Service) UpsertLanguages(ctx context.Context, ls []Language) error {
 	ns := make([]pgtype.Text, len(ls))
 	for i, l := range ls {
 		ns[i] = pgtype.Text{String: l.Name, Valid: true}
 	}
 	var lErr error
-	s.q.CreateLanguages(ctx, ns).Exec(func(i int, err error) {
+	s.q.UpsertLanguages(ctx, ns).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO: check when error in the middle
 			lErr = err

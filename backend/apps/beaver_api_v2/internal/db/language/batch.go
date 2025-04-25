@@ -18,49 +18,6 @@ var (
 	ErrBatchAlreadyClosed = errors.New("batch already closed")
 )
 
-const createLanguages = `-- name: CreateLanguages :batchexec
-INSERT INTO languages (name) VALUES($1)
-`
-
-type CreateLanguagesBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-func (q *Queries) CreateLanguages(ctx context.Context, name []pgtype.Text) *CreateLanguagesBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range name {
-		vals := []interface{}{
-			a,
-		}
-		batch.Queue(createLanguages, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &CreateLanguagesBatchResults{br, len(name), false}
-}
-
-func (b *CreateLanguagesBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *CreateLanguagesBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
 const deleteLanguages = `-- name: DeleteLanguages :batchexec
 DELETE FROM languages WHERE id = $1
 `
@@ -100,6 +57,49 @@ func (b *DeleteLanguagesBatchResults) Exec(f func(int, error)) {
 }
 
 func (b *DeleteLanguagesBatchResults) Close() error {
+	b.closed = true
+	return b.br.Close()
+}
+
+const upsertLanguages = `-- name: UpsertLanguages :batchexec
+INSERT INTO languages (name) VALUES($1) ON CONFLICT (id) DO NOTHING
+`
+
+type UpsertLanguagesBatchResults struct {
+	br     pgx.BatchResults
+	tot    int
+	closed bool
+}
+
+func (q *Queries) UpsertLanguages(ctx context.Context, name []pgtype.Text) *UpsertLanguagesBatchResults {
+	batch := &pgx.Batch{}
+	for _, a := range name {
+		vals := []interface{}{
+			a,
+		}
+		batch.Queue(upsertLanguages, vals...)
+	}
+	br := q.db.SendBatch(ctx, batch)
+	return &UpsertLanguagesBatchResults{br, len(name), false}
+}
+
+func (b *UpsertLanguagesBatchResults) Exec(f func(int, error)) {
+	defer b.br.Close()
+	for t := 0; t < b.tot; t++ {
+		if b.closed {
+			if f != nil {
+				f(t, ErrBatchAlreadyClosed)
+			}
+			continue
+		}
+		_, err := b.br.Exec()
+		if f != nil {
+			f(t, err)
+		}
+	}
+}
+
+func (b *UpsertLanguagesBatchResults) Close() error {
 	b.closed = true
 	return b.br.Close()
 }

@@ -40,10 +40,10 @@ func (s *Service) RetrieveContributors(ctx context.Context, offset int, size int
 }
 
 // TODO: should return ids
-func (s *Service) CreateContributors(ctx context.Context, cs []Contributor) error {
-	qp := make([]db.CreateContributorsParams, len(cs))
+func (s *Service) UpsertContributors(ctx context.Context, cs []Contributor) error {
+	qp := make([]db.UpsertContributorsParams, len(cs))
 	for i, c := range cs {
-		qp[i] = db.CreateContributorsParams{
+		qp[i] = db.UpsertContributorsParams{
 			Name:         pgtype.Text{String: c.Name, Valid: true},
 			LastName:     pgtype.Text{String: c.LastName, Valid: true},
 			EmailAddress: pgtype.Text{String: c.EmailAddress, Valid: true},
@@ -51,7 +51,7 @@ func (s *Service) CreateContributors(ctx context.Context, cs []Contributor) erro
 	}
 
 	var cErr error
-	s.q.CreateContributors(ctx, qp).Exec(func(i int, err error) {
+	s.q.UpsertContributors(ctx, qp).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO: check when error in the middle
 			cErr = err

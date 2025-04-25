@@ -28,4 +28,5 @@ func (c *Controller) GetRandomScript(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(dto); err != nil {
 		return
 	}
+	w.WriteHeader(http.StatusCreated)
 }
