@@ -4,20 +4,18 @@ import (
 	"beaver-api/internal/db/script"
 	"context"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Service struct {
-	q *script.Queries
-}
+type Service struct{}
 
 func New(q *script.Queries) *Service {
-	return &Service{
-		q: q,
-	}
+	return &Service{}
 }
 
-func (s *Service) UpsertScripts(ctx context.Context, scripts []Script) error {
+func (s *Service) UpsertScripts(ctx context.Context, db *pgx.Conn, scripts []Script) error {
+	repo := script.New(db)
 	qp := make([]script.UpsertScriptsParams, len(scripts))
 	for i, sc := range scripts {
 		qp[i] = script.UpsertScriptsParams{
@@ -29,7 +27,7 @@ func (s *Service) UpsertScripts(ctx context.Context, scripts []Script) error {
 	}
 
 	var upsertErr error
-	s.q.UpsertScripts(ctx, qp).Exec(func(i int, err error) {
+	repo.UpsertScripts(ctx, qp).Exec(func(i int, err error) {
 		if err != nil {
 			upsertErr = err
 		}
@@ -38,7 +36,8 @@ func (s *Service) UpsertScripts(ctx context.Context, scripts []Script) error {
 	return upsertErr
 }
 
-func (s *Service) LinkTags(ctx context.Context, tagScriptLinks []TagScript) error {
+func (s *Service) LinkTags(ctx context.Context, db *pgx.Conn, tagScriptLinks []TagScript) error {
+	repo := script.New(db)
 	qp := make([]script.LinkTagsParams, len(tagScriptLinks))
 	for i, ts := range tagScriptLinks {
 		qp[i] = script.LinkTagsParams{
@@ -47,7 +46,7 @@ func (s *Service) LinkTags(ctx context.Context, tagScriptLinks []TagScript) erro
 		}
 	}
 	var tErr error
-	s.q.LinkTags(ctx, qp).Exec(func(i int, err error) {
+	repo.LinkTags(ctx, qp).Exec(func(i int, err error) {
 		if err != nil {
 			tErr = err
 		}
@@ -55,7 +54,8 @@ func (s *Service) LinkTags(ctx context.Context, tagScriptLinks []TagScript) erro
 	return tErr
 }
 
-func (s *Service) LinkContributors(ctx context.Context, contribScriptLinks []ContributorScript) error {
+func (s *Service) LinkContributors(ctx context.Context, db *pgx.Conn, contribScriptLinks []ContributorScript) error {
+	repo := script.New(db)
 	qp := make([]script.LinkContributorsParams, len(contribScriptLinks))
 	for i, cs := range contribScriptLinks {
 		qp[i] = script.LinkContributorsParams{
@@ -64,7 +64,7 @@ func (s *Service) LinkContributors(ctx context.Context, contribScriptLinks []Con
 		}
 	}
 	var cErr error
-	s.q.LinkContributors(ctx, qp).Exec(func(i int, err error) {
+	repo.LinkContributors(ctx, qp).Exec(func(i int, err error) {
 		if err != nil {
 			cErr = err
 		}

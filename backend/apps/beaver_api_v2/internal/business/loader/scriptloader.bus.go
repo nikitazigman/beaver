@@ -7,6 +7,8 @@ import (
 	"beaver-api/internal/business/tag"
 	"context"
 	"time"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type Service struct {
@@ -30,26 +32,25 @@ func New(
 	}
 }
 
-// TODO: transaction
-func (s *Service) LoadScripts(ctx context.Context, scripts []ScriptDetail, timestamp time.Time) error {
+func (s *Service) LoadScripts(ctx context.Context, db *pgx.Conn, scripts []ScriptDetail, timestamp time.Time) error {
 	loader := toEntities(scripts, timestamp)
 
-	if err := s.langService.UpsertLanguages(ctx, loader.langs); err != nil {
+	if err := s.langService.UpsertLanguages(ctx, db, loader.langs); err != nil {
 		return err
 	}
-	if err := s.contribService.UpsertContributors(ctx, loader.contributors); err != nil {
+	if err := s.contribService.UpsertContributors(ctx, db, loader.contributors); err != nil {
 		return err
 	}
-	if err := s.tagService.CreateTags(ctx, loader.tags); err != nil {
+	if err := s.tagService.CreateTags(ctx, db, loader.tags); err != nil {
 		return err
 	}
-	if err := s.scriptService.UpsertScripts(ctx, loader.scripts); err != nil {
+	if err := s.scriptService.UpsertScripts(ctx, db, loader.scripts); err != nil {
 		return err
 	}
-	if err := s.scriptService.LinkTags(ctx, loader.tagScript); err != nil {
+	if err := s.scriptService.LinkTags(ctx, db, loader.tagScript); err != nil {
 		return err
 	}
-	if err := s.scriptService.LinkContributors(ctx, loader.contribScript); err != nil {
+	if err := s.scriptService.LinkContributors(ctx, db, loader.contribScript); err != nil {
 		return err
 	}
 	return nil

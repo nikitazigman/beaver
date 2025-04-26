@@ -1,27 +1,26 @@
 package tag
 
 import (
-	db "beaver-api/internal/db/tag"
+	"beaver-api/internal/db/tag"
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Service struct {
-	q *db.Queries
+type Service struct{}
+
+func NewService() *Service {
+	return &Service{}
 }
 
-func NewService(q *db.Queries) *Service {
-	return &Service{
-		q: q,
-	}
-}
+func (ts *Service) RetrieveTags(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Tag, error) {
+	repo := tag.New(db)
 
-func (ts *Service) RetrieveTags(ctx context.Context, offset int, size int) ([]Tag, error) {
-	qp := db.ListTagsParams{Offset: int32(offset), Limit: int32(size)}
+	qp := tag.ListTagsParams{Offset: int32(offset), Limit: int32(size)}
 
-	pgTags, err := ts.q.ListTags(ctx, qp)
+	pgTags, err := repo.ListTags(ctx, qp)
 	if err != nil {
 		return nil, err
 	}
@@ -38,15 +37,16 @@ func (ts *Service) RetrieveTags(ctx context.Context, offset int, size int) ([]Ta
 	return busTags, nil
 }
 
-// TODO: should return ids
-func (ts *Service) CreateTags(ctx context.Context, tags []Tag) error {
+func (ts *Service) CreateTags(ctx context.Context, db *pgx.Conn, tags []Tag) error {
+	repo := tag.New(db)
+
 	names := make([]pgtype.Text, len(tags))
 	for i, tag := range tags {
 		names[i] = pgtype.Text{String: tag.Name, Valid: true}
 	}
 
 	var tagErr error
-	ts.q.UpsertTags(ctx, names).Exec(func(i int, err error) {
+	repo.UpsertTags(ctx, names).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			tagErr = err
@@ -56,9 +56,11 @@ func (ts *Service) CreateTags(ctx context.Context, tags []Tag) error {
 	return tagErr
 }
 
-func (ts *Service) DeleteTags(ctx context.Context, ids []uuid.UUID) error {
+func (ts *Service) DeleteTags(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+	repo := tag.New(db)
+
 	var tagErr error
-	ts.q.DeleteTags(ctx, ids).Exec(func(i int, err error) {
+	repo.DeleteTags(ctx, ids).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			tagErr = err

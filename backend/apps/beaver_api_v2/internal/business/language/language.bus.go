@@ -1,27 +1,25 @@
 package language
 
 import (
-	db "beaver-api/internal/db/language"
+	"beaver-api/internal/db/language"
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Service struct {
-	q *db.Queries
+type Service struct{}
+
+func NewService() *Service {
+	return &Service{}
 }
 
-func NewService(q *db.Queries) *Service {
-	return &Service{
-		q: q,
-	}
-}
+func (s *Service) RetrieveLanguages(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Language, error) {
+	repo := language.New(db)
+	qp := language.ListLanguagesParams{Offset: int32(offset), Limit: int32(size)}
 
-func (s *Service) RetrieveLanguages(ctx context.Context, offset int, size int) ([]Language, error) {
-	qp := db.ListLanguagesParams{Offset: int32(offset), Limit: int32(size)}
-
-	lds, err := s.q.ListLanguages(ctx, qp)
+	lds, err := repo.ListLanguages(ctx, qp)
 	if err != nil {
 		return nil, err
 	}
@@ -38,14 +36,15 @@ func (s *Service) RetrieveLanguages(ctx context.Context, offset int, size int) (
 	return lbs, nil
 }
 
-// TODO: should return ids
-func (s *Service) UpsertLanguages(ctx context.Context, ls []Language) error {
+func (s *Service) UpsertLanguages(ctx context.Context, db *pgx.Conn, ls []Language) error {
+	repo := language.New(db)
+
 	ns := make([]pgtype.Text, len(ls))
 	for i, l := range ls {
 		ns[i] = pgtype.Text{String: l.Name, Valid: true}
 	}
 	var lErr error
-	s.q.UpsertLanguages(ctx, ns).Exec(func(i int, err error) {
+	repo.UpsertLanguages(ctx, ns).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO: check when error in the middle
 			lErr = err
@@ -55,9 +54,11 @@ func (s *Service) UpsertLanguages(ctx context.Context, ls []Language) error {
 	return lErr
 }
 
-func (s *Service) DeleteLanguages(ctx context.Context, ids []uuid.UUID) error {
+func (s *Service) DeleteLanguages(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+	repo := language.New(db)
+
 	var lErr error
-	s.q.DeleteLanguages(ctx, ids).Exec(func(i int, err error) {
+	repo.DeleteLanguages(ctx, ids).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			lErr = err
