@@ -11,7 +11,7 @@ import (
 
 type Service struct{}
 
-func NewService() *Service {
+func New() *Service {
 	return &Service{}
 }
 

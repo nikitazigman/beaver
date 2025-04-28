@@ -7,20 +7,23 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
 
 type Controller struct {
-	s *biz.Service
+	s  *biz.Service
+	db *pgx.Conn
 }
 
-func NewController(s *biz.Service) *Controller {
+func new(s *biz.Service, db *pgx.Conn) *Controller {
 	return &Controller{
-		s: s,
+		s:  s,
+		db: db,
 	}
 }
 
 func (c *Controller) GetRandomScript(w http.ResponseWriter, r *http.Request) {
-	script, err := c.s.GetRandomScriptDetail(r.Context(), nil, nil, uuid.UUID{})
+	script, err := c.s.GetRandomScriptDetail(r.Context(), c.db, nil, nil, uuid.UUID{})
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -28,5 +31,4 @@ func (c *Controller) GetRandomScript(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(dto); err != nil {
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }

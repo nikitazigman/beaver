@@ -1,25 +1,23 @@
 package scriptdetail
 
 import (
-	db "beaver-api/internal/db/scriptdetail"
+	"beaver-api/internal/db/scriptdetail"
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Service struct {
-	q *db.Queries
+type Service struct{}
+
+func New() *Service {
+	return &Service{}
 }
 
-func New(q *db.Queries) *Service {
-	return &Service{
-		q: q,
-	}
-}
-
-func (s *Service) GetRandomScriptDetail(ctx context.Context, tagIDs []uuid.UUID, contribIDs []uuid.UUID, langID uuid.UUID) (ScriptDetail, error) {
-	qp := db.RandomParams{
+func (s *Service) GetRandomScriptDetail(ctx context.Context, db *pgx.Conn, tagIDs []uuid.UUID, contribIDs []uuid.UUID, langID uuid.UUID) (ScriptDetail, error) {
+	repo := scriptdetail.New(db)
+	qp := scriptdetail.RandomParams{
 		TagIDs:     tagIDs,
 		ContribIDs: contribIDs,
 		LanguageID: pgtype.UUID{
@@ -27,7 +25,7 @@ func (s *Service) GetRandomScriptDetail(ctx context.Context, tagIDs []uuid.UUID,
 			Valid: false,
 		},
 	}
-	dbScripts, err := s.q.Random(ctx, qp)
+	dbScripts, err := repo.Random(ctx, qp)
 	if err != nil {
 		return ScriptDetail{}, err
 	}

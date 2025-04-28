@@ -5,15 +5,19 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type ContribController struct {
-	s *biz.Service
+	s  *biz.Service
+	db *pgx.Conn
 }
 
-func newContribController(s *biz.Service) *ContribController {
+func new(s *biz.Service, db *pgx.Conn) *ContribController {
 	return &ContribController{
-		s: s,
+		s:  s,
+		db: db,
 	}
 }
 
@@ -34,7 +38,7 @@ func (c *ContribController) ListContributors(w http.ResponseWriter, r *http.Requ
 			return
 		}
 	}
-	cbs, err := c.s.RetrieveContributors(r.Context(), offset, size)
+	cbs, err := c.s.RetrieveContributors(r.Context(), c.db, offset, size)
 	if err != nil {
 		return
 	}

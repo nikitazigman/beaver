@@ -10,11 +10,6 @@ import (
 	scriptdetailbiz "beaver-api/internal/business/scriptdetail"
 	tagbiz "beaver-api/internal/business/tag"
 
-	contrdb "beaver-api/internal/db/contributor"
-	langdb "beaver-api/internal/db/language"
-	scriptdetaildb "beaver-api/internal/db/scriptdetail"
-	tagdb "beaver-api/internal/db/tag"
-
 	"context"
 	"fmt"
 	"log"
@@ -46,18 +41,14 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Route("/v1", func(r chi.Router) {
-		tagDB := tagdb.New(conn)
-		tagService := tagbiz.NewService(tagDB)
-		langDB := langdb.New(conn)
-		langService := langbiz.NewService(langDB)
-		contribDB := contrdb.New(conn)
-		contribService := contrbiz.NewService(contribDB)
-		scriptDB := scriptdetaildb.New(conn)
-		scriptService := scriptdetailbiz.New(scriptDB)
-		tagapp.New(r, tagService)
-		langapp.New(r, langService)
-		contrapp.New(r, contribService)
-		scriptdetailapp.New(r, scriptService)
+		tagService := tagbiz.New()
+		langService := langbiz.New()
+		contribService := contrbiz.New()
+		scriptService := scriptdetailbiz.New()
+		tagapp.New(r, tagService, conn)
+		langapp.New(r, langService, conn)
+		contrapp.New(r, contribService, conn)
+		scriptdetailapp.New(r, scriptService, conn)
 	})
 
 	s := &http.Server{

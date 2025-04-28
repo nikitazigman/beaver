@@ -5,15 +5,19 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type Controller struct {
-	s *biz.Service
+	s  *biz.Service
+	db *pgx.Conn
 }
 
-func newTagController(s *biz.Service) *Controller {
+func new(s *biz.Service, db *pgx.Conn) *Controller {
 	return &Controller{
-		s: s,
+		s:  s,
+		db: db,
 	}
 }
 
@@ -34,7 +38,7 @@ func (c *Controller) ListTags(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	bt, err := c.s.RetrieveTags(r.Context(), offset, size)
+	bt, err := c.s.RetrieveTags(r.Context(), c.db, offset, size)
 	if err != nil {
 		return
 	}
