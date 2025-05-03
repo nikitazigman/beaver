@@ -5,29 +5,36 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type Controller struct {
-	s *biz.Service
+	s  *biz.Service
+	db *pgx.Conn
 }
 
-func NewController(s *biz.Service) *Controller {
+func new(s *biz.Service, db *pgx.Conn) *Controller {
 	return &Controller{
-		s: s,
+		s:  s,
+		db: db,
 	}
 }
 
 func (c *Controller) LoadScripts(w http.ResponseWriter, r *http.Request) {
 	dto := POSTLoadScriptsDTO{}
-	err := json.NewDecoder(r.Body).Decode(&dto)
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+	err := decoder.Decode(&dto)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	sd, t, err := toScriptDetail(dto)
 
-	err = c.s.LoadScripts(r.Context(), sd, t)
+	err = c.s.LoadScripts(r.Context(), c.db, sd, t)
 	if err != nil {
 		fmt.Println(err)
 	}
-
 }

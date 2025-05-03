@@ -1,70 +1,44 @@
-# Define environment variable names
-SCRIPT_DETAIL_MIGRATION_DIR := ./internal/db/scriptdetail/migrations
-SCRIPT_MIGRATION_DIR := ./internal/db/script/migrations
-TAG_MIGRATION_DIR := ./internal/db/tag/migrations
-CONTRIBUTOR_MIGRATION_DIR := ./internal/db/contributor/migrations
-LANGUAGE_MIGRATION_DIR := ./internal/db/language/migrations
+	# Define environment variable names
+SCRIPT_DETAIL_MIGRATION_DIR := ./internal/db/scriptdetail/migrations/
+SCRIPT_MIGRATION_DIR := ./internal/db/script/migrations/
+TAG_MIGRATION_DIR := ./internal/db/tag/migrations/
+CONTRIBUTOR_MIGRATION_DIR := ./internal/db/contributor/migrations/
+LANGUAGE_MIGRATION_DIR := ./internal/db/language/migrations/
 GOOSE_DRIVER := postgres
 GOOSE_DBSTRING := ${GOOSE_DRIVER}://$(PG_USER):$(PG_PASSWORD)@$(PG_HOST):$(PG_PORT)/$(PG_DB)
-DB_NAME=beaver_api_db
-DB_USER=beaver_api
-DB_PASSWORD=beaver_api
-DB_HOST=localhost
 SQL_FILE=./utils/demo_data.sql
+TMP_DIR=./tmp/migrations
 
 connect_db:
-	PGPASSWORD=$(DB_PASSWORD) psql -U $(DB_USER) -h $(DB_HOST) -d $(DB_NAME)
+	PGPASSWORD=$(PG_PASSWORD) psql -U $(PG_USER) -h $(PG_HOST) -d $(PG_DB)
 
 demo_data:
-	PGPASSWORD=$(DB_PASSWORD) psql -U $(DB_USER) -h $(DB_HOST) -d $(DB_NAME) -f $(SQL_FILE)
+	PGPASSWORD=$(PG_PASSWORD) psql -U $(PG_USER) -h $(PG_HOST) -d $(PG_DB) -f $(SQL_FILE)
 
 # Apply all migrations
-migrate: migrate_tag migrate_language migrate_contributor migrate_script migrate_script_detail
-
-migrate_tag:
-	@echo "Running migrations for tag..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(TAG_MIGRATION_DIR) up
-
-migrate_language:
-	@echo "Running migrations for language..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(LANGUAGE_MIGRATION_DIR) up
-
-migrate_contributor:
-	@echo "Running migrations for contributor..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(CONTRIBUTOR_MIGRATION_DIR) up
-
-migrate_script:
-	@echo "Running migrations for script..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(SCRIPT_MIGRATION_DIR) up
-
-migrate_script_detail:
-	@echo "Running migrations for script detail..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(SCRIPT_DETAIL_MIGRATION_DIR) up
-
-
+migrate: _create_tmp_dir _migrate _remove_tmp_dir
 # Rollback all migrations
-rollback: rollback_tag rollback_language rollback_contributor rollback_script rollback_script_detail
+rollback: _create_tmp_dir _rollback _remove_tmp_dir
 
-rollback_tag:
-	@echo "Running migrations for tag..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(TAG_MIGRATION_DIR) down
+_migrate:
+	@echo "Running migrations"
+	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(TMP_DIR) up
 
-rollback_script:
-	@echo "Running migrations for script..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(SCRIPT_MIGRATION_DIR) down
+_rollback:
+	@echo "Running migrations"
+	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(TMP_DIR) down
 
-rollback_script_detail:
-	@echo "Running migrations for script..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(SCRIPT_DETAIL_MIGRATION_DIR) down
+_create_tmp_dir:
+	@echo "Creating tmp dir to copy all migrations into one place"
+	mkdir -p ./tmp/migrations
+	cp -r $(SCRIPT_DETAIL_MIGRATION_DIR)* ./tmp/migrations/
+	cp -r $(SCRIPT_MIGRATION_DIR)* ./tmp/migrations/
+	cp -r $(TAG_MIGRATION_DIR)* ./tmp/migrations/
+	cp -r $(CONTRIBUTOR_MIGRATION_DIR)* ./tmp/migrations/
+	cp -r $(LANGUAGE_MIGRATION_DIR)* ./tmp/migrations/
 
-
-rollback_language:
-	@echo "Running migrations for language..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(LANGUAGE_MIGRATION_DIR) down
-
-rollback_contributor:
-	@echo "Running migrations for contributor..."
-	GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_DRIVER=${GOOSE_DRIVER} goose -dir $(CONTRIBUTOR_MIGRATION_DIR) down
+_remove_tmp_dir:
+	rm -r ./tmp
 
 status:
 	@echo "Checking migration status..."

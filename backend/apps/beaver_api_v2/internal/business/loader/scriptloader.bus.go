@@ -8,6 +8,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -32,27 +33,18 @@ func New(
 	}
 }
 
-func (s *Service) LoadScripts(ctx context.Context, db *pgx.Conn, scripts []ScriptDetail, timestamp time.Time) error {
-	loader := toEntities(scripts, timestamp)
+func (s *Service) LoadScripts(ctx context.Context, db *pgx.Conn, scripts []Script, timestamp time.Time) error {
+	toLoad := toEntitiesToLoad(scripts, timestamp)
+	tagMap := make(map[string]uuid.UUID)
 
-	if err := s.langService.UpsertLanguages(ctx, db, loader.langs); err != nil {
-		return err
+	for _, t := range toLoad.UniqueTags {
+		uuid, err := s.tagService.GetOrCreate(ctx, db, t)
+		if err != nil {
+			return err
+		}
+		tagMap[t] = uuid
 	}
-	if err := s.contribService.UpsertContributors(ctx, db, loader.contributors); err != nil {
-		return err
-	}
-	if err := s.tagService.CreateTags(ctx, db, loader.tags); err != nil {
-		return err
-	}
-	if err := s.scriptService.UpsertScripts(ctx, db, loader.scripts); err != nil {
-		return err
-	}
-	if err := s.scriptService.LinkTags(ctx, db, loader.tagScript); err != nil {
-		return err
-	}
-	if err := s.scriptService.LinkContributors(ctx, db, loader.contribScript); err != nil {
-		return err
-	}
+
 	return nil
 }
 

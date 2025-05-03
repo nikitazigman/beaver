@@ -16,11 +16,11 @@ func New() *Service {
 	return &Service{}
 }
 
-func (s *Service) RetrieveContributors(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Contributor, error) {
+func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Contributor, error) {
 	repo := contributor.New(db)
-	qp := contributor.ListContributorsParams{Offset: int32(offset), Limit: int32(size)}
+	qp := contributor.ListParams{Offset: int32(offset), Limit: int32(size)}
 
-	cds, err := repo.ListContributors(ctx, qp)
+	cds, err := repo.List(ctx, qp)
 	if err != nil {
 		return nil, err
 	}
@@ -37,33 +37,32 @@ func (s *Service) RetrieveContributors(ctx context.Context, db *pgx.Conn, offset
 	return cbs, nil
 }
 
-func (s *Service) UpsertContributors(ctx context.Context, db *pgx.Conn, cs []Contributor) error {
+func (s *Service) UpsertContributors(ctx context.Context, db *pgx.Conn, contrib UpsertContributor) (uuid.UUID, error) {
 	repo := contributor.New(db)
+	var uuid uuid.UUID
 
-	qp := make([]contributor.UpsertContributorsParams, len(cs))
-	for i, c := range cs {
-		qp[i] = contributor.UpsertContributorsParams{
-			Name:         pgtype.Text{String: c.Name, Valid: true},
-			LastName:     pgtype.Text{String: c.LastName, Valid: true},
-			EmailAddress: pgtype.Text{String: c.EmailAddress, Valid: true},
-		}
+	dbContrib := contributor.UpsertParams{
+		Name:         pgtype.Text{String: contrib.Name, Valid: true},
+		LastName:     pgtype.Text{String: contrib.LastName, Valid: true},
+		EmailAddress: pgtype.Text{String: contrib.EmailAddress, Valid: true},
 	}
 
-	var cErr error
-	repo.UpsertContributors(ctx, qp).Exec(func(i int, err error) {
-		if err != nil {
-			// TODO: check when error in the middle
-			cErr = err
-		}
-	})
+	if err := repo.Upsert(ctx, dbContrib); err != nil {
+		return uuid, err
+	}
 
-	return cErr
+	uuid, err := repo.GetID(ctx, dbContrib.EmailAddress)
+	if err != nil {
+		return uuid, err
+	}
+
+	return uuid, nil
 }
 
 func (s *Service) DeleteContributors(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
 	repo := contributor.New(db)
 	var cErr error
-	repo.DeleteContributors(ctx, ids).Exec(func(i int, err error) {
+	repo.Delete(ctx, ids).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			cErr = err

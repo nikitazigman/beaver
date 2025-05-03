@@ -5,14 +5,6 @@ import (
 	"time"
 )
 
-type Language struct {
-	Name string `json:"name"`
-}
-
-type Tag struct {
-	Name string `json:"name"`
-}
-
 type Contributor struct {
 	Name         string `json:"name"`
 	LastName     string `json:"last_name"`
@@ -24,8 +16,8 @@ type Script struct {
 	Code          string `json:"code"`
 	LinkToProject string `json:"link_to_project"`
 	Contributors  []Contributor
-	Tags          []Tag
-	Language      Language
+	Tags          []string `json:"tags"`
+	Language      string   `json:"language"`
 }
 
 type POSTLoadScriptsDTO struct {
@@ -33,31 +25,25 @@ type POSTLoadScriptsDTO struct {
 	Scripts   []Script
 }
 
-func toScriptDetail(dto POSTLoadScriptsDTO) ([]loader.ScriptDetail, time.Time, error) {
-	timestamp, err := time.Parse("2006-01-02 15-04-05", dto.Timestamp)
+func toScriptDetail(dto POSTLoadScriptsDTO) ([]loader.Script, time.Time, error) {
+	timestamp, err := time.Parse("2006-01-02T15:04:05Z", dto.Timestamp)
 	if err != nil {
 		return nil, time.Time{}, err
 	}
 
-	sd := make([]loader.ScriptDetail, len(dto.Scripts))
+	sd := make([]loader.Script, len(dto.Scripts))
 	for i, s := range dto.Scripts {
-		ts := make([]loader.Tag, len(s.Tags))
-		for i, t := range s.Tags {
-			ts[i] = loader.Tag{Name: t.Name}
+		contribs := make([]loader.Contributor, 0, len(s.Contributors))
+		for _, c := range s.Contributors {
+			contribs = append(contribs, loader.Contributor{Name: c.Name, LastName: c.LastName, EmailAddress: c.EmailAddress})
 		}
-
-		cs := make([]loader.Contributor, len(s.Contributors))
-		for i, c := range s.Contributors {
-			cs[i] = loader.Contributor{Name: c.Name, LastName: c.LastName, EmailAddress: c.EmailAddress}
-		}
-
-		sd[i] = loader.ScriptDetail{
+		sd[i] = loader.Script{
 			Title:         s.Title,
 			Code:          s.Code,
 			LinkToProject: s.LinkToProject,
-			Language:      loader.Language{Name: s.Language.Name},
-			Contributors:  cs,
-			Tags:          ts,
+			Language:      s.Language,
+			Tags:          s.Tags,
+			Contributors:  contribs,
 		}
 	}
 	return sd, timestamp, nil

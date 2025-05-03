@@ -21,7 +21,7 @@ func new(s *biz.Service, db *pgx.Conn) *ContribController {
 	}
 }
 
-func (c *ContribController) ListContributors(w http.ResponseWriter, r *http.Request) {
+func (c *ContribController) List(w http.ResponseWriter, r *http.Request) {
 	offset := 0
 	size := 10
 	var err error
@@ -38,7 +38,7 @@ func (c *ContribController) ListContributors(w http.ResponseWriter, r *http.Requ
 			return
 		}
 	}
-	cbs, err := c.s.RetrieveContributors(r.Context(), c.db, offset, size)
+	cbs, err := c.s.Retrieve(r.Context(), c.db, offset, size)
 	if err != nil {
 		return
 	}

@@ -15,11 +15,11 @@ func New() *Service {
 	return &Service{}
 }
 
-func (s *Service) RetrieveLanguages(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Language, error) {
+func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Language, error) {
 	repo := language.New(db)
-	qp := language.ListLanguagesParams{Offset: int32(offset), Limit: int32(size)}
+	qp := language.ListParams{Offset: int32(offset), Limit: int32(size)}
 
-	lds, err := repo.ListLanguages(ctx, qp)
+	lds, err := repo.List(ctx, qp)
 	if err != nil {
 		return nil, err
 	}
@@ -36,29 +36,27 @@ func (s *Service) RetrieveLanguages(ctx context.Context, db *pgx.Conn, offset in
 	return lbs, nil
 }
 
-func (s *Service) UpsertLanguages(ctx context.Context, db *pgx.Conn, ls []Language) error {
+func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, name string) (uuid.UUID, error) {
 	repo := language.New(db)
-
-	ns := make([]pgtype.Text, len(ls))
-	for i, l := range ls {
-		ns[i] = pgtype.Text{String: l.Name, Valid: true}
+	var uuid uuid.UUID
+	dbName := pgtype.Text{String: name, Valid: true}
+	if err := repo.Upsert(ctx, dbName); err != nil {
+		return uuid, err
 	}
-	var lErr error
-	repo.UpsertLanguages(ctx, ns).Exec(func(i int, err error) {
-		if err != nil {
-			// TODO: check when error in the middle
-			lErr = err
-		}
-	})
 
-	return lErr
+	uuid, err := repo.GetID(ctx, dbName)
+	if err != nil {
+		return uuid, err
+	}
+
+	return uuid, nil
 }
 
-func (s *Service) DeleteLanguages(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+func (s *Service) Delete(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
 	repo := language.New(db)
 
 	var lErr error
-	repo.DeleteLanguages(ctx, ids).Exec(func(i int, err error) {
+	repo.Delete(ctx, ids).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			lErr = err

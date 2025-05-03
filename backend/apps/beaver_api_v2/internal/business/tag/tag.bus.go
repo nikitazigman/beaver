@@ -15,12 +15,12 @@ func New() *Service {
 	return &Service{}
 }
 
-func (ts *Service) RetrieveTags(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Tag, error) {
+func (ts *Service) Retrieve(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Tag, error) {
 	repo := tag.New(db)
 
-	qp := tag.ListTagsParams{Offset: int32(offset), Limit: int32(size)}
+	qp := tag.ListParams{Offset: int32(offset), Limit: int32(size)}
 
-	pgTags, err := repo.ListTags(ctx, qp)
+	pgTags, err := repo.List(ctx, qp)
 	if err != nil {
 		return nil, err
 	}
@@ -37,30 +37,29 @@ func (ts *Service) RetrieveTags(ctx context.Context, db *pgx.Conn, offset int, s
 	return busTags, nil
 }
 
-func (ts *Service) CreateTags(ctx context.Context, db *pgx.Conn, tags []Tag) error {
+func (ts *Service) GetOrCreate(ctx context.Context, db *pgx.Conn, name string) (uuid.UUID, error) {
 	repo := tag.New(db)
+	tagName := pgtype.Text{String: name, Valid: true}
 
-	names := make([]pgtype.Text, len(tags))
-	for i, tag := range tags {
-		names[i] = pgtype.Text{String: tag.Name, Valid: true}
+	var uuid uuid.UUID
+
+	if err := repo.Upsert(ctx, tagName); err != nil {
+		return uuid, err
 	}
 
-	var tagErr error
-	repo.UpsertTags(ctx, names).Exec(func(i int, err error) {
-		if err != nil {
-			// TODO check when error in the middle
-			tagErr = err
-		}
-	})
+	uuid, err := repo.GetID(ctx, tagName)
+	if err != nil {
+		return uuid, err
+	}
 
-	return tagErr
+	return uuid, nil
 }
 
-func (ts *Service) DeleteTags(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+func (ts *Service) Delete(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
 	repo := tag.New(db)
 
 	var tagErr error
-	repo.DeleteTags(ctx, ids).Exec(func(i int, err error) {
+	repo.Delete(ctx, ids).Exec(func(i int, err error) {
 		if err != nil {
 			// TODO check when error in the middle
 			tagErr = err

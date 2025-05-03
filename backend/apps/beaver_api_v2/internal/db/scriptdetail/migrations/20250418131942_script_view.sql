@@ -24,5 +24,5 @@ JOIN contributors ON contributors.id = contributors_scripts.contributor_id;
 
 -- +goose Down
 -- +goose StatementBegin
-DROP VIEW scripts_detail;
+DROP VIEW scripts_details;
 -- +goose StatementEnd

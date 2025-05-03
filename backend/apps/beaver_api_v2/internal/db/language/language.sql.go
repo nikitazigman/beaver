@@ -7,19 +7,33 @@ package language
 
 import (
 	"context"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const listLanguages = `-- name: ListLanguages :many
+const getID = `-- name: GetID :one
+SELECT id FROM languages WHERE name=$1
+`
+
+func (q *Queries) GetID(ctx context.Context, name pgtype.Text) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, getID, name)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
+const list = `-- name: List :many
 SELECT id, created_at, updated_at, name FROM languages OFFSET $1 LIMIT $2
 `
 
-type ListLanguagesParams struct {
+type ListParams struct {
 	Offset int32
 	Limit  int32
 }
 
-func (q *Queries) ListLanguages(ctx context.Context, arg ListLanguagesParams) ([]Language, error) {
-	rows, err := q.db.Query(ctx, listLanguages, arg.Offset, arg.Limit)
+func (q *Queries) List(ctx context.Context, arg ListParams) ([]Language, error) {
+	rows, err := q.db.Query(ctx, list, arg.Offset, arg.Limit)
 	if err != nil {
 		return nil, err
 	}
@@ -41,4 +55,13 @@ func (q *Queries) ListLanguages(ctx context.Context, arg ListLanguagesParams) ([
 		return nil, err
 	}
 	return items, nil
+}
+
+const upsert = `-- name: Upsert :exec
+INSERT INTO languages (name) VALUES($1) ON CONFLICT (id) DO NOTHING
+`
+
+func (q *Queries) Upsert(ctx context.Context, name pgtype.Text) error {
+	_, err := q.db.Exec(ctx, upsert, name)
+	return err
 }

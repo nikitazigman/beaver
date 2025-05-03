@@ -11,36 +11,35 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 var (
 	ErrBatchAlreadyClosed = errors.New("batch already closed")
 )
 
-const deleteTags = `-- name: DeleteTags :batchexec
+const delete = `-- name: Delete :batchexec
 DELETE FROM tags WHERE id = $1
 `
 
-type DeleteTagsBatchResults struct {
+type DeleteBatchResults struct {
 	br     pgx.BatchResults
 	tot    int
 	closed bool
 }
 
-func (q *Queries) DeleteTags(ctx context.Context, id []uuid.UUID) *DeleteTagsBatchResults {
+func (q *Queries) Delete(ctx context.Context, id []uuid.UUID) *DeleteBatchResults {
 	batch := &pgx.Batch{}
 	for _, a := range id {
 		vals := []interface{}{
 			a,
 		}
-		batch.Queue(deleteTags, vals...)
+		batch.Queue(delete, vals...)
 	}
 	br := q.db.SendBatch(ctx, batch)
-	return &DeleteTagsBatchResults{br, len(id), false}
+	return &DeleteBatchResults{br, len(id), false}
 }
 
-func (b *DeleteTagsBatchResults) Exec(f func(int, error)) {
+func (b *DeleteBatchResults) Exec(f func(int, error)) {
 	defer b.br.Close()
 	for t := 0; t < b.tot; t++ {
 		if b.closed {
@@ -56,50 +55,7 @@ func (b *DeleteTagsBatchResults) Exec(f func(int, error)) {
 	}
 }
 
-func (b *DeleteTagsBatchResults) Close() error {
-	b.closed = true
-	return b.br.Close()
-}
-
-const upsertTags = `-- name: UpsertTags :batchexec
-INSERT INTO tags (name) VALUES($1) ON CONFLICT (id) DO NOTHING
-`
-
-type UpsertTagsBatchResults struct {
-	br     pgx.BatchResults
-	tot    int
-	closed bool
-}
-
-func (q *Queries) UpsertTags(ctx context.Context, name []pgtype.Text) *UpsertTagsBatchResults {
-	batch := &pgx.Batch{}
-	for _, a := range name {
-		vals := []interface{}{
-			a,
-		}
-		batch.Queue(upsertTags, vals...)
-	}
-	br := q.db.SendBatch(ctx, batch)
-	return &UpsertTagsBatchResults{br, len(name), false}
-}
-
-func (b *UpsertTagsBatchResults) Exec(f func(int, error)) {
-	defer b.br.Close()
-	for t := 0; t < b.tot; t++ {
-		if b.closed {
-			if f != nil {
-				f(t, ErrBatchAlreadyClosed)
-			}
-			continue
-		}
-		_, err := b.br.Exec()
-		if f != nil {
-			f(t, err)
-		}
-	}
-}
-
-func (b *UpsertTagsBatchResults) Close() error {
+func (b *DeleteBatchResults) Close() error {
 	b.closed = true
 	return b.br.Close()
 }

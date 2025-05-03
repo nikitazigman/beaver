@@ -4,70 +4,62 @@ import (
 	"beaver-api/internal/db/script"
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Service struct{}
 
-func New(q *script.Queries) *Service {
+func New() *Service {
 	return &Service{}
 }
 
-func (s *Service) UpsertScripts(ctx context.Context, db *pgx.Conn, scripts []Script) error {
+func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, upsertScript UpsertScript) (uuid.UUID, error) {
 	repo := script.New(db)
-	qp := make([]script.UpsertScriptsParams, len(scripts))
-	for i, sc := range scripts {
-		qp[i] = script.UpsertScriptsParams{
-			Title:         pgtype.Text{String: sc.Title, Valid: true},
-			LinkToProject: pgtype.Text{String: sc.LinkToProject, Valid: true},
-			Code:          pgtype.Text{String: sc.Code, Valid: true},
-			LanguageID:    pgtype.UUID{Bytes: sc.LanguageID, Valid: true},
-		}
+	var uuid uuid.UUID
+	qp := script.UpsertParams{
+		Title:         pgtype.Text{String: upsertScript.Title, Valid: true},
+		Code:          pgtype.Text{String: upsertScript.Code, Valid: true},
+		LinkToProject: pgtype.Text{String: upsertScript.LinkToProject, Valid: true},
+		LanguageID:    pgtype.UUID{Bytes: upsertScript.LanguageID, Valid: true},
+	}
+	if err := repo.Upsert(ctx, qp); err != nil {
+		return uuid, err
 	}
 
-	var upsertErr error
-	repo.UpsertScripts(ctx, qp).Exec(func(i int, err error) {
-		if err != nil {
-			upsertErr = err
-		}
-	})
+	uuid, err := repo.GetID(ctx, qp.Title)
+	if err != nil {
+		return uuid, err
+	}
 
-	return upsertErr
+	return uuid, nil
 }
 
-func (s *Service) LinkTags(ctx context.Context, db *pgx.Conn, tagScriptLinks []TagScript) error {
+func (s *Service) LinkTag(ctx context.Context, db *pgx.Conn, link TagScript) error {
 	repo := script.New(db)
-	qp := make([]script.LinkTagsParams, len(tagScriptLinks))
-	for i, ts := range tagScriptLinks {
-		qp[i] = script.LinkTagsParams{
-			TagID:    pgtype.UUID{Bytes: ts.TagID, Valid: true},
-			ScriptID: pgtype.UUID{Bytes: ts.ScriptID, Valid: true},
-		}
+	qp := script.LinkTagParams{
+		TagID:    pgtype.UUID{Bytes: link.TagID, Valid: true},
+		ScriptID: pgtype.UUID{Bytes: link.ScriptID, Valid: true},
 	}
-	var tErr error
-	repo.LinkTags(ctx, qp).Exec(func(i int, err error) {
-		if err != nil {
-			tErr = err
-		}
-	})
-	return tErr
+
+	if err := repo.LinkTag(ctx, qp); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (s *Service) LinkContributors(ctx context.Context, db *pgx.Conn, contribScriptLinks []ContributorScript) error {
+func (s *Service) LinkContrib(ctx context.Context, db *pgx.Conn, link ContributorScript) error {
 	repo := script.New(db)
-	qp := make([]script.LinkContributorsParams, len(contribScriptLinks))
-	for i, cs := range contribScriptLinks {
-		qp[i] = script.LinkContributorsParams{
-			ContributorID: pgtype.UUID{Bytes: cs.ContributorID, Valid: true},
-			ScriptID:      pgtype.UUID{Bytes: cs.ScriptID, Valid: true},
-		}
+	qp := script.LinkContribParams{
+		ContributorID: pgtype.UUID{Bytes: link.ContributorID, Valid: true},
+		ScriptID:      pgtype.UUID{Bytes: link.ScriptID, Valid: true},
 	}
-	var cErr error
-	repo.LinkContributors(ctx, qp).Exec(func(i int, err error) {
-		if err != nil {
-			cErr = err
-		}
-	})
-	return cErr
+
+	if err := repo.LinkContrib(ctx, qp); err != nil {
+		return err
+	}
+
+	return nil
 }

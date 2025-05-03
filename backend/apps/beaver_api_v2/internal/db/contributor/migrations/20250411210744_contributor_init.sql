@@ -7,7 +7,7 @@ CREATE TABLE contributors(
 
     name VARCHAR(255),
     last_name VARCHAR(255),
-    email_address VARCHAR(1024)
+    email_address VARCHAR(1024) UNIQUE
 );
 -- +goose StatementEnd
 

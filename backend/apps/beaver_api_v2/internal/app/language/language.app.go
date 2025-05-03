@@ -21,7 +21,7 @@ func new(s *biz.Service, db *pgx.Conn) *Controller {
 	}
 }
 
-func (c *Controller) ListLangs(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) List(w http.ResponseWriter, r *http.Request) {
 	offset := 0
 	size := 10
 	var err error
@@ -38,7 +38,7 @@ func (c *Controller) ListLangs(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	lbs, err := c.s.RetrieveLanguages(r.Context(), c.db, offset, size)
+	lbs, err := c.s.Retrieve(r.Context(), c.db, offset, size)
 	if err != nil {
 		return
 	}

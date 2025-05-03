@@ -13,6 +13,11 @@ type Contributor struct {
 	LastName     string
 	EmailAddress string
 }
+type UpsertContributor struct {
+	Name         string
+	LastName     string
+	EmailAddress string
+}
 
 func toBusContrib(cd db.Contributor) (Contributor, error) {
 	if !(cd.Name.Valid || cd.LastName.Valid || cd.EmailAddress.Valid) {

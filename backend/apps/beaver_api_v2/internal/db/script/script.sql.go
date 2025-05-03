@@ -9,28 +9,65 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const getTagScriptIDs = `-- name: GetTagScriptIDs :many
-SELECT id from tags_scripts WHERE id = ANY($1::UUID[])
+const getID = `-- name: GetID :one
+SELECT id FROM scripts WHERE title=$1
 `
 
-func (q *Queries) GetTagScriptIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error) {
-	rows, err := q.db.Query(ctx, getTagScriptIDs, ids)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []uuid.UUID
-	for rows.Next() {
-		var id uuid.UUID
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+func (q *Queries) GetID(ctx context.Context, title pgtype.Text) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, getID, title)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
+const linkContrib = `-- name: LinkContrib :exec
+INSERT INTO contributors_scripts (contributor_id, script_id) VALUES($1, $2) ON CONFLICT (contributor_id, script_id) DO NOTHING
+`
+
+type LinkContribParams struct {
+	ContributorID pgtype.UUID
+	ScriptID      pgtype.UUID
+}
+
+func (q *Queries) LinkContrib(ctx context.Context, arg LinkContribParams) error {
+	_, err := q.db.Exec(ctx, linkContrib, arg.ContributorID, arg.ScriptID)
+	return err
+}
+
+const linkTag = `-- name: LinkTag :exec
+INSERT INTO tags_scripts (tag_id, script_id) VALUES($1, $2) ON CONFLICT (tag_id, script_id) DO NOTHING
+`
+
+type LinkTagParams struct {
+	TagID    pgtype.UUID
+	ScriptID pgtype.UUID
+}
+
+func (q *Queries) LinkTag(ctx context.Context, arg LinkTagParams) error {
+	_, err := q.db.Exec(ctx, linkTag, arg.TagID, arg.ScriptID)
+	return err
+}
+
+const upsert = `-- name: Upsert :exec
+INSERT INTO scripts (title, code, link_to_project, language_id) VALUES($1, $2, $3, $4) ON CONFLICT (title) DO NOTHING
+`
+
+type UpsertParams struct {
+	Title         pgtype.Text
+	Code          pgtype.Text
+	LinkToProject pgtype.Text
+	LanguageID    pgtype.UUID
+}
+
+func (q *Queries) Upsert(ctx context.Context, arg UpsertParams) error {
+	_, err := q.db.Exec(ctx, upsert,
+		arg.Title,
+		arg.Code,
+		arg.LinkToProject,
+		arg.LanguageID,
+	)
+	return err
 }

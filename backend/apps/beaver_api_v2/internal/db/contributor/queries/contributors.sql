@@ -1,9 +1,12 @@
 
--- name: ListContributors :many
+-- name: List :many
 SELECT * FROM contributors OFFSET $1 LIMIT $2;
 
--- name: UpsertContributors :batchexec
+-- name: Upsert :exec
 INSERT INTO contributors (name, last_name, email_address) VALUES($1, $2, $3) ON CONFLICT (id) DO NOTHING;
 
--- name: DeleteContributors :batchexec
+-- name: GetID :one
+SELECT id FROM contributors WHERE email_address=$1;
+
+-- name: Delete :batchexec
 DELETE FROM contributors WHERE id = $1;

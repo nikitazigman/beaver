@@ -1,265 +1,179 @@
 package loader
 
 import (
-	"beaver-api/internal/business/contributor"
-	"beaver-api/internal/business/language"
-	"beaver-api/internal/business/script"
-	"beaver-api/internal/business/tag"
-	"reflect"
-	"sort"
+	"fmt"
+	"math/rand"
 	"testing"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 func TestToEntities(t *testing.T) {
-	input := []ScriptDetail{
+	input := []Script{
 		{
 			Title:         "title 1",
 			Code:          "code",
 			LinkToProject: "link",
-			Language:      Language{Name: "language 1"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag1"}},
+			Language:      "language 1",
+			Tags:          []string{"tag1", "tag2"},
 			Contributors: []Contributor{
-				{Name: "Name", LastName: "LastName", EmailAddress: "Email1"},
-				{Name: "Name", LastName: "LastName", EmailAddress: "Email2"},
+				{Name: "Name1", LastName: "LastName1", EmailAddress: "Email1"},
+				{Name: "Name2", LastName: "LastName2", EmailAddress: "Email2"},
 			},
 		},
 		{
 			Title:         "title 2",
-			Code:          "code 2 ",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 1"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag2"}},
+			Code:          "code",
+			LinkToProject: "link",
+			Language:      "language 2",
+			Tags:          []string{"tag1", "tag3"},
 			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email1"},
+				{Name: "Name1", LastName: "LastName1", EmailAddress: "Email1"},
+				{Name: "Name3", LastName: "LastName3", EmailAddress: "Email3"},
 			},
 		},
 		{
 			Title:         "title 3",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 2"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag3"}},
+			Code:          "code",
+			LinkToProject: "link",
+			Language:      "language 2",
+			Tags:          []string{"tag3"},
 			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email2"},
+				{Name: "Name2", LastName: "LastName2", EmailAddress: "Email2"},
 			},
 		},
 	}
-	result := toEntities(input, time.Now())
+	result := toEntitiesToLoad(input, time.Now())
 
 	// check number of create entities
-	if len(result.scripts) != 3 {
-		t.Errorf("Result should have 3 tag but got %d", len(result.scripts))
+	if len(result.UniqueScripts) != 3 {
+		t.Errorf("Result should have 3 tag but got %d", len(result.UniqueScripts))
 	}
-	if len(result.tags) != 3 {
-		t.Errorf("Result should have 3 tag but got %d", len(result.tags))
+	if len(result.UniqueTags) != 3 {
+		t.Errorf("Result should have 3 tag but got %d", len(result.UniqueTags))
 	}
-	if len(result.contributors) != 2 {
-		t.Errorf("Result should have 2 contributor but got %d", len(result.contributors))
+	if len(result.UniqueContribs) != 3 {
+		t.Errorf("Result should have 2 contributor but got %d", len(result.UniqueContribs))
 	}
-	if len(result.langs) != 2 {
-		t.Errorf("Result should have 2 lang but got %d", len(result.langs))
-	}
-	if len(result.tagScript) != 6 {
-		t.Errorf("Result should have 6 tagScript link but got %d", len(result.tagScript))
-	}
-	if len(result.contribScript) != 4 {
-		t.Errorf("Result should have 4 contribScript link but got %d", len(result.contribScript))
+	if len(result.UniqueLangs) != 2 {
+		t.Errorf("Result should have 2 lang but got %d", len(result.UniqueLangs))
 	}
 
-	// check FK and m2m correctness
-
-	// create helper mapping
-	sm := make(map[string]script.Script)
-	for _, s := range result.scripts {
-		sm[s.Title] = s
+	// check scripts
+	expScripts := map[string]struct {
+		Title         string
+		Code          string
+		LinkToProject string
+	}{
+		"title 1": {
+			Code:          "code",
+			LinkToProject: "link",
+		},
+		"title 2": {
+			Code:          "code",
+			LinkToProject: "link",
+		},
+		"title 3": {
+			Code:          "code",
+			LinkToProject: "link",
+		},
 	}
-	lm := make(map[string]language.Language)
-	for _, l := range result.langs {
-		lm[l.Name] = l
+	for _, s := range result.UniqueScripts {
+		exp, exist := expScripts[s.Title]
+		if !exist {
+			t.Errorf("script %s was not found", s.Title)
+		}
+		if exp.Code != s.Code {
+			t.Errorf("exp code %s != res code %s", exp.Code, s.Code)
+		}
+		if exp.LinkToProject != s.LinkToProject {
+			t.Errorf("exp link %s != res link %s", exp.LinkToProject, s.LinkToProject)
+		}
 	}
-	tm := make(map[string]tag.Tag)
-	for _, t := range result.tags {
-		tm[t.Name] = t
+	// check langs
+	expLangs := map[string]struct{}{
+		"language 2": {},
+		"language 1": {},
 	}
-	cm := make(map[string]contributor.Contributor)
-	for _, c := range result.contributors {
-		cm[c.EmailAddress] = c
+	for _, l := range result.UniqueLangs {
+		if _, exist := expLangs[l]; !exist {
+			t.Errorf("lang %s was not found", l)
+		}
 	}
-	tsm := make(map[uuid.UUID][]uuid.UUID)
-	for _, ts := range result.tagScript {
-		tsm[ts.ScriptID] = append(tsm[ts.ScriptID], ts.TagID)
+	//check tags
+	expTags := map[string]struct{}{
+		"tag1": {},
+		"tag2": {},
+		"tag3": {},
 	}
-	csm := make(map[uuid.UUID][]uuid.UUID)
-	for _, cs := range result.contribScript {
-		csm[cs.ScriptID] = append(csm[cs.ScriptID], cs.ContributorID)
+	for _, ut := range result.UniqueTags {
+		if _, exist := expTags[ut]; !exist {
+			t.Errorf("tag %s was not found", ut)
+		}
 	}
-
-	// check correctness for each script
-	for _, n := range input {
-		s, ok := sm[n.Title]
-		if !ok {
-			t.Fatalf("Cannot find related script %s", n.Title)
+	// check contibs
+	expContribs := map[string]struct {
+		Name     string
+		LastName string
+	}{
+		"Email1": {Name: "Name1", LastName: "LastName1"},
+		"Email2": {Name: "Name2", LastName: "LastName2"},
+		"Email3": {Name: "Name3", LastName: "LastName3"},
+	}
+	for _, c := range result.UniqueContribs {
+		exp, exist := expContribs[c.EmailAddress]
+		if !exist {
+			t.Errorf("contrib %s was not found", c.EmailAddress)
 		}
-		l, ok := lm[n.Language.Name]
-		if !ok {
-			t.Fatalf("Cannot find related lang %s for script %s", n.Language.Name, n.Title)
+		if exp.Name != c.Name {
+			t.Errorf("exp name %s != res name %s", exp.Name, c.Name)
 		}
-		// check script has correct language ID
-		if s.LanguageID != l.ID {
-			t.Errorf("Script %s has incorrect language id", n.Title)
-		}
-
-		// check script has correct links to the tags
-		ts, ok := tsm[s.ID]
-		if !ok {
-			t.Fatalf("Cannot find related tags for script %s", n.Title)
-		}
-		sort.Slice(ts, func(i, j int) bool { return ts[i].String() < ts[j].String() })
-
-		tIDs := make([]uuid.UUID, len(n.Tags))
-		for i, tg := range n.Tags {
-			tr, ok := tm[tg.Name]
-			if !ok {
-				t.Fatalf("Cannot find related tag %s for script %s", tg.Name, n.Title)
-			}
-			tIDs[i] = tr.ID
-		}
-		sort.Slice(tIDs, func(i, j int) bool { return tIDs[i].String() < tIDs[j].String() })
-		if !reflect.DeepEqual(tIDs, ts) {
-			t.Errorf("Script %s has incorrect tag assignment. Expected %s got %s", n.Title, tIDs, ts)
-		}
-
-		// check script has correct links to contributors
-		cs, ok := csm[s.ID]
-		if !ok {
-			t.Fatalf("Cannot find related contributors for script %s", n.Title)
-		}
-		sort.Slice(cs, func(i, j int) bool { return cs[i].String() < cs[j].String() })
-
-		cIDs := make([]uuid.UUID, len(n.Contributors))
-		for i, c := range n.Contributors {
-			cr, ok := cm[c.EmailAddress]
-			if !ok {
-				t.Fatalf("Cannot find related contributor %s for script %s", c.Name, n.Title)
-			}
-			cIDs[i] = cr.ID
-		}
-		sort.Slice(cIDs, func(i, j int) bool { return cIDs[i].String() < cIDs[j].String() })
-		if !reflect.DeepEqual(cIDs, cs) {
-			t.Errorf("Script %s has incorrect contributor assignment. Expected %s got %s", n.Title, cIDs, cs)
+		if exp.LastName != c.LastName {
+			t.Errorf("exp last name %s != res last name %s", exp.LastName, c.LastName)
 		}
 	}
 }
 
-func BenchmarkToEntities(b *testing.B) {
-	input := []ScriptDetail{
-		{
-			Title:         "title 1",
-			Code:          "code",
-			LinkToProject: "link",
-			Language:      Language{Name: "language 1"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag1"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "LastName", EmailAddress: "Email1"},
-				{Name: "Name", LastName: "LastName", EmailAddress: "Email2"},
-			},
-		},
-		{
-			Title:         "title 2",
-			Code:          "code 2 ",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 1"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag2"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email1"},
-			},
-		},
-		{
-			Title:         "title 3",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 2"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag3"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email2"},
-			},
-		},
-		{
-			Title:         "title 4",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 2"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag3"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email2"},
-			},
-		},
-		{
-			Title:         "title 5",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 2"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag4"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email1"},
-			},
-		},
-		{
-			Title:         "title 6",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 2"},
-			Tags:          []Tag{{Name: "tag2"}, {Name: "tag3"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email3"},
-			},
-		},
-		{
-			Title:         "title 7",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 2"},
-			Tags:          []Tag{{Name: "tag2"}, {Name: "tag3"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email3"},
-			},
-		},
-		{
-			Title:         "title 8",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 3"},
-			Tags:          []Tag{{Name: "tag2"}, {Name: "tag3"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email3"},
-			},
-		},
-		{
-			Title:         "title 9",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 1"},
-			Tags:          []Tag{{Name: "tag2"}, {Name: "tag3"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email3"},
-			},
-		},
-		{
-			Title:         "title 10",
-			Code:          "code 3",
-			LinkToProject: "link 3",
-			Language:      Language{Name: "language 1"},
-			Tags:          []Tag{{Name: "tag1"}, {Name: "tag4"}},
-			Contributors: []Contributor{
-				{Name: "Name", LastName: "ContrLast", EmailAddress: "Email3"},
-			},
-		},
+func generateBenchmarkScripts(count int, contribPerScript int, tagsPerScript int) []Script {
+	var scripts []Script
+	tagPool := make([]string, 50)
+	for i := range tagPool {
+		tagPool[i] = fmt.Sprintf("tag%d", i+1)
 	}
+	langs := []string{"Go", "Python", "Rust", "JavaScript", "Java", "C++", "Ruby", "Swift", "TypeScript", "Kotlin"}
+
+	for i := 0; i < count; i++ {
+		var contributors []Contributor
+		for j := 0; j < contribPerScript; j++ {
+			contributors = append(contributors, Contributor{
+				Name:         fmt.Sprintf("Name%d", i*10+j),
+				LastName:     fmt.Sprintf("Last%d", i*10+j),
+				EmailAddress: fmt.Sprintf("email%d@example.com", i*10+j),
+			})
+		}
+
+		var tags []string
+		for j := 0; j < tagsPerScript; j++ {
+			tags = append(tags, tagPool[rand.Intn(len(tagPool))])
+		}
+
+		scripts = append(scripts, Script{
+			Title:         fmt.Sprintf("title_%d", i),
+			Code:          "// some code here",
+			LinkToProject: fmt.Sprintf("https://github.com/project%d", i),
+			Language:      langs[i%len(langs)],
+			Tags:          tags,
+			Contributors:  contributors,
+		})
+	}
+
+	return scripts
+}
+
+func BenchmarkToEntities(b *testing.B) {
+	input := generateBenchmarkScripts(100, 2, 3)
 	time := time.Now()
+	b.ResetTimer()
 	for b.Loop() {
-		toEntities(input, time)
+		toEntitiesToLoad(input, time)
 	}
 }
