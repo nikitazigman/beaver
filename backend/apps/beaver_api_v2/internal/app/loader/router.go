@@ -10,5 +10,5 @@ import (
 func New(r chi.Router, s *biz.Service, db *pgx.Conn) {
 	ctrl := new(s, db)
 
-	r.Post("/loader/scripts", ctrl.LoadScripts)
+	r.Post("/code_documents/bulk_update/", ctrl.LoadScripts)
 }
