@@ -43,7 +43,7 @@ func main() {
 	defer conn.Close(context.Background())
 
 	r := chi.NewRouter()
-	r.Route("/v1", func(r chi.Router) {
+	r.Route("/api/v1", func(r chi.Router) {
 		tagService := tagbiz.New()
 		langService := langbiz.New()
 		contribService := contrbiz.New()
