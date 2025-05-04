@@ -3,7 +3,7 @@
 SELECT * FROM languages OFFSET $1 LIMIT $2;
 
 -- name: Upsert :exec
-INSERT INTO languages (name) VALUES($1) ON CONFLICT (id) DO NOTHING;
+INSERT INTO languages (name) VALUES($1) ON CONFLICT (name) DO NOTHING;
 
 -- name: GetID :one
 SELECT id FROM languages WHERE name=$1;

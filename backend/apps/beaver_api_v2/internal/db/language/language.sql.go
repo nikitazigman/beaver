@@ -58,7 +58,7 @@ func (q *Queries) List(ctx context.Context, arg ListParams) ([]Language, error) 
 }
 
 const upsert = `-- name: Upsert :exec
-INSERT INTO languages (name) VALUES($1) ON CONFLICT (id) DO NOTHING
+INSERT INTO languages (name) VALUES($1) ON CONFLICT (name) DO NOTHING
 `
 
 func (q *Queries) Upsert(ctx context.Context, name pgtype.Text) error {

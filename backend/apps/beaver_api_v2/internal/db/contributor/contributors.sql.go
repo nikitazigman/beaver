@@ -60,7 +60,7 @@ func (q *Queries) List(ctx context.Context, arg ListParams) ([]Contributor, erro
 }
 
 const upsert = `-- name: Upsert :exec
-INSERT INTO contributors (name, last_name, email_address) VALUES($1, $2, $3) ON CONFLICT (id) DO NOTHING
+INSERT INTO contributors (name, last_name, email_address) VALUES($1, $2, $3) ON CONFLICT (email_address) DO NOTHING
 `
 
 type UpsertParams struct {
