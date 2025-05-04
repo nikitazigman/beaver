@@ -48,6 +48,7 @@ func toDTO(script biz.ScriptDetail) GetRandScriptDetailDTO {
 	dto := GetRandScriptDetailDTO{
 		ID:            script.ID.String(),
 		Title:         script.Title,
+		Code:          script.Code,
 		LinkToProject: script.LinkToProject,
 		Language:      Language{ID: script.Language.ID.String(), Name: script.Language.Name},
 		Contributors:  contribs,

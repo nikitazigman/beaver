@@ -26,6 +26,7 @@ func (s *Service) GetRandomScriptDetail(ctx context.Context, db *pgx.Conn, tagID
 		},
 	}
 	dbScripts, err := repo.Random(ctx, qp)
+
 	if err != nil {
 		return ScriptDetail{}, err
 	}
