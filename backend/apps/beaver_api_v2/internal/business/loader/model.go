@@ -2,10 +2,7 @@ package loader
 
 import (
 	"beaver-api/internal/business/contributor"
-	"beaver-api/internal/business/script"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Contributor struct {
@@ -23,25 +20,40 @@ type Script struct {
 	Language      string
 }
 
+type loaderScript struct {
+	title         string
+	code          string
+	linkToProject string
+	contributors  []string
+	tags          []string
+	language      string
+}
+
 type EntitiesToLoad struct {
 	UniqueTags     []string
 	UniqueLangs    []string
 	UniqueContribs []contributor.UpsertContributor
-	UniqueScripts  []script.UpsertScript
+	UniqueScripts  []loaderScript
 }
 
 func toEntitiesToLoad(scripts []Script, timestamp time.Time) EntitiesToLoad {
 	uTags := NewUnique[string, string]()
 	uLangs := NewUnique[string, string]()
 	uContribs := NewUnique[string, contributor.UpsertContributor]()
-	uScripts := NewUnique[string, script.UpsertScript]()
+	uScripts := NewUnique[string, loaderScript]()
 
 	for _, s := range scripts {
-		uScripts.Insert(s.Title, script.UpsertScript{
-			Title:         s.Title,
-			Code:          s.Code,
-			LinkToProject: s.LinkToProject,
-			LanguageID:    uuid.UUID{},
+		ctrb := make([]string, 0, len(s.Contributors))
+		for _, c := range s.Contributors {
+			ctrb = append(ctrb, c.EmailAddress)
+		}
+		uScripts.Insert(s.Title, loaderScript{
+			title:         s.Title,
+			code:          s.Code,
+			linkToProject: s.LinkToProject,
+			language:      s.Language,
+			tags:          s.Tags,
+			contributors:  ctrb,
 		})
 
 		uLangs.Insert(s.Language, s.Language)

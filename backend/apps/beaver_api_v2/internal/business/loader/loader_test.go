@@ -78,15 +78,15 @@ func TestToEntities(t *testing.T) {
 		},
 	}
 	for _, s := range result.UniqueScripts {
-		exp, exist := expScripts[s.Title]
+		exp, exist := expScripts[s.title]
 		if !exist {
-			t.Errorf("script %s was not found", s.Title)
+			t.Errorf("script %s was not found", s.title)
 		}
-		if exp.Code != s.Code {
-			t.Errorf("exp code %s != res code %s", exp.Code, s.Code)
+		if exp.Code != s.code {
+			t.Errorf("exp code %s != res code %s", exp.Code, s.code)
 		}
-		if exp.LinkToProject != s.LinkToProject {
-			t.Errorf("exp link %s != res link %s", exp.LinkToProject, s.LinkToProject)
+		if exp.LinkToProject != s.linkToProject {
+			t.Errorf("exp link %s != res link %s", exp.LinkToProject, s.linkToProject)
 		}
 	}
 	// check langs
