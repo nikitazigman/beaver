@@ -12,6 +12,17 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const count = `-- name: Count :one
+SELECT COUNT(*) FROM tags
+`
+
+func (q *Queries) Count(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, count)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const getID = `-- name: GetID :one
 SELECT id FROM tags WHERE name=$1
 `

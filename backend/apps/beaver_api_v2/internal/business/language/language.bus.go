@@ -3,37 +3,63 @@ package language
 import (
 	"beaver-api/internal/db/language"
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Service struct{}
-
-func New() *Service {
-	return &Service{}
+type Service struct {
+	PageSize int
 }
 
-func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Language, error) {
-	repo := language.New(db)
-	qp := language.ListParams{Offset: int32(offset), Limit: int32(size)}
+func New(pageSize int) *Service {
+	return &Service{
+		PageSize: pageSize,
+	}
+}
 
-	lds, err := repo.List(ctx, qp)
+func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, page int) (LanguagePage, error) {
+	repo := language.New(db)
+	qp := language.ListParams{Offset: int32(page * s.PageSize), Limit: int32(s.PageSize)}
+
+	langsDB, err := repo.List(ctx, qp)
 	if err != nil {
-		return nil, err
+		return LanguagePage{}, err
 	}
 
-	lbs := make([]Language, len(lds))
-	for i, ld := range lds {
+	langs := make([]Language, len(langsDB))
+	for i, ld := range langsDB {
 		bt, err := toLanguageBus(ld)
 		if err != nil {
-			return nil, err
+			return LanguagePage{}, err
 		}
-		lbs[i] = bt
+		langs[i] = bt
+	}
+	langCount, err := repo.Count(ctx)
+	if err != nil {
+		return LanguagePage{}, err
 	}
 
-	return lbs, nil
+	count := int(langCount)
+
+	nextPage := ""
+	if count > s.PageSize {
+		nextPage = fmt.Sprintf("/api/v1/languages/?page=%d", page+1)
+	}
+
+	previousPage := ""
+	if page > 0 {
+		previousPage = fmt.Sprintf("/api/v1/languages/?page=%d", page-1)
+	}
+	res := LanguagePage{
+		Count:    count,
+		Next:     nextPage,
+		Previous: previousPage,
+		Results:  langs,
+	}
+	return res, nil
 }
 
 func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, name string) (uuid.UUID, error) {

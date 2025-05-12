@@ -10,5 +10,5 @@ import (
 func New(r chi.Router, s *biz.Service, db *pgx.Conn) {
 	ctrl := new(s, db)
 
-	r.Get("/languages", ctrl.List)
+	r.Get("/languages/", ctrl.List)
 }

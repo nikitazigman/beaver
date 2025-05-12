@@ -12,6 +12,13 @@ type Language struct {
 	Name string
 }
 
+type LanguagePage struct {
+	Count    int
+	Next     string
+	Previous string
+	Results  []Language
+}
+
 func toLanguageBus(ld db.Language) (Language, error) {
 	if !ld.Name.Valid {
 		return Language{}, errors.New("ID or Name of language is not Valid")

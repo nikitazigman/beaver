@@ -44,8 +44,8 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Route("/api/v1", func(r chi.Router) {
-		tagService := tagbiz.New()
-		langService := langbiz.New()
+		tagService := tagbiz.New(10)
+		langService := langbiz.New(10)
 		contribService := contrbiz.New()
 		scriptDetailService := scriptdetailbiz.New()
 		scriptService := scriptbiz.New()

@@ -22,29 +22,23 @@ func new(s *biz.Service, db *pgx.Conn) *Controller {
 }
 
 func (c *Controller) List(w http.ResponseWriter, r *http.Request) {
-	offset := 0
-	size := 10
+	page := 0
 	var err error
 
-	if o := r.URL.Query().Get("offset"); o != "" {
-		offset, err = strconv.Atoi(o)
+	if p := r.URL.Query().Get("page"); p != "" {
+		page, err = strconv.Atoi(p)
 		if err != nil {
-			return
+			w.WriteHeader(500)
 		}
 	}
-	if s := r.URL.Query().Get("size"); s != "" {
-		size, err = strconv.Atoi(s)
-		if err != nil {
-			return
-		}
-	}
-	lbs, err := c.s.Retrieve(r.Context(), c.db, offset, size)
+
+	lbs, err := c.s.Retrieve(r.Context(), c.db, page)
 	if err != nil {
 		return
 	}
 
-	las := langBusToGetLangsDTO(lbs, offset, size)
-	if err := json.NewEncoder(w).Encode(las); err != nil {
+	langPage := langBusToGetLangsDTO(lbs)
+	if err := json.NewEncoder(w).Encode(langPage); err != nil {
 		return
 	}
 }

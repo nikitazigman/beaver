@@ -1,7 +1,7 @@
 package tag
 
 import (
-	biz "beaver-api/internal/business/tag"
+	"beaver-api/internal/business/tag"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -10,11 +10,11 @@ import (
 )
 
 type Controller struct {
-	s  *biz.Service
+	s  *tag.Service
 	db *pgx.Conn
 }
 
-func new(s *biz.Service, db *pgx.Conn) *Controller {
+func new(s *tag.Service, db *pgx.Conn) *Controller {
 	return &Controller{
 		s:  s,
 		db: db,
@@ -22,28 +22,22 @@ func new(s *biz.Service, db *pgx.Conn) *Controller {
 }
 
 func (c *Controller) List(w http.ResponseWriter, r *http.Request) {
-	offset := 0
-	size := 10
+	page := 0
 	var err error
 
-	if o := r.URL.Query().Get("offset"); o != "" {
-		offset, err = strconv.Atoi(o)
+	if p := r.URL.Query().Get("page"); p != "" {
+		page, err = strconv.Atoi(p)
 		if err != nil {
-			return
+			w.WriteHeader(500)
 		}
-	}
-	if s := r.URL.Query().Get("size"); s != "" {
-		size, err = strconv.Atoi(s)
-		if err != nil {
-			return
-		}
-	}
-	bt, err := c.s.Retrieve(r.Context(), c.db, offset, size)
-	if err != nil {
-		return
 	}
 
-	t := BusTagsToGetTagsDTO(bt, offset, size)
+	tagPage, err := c.s.Retrieve(r.Context(), c.db, page)
+	if err != nil {
+		w.WriteHeader(500)
+	}
+
+	t := BusTagsToGetTagsDTO(tagPage)
 	if err := json.NewEncoder(w).Encode(t); err != nil {
 		return
 	}

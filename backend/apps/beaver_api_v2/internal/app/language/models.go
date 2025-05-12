@@ -1,30 +1,32 @@
 package language
 
-import biz "beaver-api/internal/business/language"
+import "beaver-api/internal/business/language"
 
-type GetLangDTO struct {
+type Language struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
 type GetLangsDTO struct {
-	Offset int `json:"offset"`
-	Size   int `json:"size"`
-	Value  []GetLangDTO
+	Count    int        `json:"count"`
+	Next     string     `json:"next"`
+	Previous string     `json:"previous"`
+	Results  []Language `json:"results"`
 }
 
-func langBusToGetLangsDTO(bls []biz.Language, offset int, size int) GetLangsDTO {
-	v := make([]GetLangDTO, len(bls))
-	for i, bt := range bls {
-		v[i] = GetLangDTO{
-			ID:   bt.ID.String(),
-			Name: bt.Name,
+func langBusToGetLangsDTO(langPage language.LanguagePage) GetLangsDTO {
+	langs := make([]Language, len(langPage.Results))
+	for i, l := range langPage.Results {
+		langs[i] = Language{
+			ID:   l.ID.String(),
+			Name: l.Name,
 		}
 	}
 
 	return GetLangsDTO{
-		Offset: offset,
-		Size:   size,
-		Value:  v,
+		Count:    langPage.Count,
+		Next:     langPage.Next,
+		Previous: langPage.Previous,
+		Results:  langs,
 	}
 }

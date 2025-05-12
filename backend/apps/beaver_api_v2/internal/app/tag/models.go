@@ -1,6 +1,6 @@
 package tag
 
-import biz "beaver-api/internal/business/tag"
+import "beaver-api/internal/business/tag"
 
 type GetTagDTO struct {
 	ID   string `json:"id"`
@@ -8,14 +8,15 @@ type GetTagDTO struct {
 }
 
 type GetTagsDTO struct {
-	Offset int `json:"offset"`
-	Size   int `json:"size"`
-	Value  []GetTagDTO
+	Count    int         `json:"count"`
+	Next     string      `json:"next"`
+	Previous string      `json:"previous"`
+	Results  []GetTagDTO `json:"results"`
 }
 
-func BusTagsToGetTagsDTO(tag []biz.Tag, offset int, size int) GetTagsDTO {
-	v := make([]GetTagDTO, len(tag))
-	for i, bt := range tag {
+func BusTagsToGetTagsDTO(tag tag.TagPage) GetTagsDTO {
+	v := make([]GetTagDTO, len(tag.Results))
+	for i, bt := range tag.Results {
 		v[i] = GetTagDTO{
 			ID:   bt.ID.String(),
 			Name: bt.Name,
@@ -23,8 +24,9 @@ func BusTagsToGetTagsDTO(tag []biz.Tag, offset int, size int) GetTagsDTO {
 	}
 
 	return GetTagsDTO{
-		Offset: offset,
-		Size:   size,
-		Value:  v,
+		Count:    tag.Count,
+		Next:     tag.Next,
+		Previous: tag.Previous,
+		Results:  v,
 	}
 }

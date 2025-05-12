@@ -12,6 +12,13 @@ type Tag struct {
 	Name string
 }
 
+type TagPage struct {
+	Count    int
+	Next     string
+	Previous string
+	Results  []Tag
+}
+
 func toBusTag(dbTag db.Tag) (Tag, error) {
 	if !dbTag.Name.Valid {
 		return Tag{}, errors.New("ID or Name is not Valid")

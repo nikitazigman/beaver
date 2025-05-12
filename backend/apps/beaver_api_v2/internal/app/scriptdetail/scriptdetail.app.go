@@ -24,6 +24,7 @@ func new(s *biz.Service, db *pgx.Conn) *Controller {
 
 func (c *Controller) GetRandomScript(w http.ResponseWriter, r *http.Request) {
 	script, err := c.s.GetRandomScriptDetail(r.Context(), c.db, nil, nil, uuid.UUID{})
+	fmt.Println("get request to random script")
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -10,3 +10,6 @@ SELECT id FROM languages WHERE name=$1;
 
 -- name: Delete :batchexec
 DELETE FROM languages WHERE id = $1;
+
+-- name: Count :one
+SELECT COUNT(*) FROM languages;

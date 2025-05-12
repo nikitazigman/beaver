@@ -2,16 +2,6 @@ package scriptdetail
 
 import biz "beaver-api/internal/business/scriptdetail"
 
-type Language struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-type Tag struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 type Contributor struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
@@ -25,14 +15,14 @@ type GetRandScriptDetailDTO struct {
 	Code          string `json:"code"`
 	LinkToProject string `json:"link_to_project"`
 	Contributors  []Contributor
-	Tags          []Tag
-	Language      Language
+	Tags          []string `json:"tags"`
+	Language      string   `json:"language"`
 }
 
 func toDTO(script biz.ScriptDetail) GetRandScriptDetailDTO {
-	tags := make([]Tag, len(script.Tags))
+	tags := make([]string, len(script.Tags))
 	for i, t := range script.Tags {
-		tags[i] = Tag{ID: t.ID.String(), Name: t.Name}
+		tags[i] = t.Name
 	}
 
 	contribs := make([]Contributor, len(script.Contributors))
@@ -50,7 +40,7 @@ func toDTO(script biz.ScriptDetail) GetRandScriptDetailDTO {
 		Title:         script.Title,
 		Code:          script.Code,
 		LinkToProject: script.LinkToProject,
-		Language:      Language{ID: script.Language.ID.String(), Name: script.Language.Name},
+		Language:      script.Language.Name,
 		Contributors:  contribs,
 		Tags:          tags,
 	}
