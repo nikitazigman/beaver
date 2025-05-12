@@ -13,7 +13,7 @@ import (
 )
 
 const random = `-- name: Random :many
-SELECT script_id, script_title, script_code, script_link_to_project, language_id, language_name, tag_id, tag_name, contributor_id, contributor_name, contributor_last_name, contributor_email_address FROM scripts_details
+SELECT script_id, script_title, script_code, script_link_to_project, script_updated_at, script_created_at, language_id, language_name, tag_id, tag_name, contributor_id, contributor_name, contributor_last_name, contributor_email_address FROM scripts_details
 WHERE script_id = (
 SELECT script_id FROM scripts_details AS sd
     WHERE
@@ -45,6 +45,8 @@ func (q *Queries) Random(ctx context.Context, arg RandomParams) ([]ScriptsDetail
 			&i.ScriptTitle,
 			&i.ScriptCode,
 			&i.ScriptLinkToProject,
+			&i.ScriptUpdatedAt,
+			&i.ScriptCreatedAt,
 			&i.LanguageID,
 			&i.LanguageName,
 			&i.TagID,

@@ -2,6 +2,7 @@ package scriptdetail
 
 import (
 	db "beaver-api/internal/db/scriptdetail"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -31,6 +32,8 @@ type ScriptDetail struct {
 	Language      Language
 	Tags          []Tag
 	Contributors  []Contributor
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
 
 func toBus(scripts []db.ScriptsDetail) ScriptDetail {
@@ -63,6 +66,8 @@ func toBus(scripts []db.ScriptsDetail) ScriptDetail {
 		Title:         dbScript.ScriptTitle.String,
 		Code:          dbScript.ScriptCode.String,
 		LinkToProject: dbScript.ScriptLinkToProject.String,
+		CreatedAt:     dbScript.ScriptCreatedAt.Time,
+		UpdatedAt:     dbScript.ScriptUpdatedAt.Time,
 		Language:      Language{ID: dbScript.LanguageID, Name: dbScript.LanguageName.String},
 		Tags:          tags,
 		Contributors:  contribs,

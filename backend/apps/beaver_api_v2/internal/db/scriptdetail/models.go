@@ -46,6 +46,8 @@ type ScriptsDetail struct {
 	ScriptTitle             pgtype.Text
 	ScriptCode              pgtype.Text
 	ScriptLinkToProject     pgtype.Text
+	ScriptUpdatedAt         pgtype.Timestamptz
+	ScriptCreatedAt         pgtype.Timestamptz
 	LanguageID              uuid.UUID
 	LanguageName            pgtype.Text
 	TagID                   uuid.UUID

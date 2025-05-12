@@ -6,6 +6,8 @@ SELECT
     scripts.title as script_title,
     scripts.code as script_code ,
     scripts.link_to_project as script_link_to_project,
+    scripts.updated_at as script_updated_at,
+    scripts.created_at as script_created_at,
     languages.id as language_id,
     languages.name as language_name,
     tags.id as tag_id,

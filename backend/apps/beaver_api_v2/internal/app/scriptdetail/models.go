@@ -17,6 +17,8 @@ type GetRandScriptDetailDTO struct {
 	Contributors  []Contributor
 	Tags          []string `json:"tags"`
 	Language      string   `json:"language"`
+	UpdatedAt     string   `json:"updated_at"`
+	CreatedAt     string   `json:"created_at"`
 }
 
 func toDTO(script biz.ScriptDetail) GetRandScriptDetailDTO {
@@ -43,6 +45,8 @@ func toDTO(script biz.ScriptDetail) GetRandScriptDetailDTO {
 		Language:      script.Language.Name,
 		Contributors:  contribs,
 		Tags:          tags,
+		UpdatedAt:     script.UpdatedAt.Format("2006-01-02 15:04:05.999999-07:00"),
+		CreatedAt:     script.CreatedAt.Format("2006-01-02 15:04:05.999999-07:00"),
 	}
 	return dto
 }
