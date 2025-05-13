@@ -1,17 +1,19 @@
 package main
 
 import (
-	contrapp "beaver-api/internal/app/contributor"
-	langapp "beaver-api/internal/app/language"
-	loaderapp "beaver-api/internal/app/loader"
-	scriptdetailapp "beaver-api/internal/app/scriptdetail"
-	tagapp "beaver-api/internal/app/tag"
-	contrbiz "beaver-api/internal/business/contributor"
-	langbiz "beaver-api/internal/business/language"
-	loaderbiz "beaver-api/internal/business/loader"
-	scriptbiz "beaver-api/internal/business/script"
-	scriptdetailbiz "beaver-api/internal/business/scriptdetail"
-	tagbiz "beaver-api/internal/business/tag"
+	contributorApp "beaver-api/internal/app/contributor"
+	languageApp "beaver-api/internal/app/language"
+	loaderApp "beaver-api/internal/app/loader"
+	scriptDetailApp "beaver-api/internal/app/scriptdetail"
+	tagApp "beaver-api/internal/app/tag"
+	"beaver-api/internal/business/contributor"
+	"beaver-api/internal/business/language"
+	"beaver-api/internal/business/loader"
+	"beaver-api/internal/business/script"
+	"beaver-api/internal/business/scriptdetail"
+	"beaver-api/internal/business/tag"
+	"beaver-api/utils/logger"
+	beaverMiddleware "beaver-api/utils/middleware"
 
 	"context"
 	"fmt"
@@ -20,6 +22,7 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -33,8 +36,11 @@ const (
 )
 
 func main() {
-	url := fmt.Sprintf(fmtDBString, host, user, password, dbname, port)
 
+	logger := logger.New(true)
+	defer logger.Sync()
+
+	url := fmt.Sprintf(fmtDBString, host, user, password, dbname, port)
 	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
@@ -42,19 +48,23 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
+	tagService := tag.New(10)
+	langService := language.New(10)
+	contribService := contributor.New()
+	scriptDetailService := scriptdetail.New()
+	scriptService := script.New()
+	loaderService := loader.New(scriptService, tagService, contribService, langService)
+
 	r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(beaverMiddleware.LoggerMiddleware(logger))
+	r.Use(middleware.Recoverer)
 	r.Route("/api/v1", func(r chi.Router) {
-		tagService := tagbiz.New(10)
-		langService := langbiz.New(10)
-		contribService := contrbiz.New()
-		scriptDetailService := scriptdetailbiz.New()
-		scriptService := scriptbiz.New()
-		loaderService := loaderbiz.New(scriptService, tagService, contribService, langService)
-		tagapp.New(r, tagService, conn)
-		langapp.New(r, langService, conn)
-		contrapp.New(r, contribService, conn)
-		scriptdetailapp.New(r, scriptDetailService, conn)
-		loaderapp.New(r, loaderService, conn)
+		tagApp.New(r, tagService, conn, logger)
+		languageApp.New(r, langService, conn, logger)
+		contributorApp.New(r, contribService, conn, logger)
+		scriptDetailApp.New(r, scriptDetailService, conn, logger)
+		loaderApp.New(r, loaderService, conn, logger)
 	})
 
 	s := &http.Server{

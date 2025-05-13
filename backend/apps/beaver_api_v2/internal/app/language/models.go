@@ -1,18 +1,16 @@
 package language
 
-import "beaver-api/internal/business/language"
+import (
+	"beaver-api/internal/business/language"
+	"beaver-api/utils/pagination"
+)
 
 type Language struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
-type GetLangsDTO struct {
-	Count    int        `json:"count"`
-	Next     string     `json:"next"`
-	Previous string     `json:"previous"`
-	Results  []Language `json:"results"`
-}
+type GetLangsDTO pagination.Page[Language]
 
 func langBusToGetLangsDTO(langPage language.LanguagePage) GetLangsDTO {
 	langs := make([]Language, len(langPage.Results))

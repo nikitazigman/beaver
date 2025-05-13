@@ -1,23 +1,21 @@
 package tag
 
-import "beaver-api/internal/business/tag"
+import (
+	"beaver-api/internal/business/tag"
+	"beaver-api/utils/pagination"
+)
 
-type GetTagDTO struct {
+type Tag struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
-type GetTagsDTO struct {
-	Count    int         `json:"count"`
-	Next     string      `json:"next"`
-	Previous string      `json:"previous"`
-	Results  []GetTagDTO `json:"results"`
-}
+type GetTagsDTO pagination.Page[Tag]
 
 func BusTagsToGetTagsDTO(tag tag.TagPage) GetTagsDTO {
-	v := make([]GetTagDTO, len(tag.Results))
+	v := make([]Tag, len(tag.Results))
 	for i, bt := range tag.Results {
-		v[i] = GetTagDTO{
+		v[i] = Tag{
 			ID:   bt.ID.String(),
 			Name: bt.Name,
 		}
