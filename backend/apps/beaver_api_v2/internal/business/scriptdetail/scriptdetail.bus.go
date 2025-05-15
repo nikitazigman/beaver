@@ -15,7 +15,7 @@ func New() *Service {
 	return &Service{}
 }
 
-func (s *Service) GetRandomScriptDetail(ctx context.Context, db *pgx.Conn, tagIDs []uuid.UUID, contribIDs []uuid.UUID, langID uuid.UUID) (ScriptDetail, error) {
+func (s *Service) GetRandomScriptDetail(ctx context.Context, db pgx.Tx, tagIDs []uuid.UUID, contribIDs []uuid.UUID, langID uuid.UUID) (ScriptDetail, error) {
 	repo := scriptdetail.New(db)
 	qp := scriptdetail.RandomParams{
 		TagIDs:     tagIDs,

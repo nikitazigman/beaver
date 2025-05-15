@@ -15,7 +15,7 @@ func New() *Service {
 	return &Service{}
 }
 
-func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, upsertScript UpsertScript) (uuid.UUID, error) {
+func (s *Service) Upsert(ctx context.Context, db pgx.Tx, upsertScript UpsertScript) (uuid.UUID, error) {
 	repo := script.New(db)
 	var uuid uuid.UUID
 	qp := script.UpsertParams{
@@ -36,7 +36,7 @@ func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, upsertScript UpsertS
 	return uuid, nil
 }
 
-func (s *Service) LinkTag(ctx context.Context, db *pgx.Conn, link TagScript) error {
+func (s *Service) LinkTag(ctx context.Context, db pgx.Tx, link TagScript) error {
 	repo := script.New(db)
 	qp := script.LinkTagParams{
 		TagID:    pgtype.UUID{Bytes: link.TagID, Valid: true},
@@ -50,7 +50,7 @@ func (s *Service) LinkTag(ctx context.Context, db *pgx.Conn, link TagScript) err
 	return nil
 }
 
-func (s *Service) LinkContrib(ctx context.Context, db *pgx.Conn, link ContributorScript) error {
+func (s *Service) LinkContrib(ctx context.Context, db pgx.Tx, link ContributorScript) error {
 	repo := script.New(db)
 	qp := script.LinkContribParams{
 		ContributorID: pgtype.UUID{Bytes: link.ContributorID, Valid: true},

@@ -5,20 +5,22 @@ TAG_MIGRATION_DIR := ./internal/db/tag/migrations/
 CONTRIBUTOR_MIGRATION_DIR := ./internal/db/contributor/migrations/
 LANGUAGE_MIGRATION_DIR := ./internal/db/language/migrations/
 GOOSE_DRIVER := postgres
-GOOSE_DBSTRING := ${GOOSE_DRIVER}://$(PG_USER):$(PG_PASSWORD)@$(PG_HOST):$(PG_PORT)/$(PG_DB)
+GOOSE_DBSTRING := ${GOOSE_DRIVER}://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
 SQL_FILE=./utils/demo_data.sql
 TMP_DIR=./tmp/migrations
 
 connect_db:
-	PGPASSWORD=$(PG_PASSWORD) psql -U $(PG_USER) -h $(PG_HOST) -d $(PG_DB)
+	PGPASSWORD=$(DB_PASS) psql -U $(DB_USER) -h $(DB_HOST) -d $(DB_NAME)
 
 demo_data:
-	PGPASSWORD=$(PG_PASSWORD) psql -U $(PG_USER) -h $(PG_HOST) -d $(PG_DB) -f $(SQL_FILE)
+	PGPASSWORD=$(DB_PASS) psql -U $(DB_USER) -h $(DB_HOST) -d $(DB_NAME) -f $(SQL_FILE)
 
 # Apply all migrations
 migrate: _create_tmp_dir _migrate _remove_tmp_dir
 # Rollback all migrations
 rollback: _create_tmp_dir _rollback _remove_tmp_dir
+
+
 
 _migrate:
 	@echo "Running migrations"

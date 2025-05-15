@@ -12,44 +12,52 @@ import (
 	"beaver-api/internal/business/script"
 	"beaver-api/internal/business/scriptdetail"
 	"beaver-api/internal/business/tag"
+	"beaver-api/utils/db"
 	"beaver-api/utils/logger"
 	beaverMiddleware "beaver-api/utils/middleware"
+	"time"
 
-	"context"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/kelseyhightower/envconfig"
+	"go.uber.org/zap"
 )
 
-const (
-	fmtDBString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
-	host        = "localhost"
-	user        = "beaver_api"
-	password    = "beaver_api"
-	dbname      = "beaver_api_db"
-	port        = 5432
-)
+type Config struct {
+	Debug    bool `envconfig:"DEBUG"`
+	PageSize int  `envconfig:"PAGESIZE" default:"10"`
 
-func main() {
+	ServerPort         int           `envconfig:"SERVER_PORT"`
+	ServerTimeoutRead  time.Duration `envconfig:"SERVER_TIMEOUT_READ" default:"3s"`
+	ServerTimeoutWrite time.Duration `envconfig:"SERVER_TIMEOUT_WRITE" default:"5s"`
+	ServerTimeoutIdle  time.Duration `envconfig:"SERVER_TIMEOUT_IDLE" default:"5s"`
 
-	logger := logger.New(true)
-	defer logger.Sync()
+	DBHost string `envconfig:"DB_HOST"`
+	DBPort int    `envconfig:"DB_PORT"`
+	DBUser string `envconfig:"DB_USER"`
+	DBPass string `envconfig:"DB_PASS"`
+	DBName string `envconfig:"DB_NAME"`
+}
 
-	url := fmt.Sprintf(fmtDBString, host, user, password, dbname, port)
-	conn, err := pgx.Connect(context.Background(), url)
+func NewConfig() *Config {
+	var c Config
+
+	err := envconfig.Process("", &c)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		log.Fatal("Cannot read configuration. Check envs.")
 	}
-	defer conn.Close(context.Background())
 
-	tagService := tag.New(10)
-	langService := language.New(10)
+	return &c
+}
+
+func NewController(config *Config, pool *pgxpool.Pool, logger *zap.SugaredLogger) *chi.Mux {
+	tagService := tag.New(config.PageSize)
+	langService := language.New(config.PageSize)
 	contribService := contributor.New()
 	scriptDetailService := scriptdetail.New()
 	scriptService := script.New()
@@ -58,18 +66,36 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(beaverMiddleware.LoggerMiddleware(logger))
+	r.Use(beaverMiddleware.TransactionMiddleware(pool))
 	r.Use(middleware.Recoverer)
+
 	r.Route("/api/v1", func(r chi.Router) {
-		tagApp.New(r, tagService, conn, logger)
-		languageApp.New(r, langService, conn, logger)
-		contributorApp.New(r, contribService, conn, logger)
-		scriptDetailApp.New(r, scriptDetailService, conn, logger)
-		loaderApp.New(r, loaderService, conn, logger)
+		tagApp.New(r, tagService)
+		languageApp.New(r, langService)
+		contributorApp.New(r, contribService)
+		scriptDetailApp.New(r, scriptDetailService)
+		loaderApp.New(r, loaderService)
 	})
+	return r
+}
+
+func main() {
+	config := NewConfig()
+
+	logger := logger.New(config.Debug)
+	defer logger.Sync()
+
+	pool := db.New(config.DBHost, config.DBUser, config.DBPass, config.DBName, config.DBPort)
+	defer pool.Close()
+
+	controller := NewController(config, pool, logger)
 
 	s := &http.Server{
-		Addr:    fmt.Sprintf(":%d", 8000),
-		Handler: r,
+		Addr:         fmt.Sprintf(":%d", 8000),
+		Handler:      controller,
+		ReadTimeout:  config.ServerTimeoutRead,
+		WriteTimeout: config.ServerTimeoutWrite,
+		IdleTimeout:  config.ServerTimeoutIdle,
 	}
 
 	log.Println("Starting server " + s.Addr)

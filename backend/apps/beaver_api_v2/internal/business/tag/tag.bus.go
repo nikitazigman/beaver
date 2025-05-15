@@ -18,7 +18,7 @@ func New(pageSize int) *Service {
 	return &Service{PageSize: pageSize}
 }
 
-func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, page int) (TagPage, error) {
+func (s *Service) Retrieve(ctx context.Context, db pgx.Tx, page int) (TagPage, error) {
 	repo := tag.New(db)
 
 	qp := tag.ListParams{Offset: int32(page * s.PageSize), Limit: int32(s.PageSize)}
@@ -62,7 +62,7 @@ func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, page int) (TagPage
 	return result, nil
 }
 
-func (ts *Service) GetOrCreate(ctx context.Context, db *pgx.Conn, name string) (uuid.UUID, error) {
+func (ts *Service) GetOrCreate(ctx context.Context, db pgx.Tx, name string) (uuid.UUID, error) {
 	repo := tag.New(db)
 	tagName := pgtype.Text{String: name, Valid: true}
 
@@ -80,7 +80,7 @@ func (ts *Service) GetOrCreate(ctx context.Context, db *pgx.Conn, name string) (
 	return uuid, nil
 }
 
-func (ts *Service) Delete(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+func (ts *Service) Delete(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
 	repo := tag.New(db)
 
 	var tagErr error

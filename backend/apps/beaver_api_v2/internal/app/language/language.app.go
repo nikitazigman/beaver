@@ -2,22 +2,19 @@ package language
 
 import (
 	biz "beaver-api/internal/business/language"
+	"beaver-api/utils/middleware"
 	"encoding/json"
 	"net/http"
 	"strconv"
-
-	"github.com/jackc/pgx/v5"
 )
 
 type Controller struct {
-	s  *biz.Service
-	db *pgx.Conn
+	s *biz.Service
 }
 
-func new(s *biz.Service, db *pgx.Conn) *Controller {
+func new(s *biz.Service) *Controller {
 	return &Controller{
-		s:  s,
-		db: db,
+		s: s,
 	}
 }
 
@@ -31,8 +28,8 @@ func (c *Controller) List(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(500)
 		}
 	}
-
-	lbs, err := c.s.Retrieve(r.Context(), c.db, page)
+	tx := middleware.GetTransactionFromContext(r.Context())
+	lbs, err := c.s.Retrieve(r.Context(), tx, page)
 	if err != nil {
 		return
 	}

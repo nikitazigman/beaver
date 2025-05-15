@@ -1,23 +1,20 @@
 package loader
 
 import (
-	biz "beaver-api/internal/business/loader"
+	"beaver-api/internal/business/loader"
+	"beaver-api/utils/middleware"
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/jackc/pgx/v5"
 )
 
 type Controller struct {
-	s  *biz.Service
-	db *pgx.Conn
+	s *loader.Service
 }
 
-func new(s *biz.Service, db *pgx.Conn) *Controller {
+func new(s *loader.Service) *Controller {
 	return &Controller{
-		s:  s,
-		db: db,
+		s: s,
 	}
 }
 
@@ -32,12 +29,13 @@ func (c *Controller) LoadScripts(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	sd, t, err := toScriptDetail(dto)
+	scriptDetail, t, err := toScriptDetail(dto)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	err = c.s.LoadScripts(r.Context(), c.db, sd, t)
+	tx := middleware.GetTransactionFromContext(r.Context())
+	err = c.s.LoadScripts(r.Context(), tx, scriptDetail, t)
 	if err != nil {
 		fmt.Println(err)
 	}

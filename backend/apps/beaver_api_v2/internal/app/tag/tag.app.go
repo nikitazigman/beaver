@@ -2,22 +2,19 @@ package tag
 
 import (
 	"beaver-api/internal/business/tag"
+	"beaver-api/utils/middleware"
 	"encoding/json"
 	"net/http"
 	"strconv"
-
-	"github.com/jackc/pgx/v5"
 )
 
 type Controller struct {
-	s  *tag.Service
-	db *pgx.Conn
+	s *tag.Service
 }
 
-func new(s *tag.Service, db *pgx.Conn) *Controller {
+func new(s *tag.Service) *Controller {
 	return &Controller{
-		s:  s,
-		db: db,
+		s: s,
 	}
 }
 
@@ -31,8 +28,8 @@ func (c *Controller) List(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(500)
 		}
 	}
-
-	tagPage, err := c.s.Retrieve(r.Context(), c.db, page)
+	tx := middleware.GetTransactionFromContext(r.Context())
+	tagPage, err := c.s.Retrieve(r.Context(), tx, page)
 	if err != nil {
 		w.WriteHeader(500)
 	}

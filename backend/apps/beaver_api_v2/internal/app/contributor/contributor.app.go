@@ -1,27 +1,24 @@
 package contributor
 
 import (
-	biz "beaver-api/internal/business/contributor"
+	"beaver-api/internal/business/contributor"
+	"beaver-api/utils/middleware"
 	"encoding/json"
 	"net/http"
 	"strconv"
-
-	"github.com/jackc/pgx/v5"
 )
 
-type ContribController struct {
-	s  *biz.Service
-	db *pgx.Conn
+type Controller struct {
+	s *contributor.Service
 }
 
-func new(s *biz.Service, db *pgx.Conn) *ContribController {
-	return &ContribController{
-		s:  s,
-		db: db,
+func new(s *contributor.Service) *Controller {
+	return &Controller{
+		s: s,
 	}
 }
 
-func (c *ContribController) List(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) List(w http.ResponseWriter, r *http.Request) {
 	offset := 0
 	size := 10
 	var err error
@@ -38,7 +35,9 @@ func (c *ContribController) List(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	cbs, err := c.s.Retrieve(r.Context(), c.db, offset, size)
+
+	tx := middleware.GetTransactionFromContext(r.Context())
+	cbs, err := c.s.Retrieve(r.Context(), tx, offset, size)
 	if err != nil {
 		return
 	}

@@ -16,7 +16,7 @@ func New() *Service {
 	return &Service{}
 }
 
-func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, offset int, size int) ([]Contributor, error) {
+func (s *Service) Retrieve(ctx context.Context, db pgx.Tx, offset int, size int) ([]Contributor, error) {
 	repo := contributor.New(db)
 	qp := contributor.ListParams{Offset: int32(offset), Limit: int32(size)}
 
@@ -37,7 +37,7 @@ func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, offset int, size i
 	return cbs, nil
 }
 
-func (s *Service) UpsertContributors(ctx context.Context, db *pgx.Conn, contrib UpsertContributor) (uuid.UUID, error) {
+func (s *Service) UpsertContributors(ctx context.Context, db pgx.Tx, contrib UpsertContributor) (uuid.UUID, error) {
 	repo := contributor.New(db)
 	var uuid uuid.UUID
 
@@ -59,7 +59,7 @@ func (s *Service) UpsertContributors(ctx context.Context, db *pgx.Conn, contrib 
 	return uuid, nil
 }
 
-func (s *Service) DeleteContributors(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+func (s *Service) DeleteContributors(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
 	repo := contributor.New(db)
 	var cErr error
 	repo.Delete(ctx, ids).Exec(func(i int, err error) {

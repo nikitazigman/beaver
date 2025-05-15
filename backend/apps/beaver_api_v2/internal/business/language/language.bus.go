@@ -20,7 +20,7 @@ func New(pageSize int) *Service {
 	}
 }
 
-func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, page int) (LanguagePage, error) {
+func (s *Service) Retrieve(ctx context.Context, db pgx.Tx, page int) (LanguagePage, error) {
 	repo := language.New(db)
 	qp := language.ListParams{Offset: int32(page * s.PageSize), Limit: int32(s.PageSize)}
 
@@ -62,7 +62,7 @@ func (s *Service) Retrieve(ctx context.Context, db *pgx.Conn, page int) (Languag
 	return res, nil
 }
 
-func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, name string) (uuid.UUID, error) {
+func (s *Service) Upsert(ctx context.Context, db pgx.Tx, name string) (uuid.UUID, error) {
 	repo := language.New(db)
 	var uuid uuid.UUID
 	dbName := pgtype.Text{String: name, Valid: true}
@@ -78,7 +78,7 @@ func (s *Service) Upsert(ctx context.Context, db *pgx.Conn, name string) (uuid.U
 	return uuid, nil
 }
 
-func (s *Service) Delete(ctx context.Context, db *pgx.Conn, ids []uuid.UUID) error {
+func (s *Service) Delete(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
 	repo := language.New(db)
 
 	var lErr error

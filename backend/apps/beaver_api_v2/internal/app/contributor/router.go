@@ -1,15 +1,13 @@
 package contributor
 
 import (
-	biz "beaver-api/internal/business/contributor"
+	"beaver-api/internal/business/contributor"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/jackc/pgx/v5"
-	"go.uber.org/zap"
 )
 
-func New(r chi.Router, s *biz.Service, db *pgx.Conn, logger *zap.SugaredLogger) {
-	ctrl := new(s, db)
+func New(r chi.Router, s *contributor.Service) {
+	ctrl := new(s)
 
 	r.Get("/contributors/", ctrl.List)
 }

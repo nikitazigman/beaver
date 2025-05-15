@@ -35,7 +35,7 @@ func New(
 	}
 }
 
-func (s *Service) LoadScripts(ctx context.Context, db *pgx.Conn, scripts []Script, timestamp time.Time) error {
+func (s *Service) LoadScripts(ctx context.Context, db pgx.Tx, scripts []Script, timestamp time.Time) error {
 	toLoad := toEntitiesToLoad(scripts, timestamp)
 
 	tagMap := make(map[string]uuid.UUID)
