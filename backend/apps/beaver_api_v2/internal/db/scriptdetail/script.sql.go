@@ -7,9 +7,6 @@ package scriptdetail
 
 import (
 	"context"
-
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const random = `-- name: Random :many
@@ -17,22 +14,22 @@ SELECT script_id, script_title, script_code, script_link_to_project, script_upda
 WHERE script_id = (
 SELECT script_id FROM scripts_details AS sd
     WHERE
-        (sd.tag_id = ANY($1::uuid[]) OR $1 IS NULL) AND
-        (sd.contributor_id = ANY($2::uuid[]) OR $2 IS NULL) AND
-        (sd.language_id = $3::uuid OR $3 IS NULL)
+        (sd.tag_name = ANY($1::varchar[]) OR $1 IS NULL) AND
+        (sd.contributor_email_address = ANY($2::varchar[]) OR $2 IS NULL) AND
+        (sd.language_name = ANY($3::varchar[]) OR $3 IS NULL)
     ORDER BY RANDOM()
     LIMIT 1
 )
 `
 
 type RandomParams struct {
-	TagIDs     []uuid.UUID
-	ContribIDs []uuid.UUID
-	LanguageID pgtype.UUID
+	Tags     []string
+	Contribs []string
+	Langs    []string
 }
 
 func (q *Queries) Random(ctx context.Context, arg RandomParams) ([]ScriptsDetail, error) {
-	rows, err := q.db.Query(ctx, random, arg.TagIDs, arg.ContribIDs, arg.LanguageID)
+	rows, err := q.db.Query(ctx, random, arg.Tags, arg.Contribs, arg.Langs)
 	if err != nil {
 		return nil, err
 	}

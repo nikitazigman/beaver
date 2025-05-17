@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW scripts_details AS
 SELECT
     scripts.id as script_id,
     scripts.title as script_title,
-    scripts.code as script_code ,
+    scripts.code as script_code,
     scripts.link_to_project as script_link_to_project,
     scripts.updated_at as script_updated_at,
     scripts.created_at as script_created_at,
