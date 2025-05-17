@@ -17,7 +17,7 @@ func New(host, user, password, dbname string, port int) *pgxpool.Pool {
 
 	pool, err := pgxpool.New(context.Background(), url)
 	if err != nil {
-		log.Fatal("Cannot establish connection with the database", host, dbname, user, port)
+		log.Fatalf("Cannot establish connection with the database host=%s, db_name=%s, port=%d, name=%s", host, dbname, port, user)
 	}
 
 	return pool

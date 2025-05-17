@@ -10,8 +10,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const loggerKey string = "logger"
-
 func LoggerMiddleware(logger *zap.SugaredLogger) func(next http.Handler) http.Handler {
 	if logger == nil {
 		log.Panic("Logger was not provided to the logger middleware")

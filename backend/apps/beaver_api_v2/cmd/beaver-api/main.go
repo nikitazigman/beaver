@@ -32,6 +32,8 @@ type Config struct {
 	Debug    bool `envconfig:"DEBUG"`
 	PageSize int  `envconfig:"PAGESIZE" default:"10"`
 
+	Secret string `envconfig:"SECRET"`
+
 	ServerPort         int           `envconfig:"SERVER_PORT"`
 	ServerTimeoutRead  time.Duration `envconfig:"SERVER_TIMEOUT_READ" default:"3s"`
 	ServerTimeoutWrite time.Duration `envconfig:"SERVER_TIMEOUT_WRITE" default:"5s"`
@@ -70,11 +72,18 @@ func NewController(config *Config, pool *pgxpool.Pool, logger *zap.SugaredLogger
 	r.Use(middleware.Recoverer)
 
 	r.Route("/api/v1", func(r chi.Router) {
-		tagApp.New(r, tagService)
-		languageApp.New(r, langService)
-		contributorApp.New(r, contribService)
-		scriptDetailApp.New(r, scriptDetailService)
-		loaderApp.New(r, loaderService)
+		// public routes
+		r.Group(func(r chi.Router) {
+			tagApp.New(r, tagService)
+			languageApp.New(r, langService)
+			contributorApp.New(r, contribService)
+			scriptDetailApp.New(r, scriptDetailService)
+		})
+		// private routes
+		r.Group(func(r chi.Router) {
+			r.Use(beaverMiddleware.TokenAuthMiddleware(config.Secret))
+			loaderApp.New(r, loaderService)
+		})
 	})
 	return r
 }
