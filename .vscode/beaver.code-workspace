@@ -1,5 +1,5 @@
 {
-    "folders": [
+	"folders": [
 		{
 			"name": "IaC",
 			"path": "../IaC"
@@ -27,11 +27,14 @@
 		{
 			"name": "python",
 			"path": "../dataset/python"
+		},
+		{
+			"name": "beaver_api_v2",
+			"path": "../backend/apps/beaver_api_v2"
 		}
 	],
 	"settings": {
 		"ruff.enable": true,
-		"ruff.lint.run": "onSave",
 		"[python]": {
 			"editor.defaultFormatter": "charliermarsh.ruff",
 			"editor.formatOnSave": true,
@@ -39,6 +42,9 @@
 				"source.fixAll.ruff": "explicit",
 				"source.organizeImports.ruff": "explicit"
 			}
+		},
+		"[go]": {
+			"editor.formatOnSave": true
 		},
 		"python.testing.unittestEnabled": false,
 		"python.testing.pytestEnabled": true,
@@ -56,21 +62,31 @@
 			"fargate",
 			"awslogs",
 			"appautoscaling",
-			"cooldown"
+			"cooldown",
+			"pgtype",
+			"tagdb",
+			"tagbus",
+			"DBSTRING",
+			"languagedb",
+			"languagebus",
+			"contributordb",
+			"scriptdb"
 		]
 	},
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [
 			{
-                "name": "Python: Debug Tests",
-                "type": "debugpy",
-                "request": "launch",
-                "program": "${file}",
-                "purpose": ["debug-test"],
-                "console": "integratedTerminal",
-                "justMyCode": false
-            }
+				"name": "Python: Debug Tests",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${file}",
+				"purpose": [
+					"debug-test"
+				],
+				"console": "integratedTerminal",
+				"justMyCode": false
+			}
 		]
 	}
 }
