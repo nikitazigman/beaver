@@ -1,0 +1,76 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "internal/db/contributor/queries"
+    schema: "internal/db/contributor/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "contributor"
+        out: "internal/db/contributor"
+        overrides:
+          - db_type: "uuid"
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
+
+  - engine: "postgresql"
+    queries: "internal/db/tag/queries"
+    schema: "internal/db/tag/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "tag"
+        out: "internal/db/tag"
+        overrides:
+          - db_type: "uuid"
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
+
+  - engine: "postgresql"
+    queries: "internal/db/language/queries"
+    schema: "internal/db/language/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "language"
+        out: "internal/db/language"
+        overrides:
+          - db_type: "uuid"
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
+
+  - engine: "postgresql"
+    queries: "internal/db/script/queries"
+    schema: "internal/db/script/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "script"
+        out: "internal/db/script"
+        overrides:
+          - db_type: "uuid"
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
+
+  - engine: "postgresql"
+    queries: "internal/db/scriptdetail/queries"
+    schema:
+      - "internal/db/contributor/migrations"
+      - "internal/db/tag/migrations"
+      - "internal/db/language/migrations"
+      - "internal/db/script/migrations"
+      - "internal/db/scriptdetail/migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "scriptdetail"
+        out: "internal/db/scriptdetail"
+        overrides:
+          - db_type: "uuid"
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
