@@ -1,6 +1,8 @@
 package script
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -19,4 +21,5 @@ type UpsertScript struct {
 	Code          string
 	LinkToProject string
 	LanguageID    uuid.UUID
+	CreatedAt     time.Time
 }

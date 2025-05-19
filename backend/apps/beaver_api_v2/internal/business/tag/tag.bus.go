@@ -80,16 +80,10 @@ func (ts *Service) GetOrCreate(ctx context.Context, db pgx.Tx, name string) (uui
 	return uuid, nil
 }
 
-func (ts *Service) Delete(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
+func (ts *Service) KeepOnly(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
 	repo := tag.New(db)
-
-	var tagErr error
-	repo.Delete(ctx, ids).Exec(func(i int, err error) {
-		if err != nil {
-			// TODO check when error in the middle
-			tagErr = err
-		}
-	})
-
-	return tagErr
+	if err := repo.KeepOnly(ctx, ids); err != nil {
+		return err
+	}
+	return nil
 }

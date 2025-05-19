@@ -21,6 +21,10 @@ type POSTUpdateScriptDTO struct {
 	LastSync      string `json:"last_synchronization"`
 }
 
+type POSTDeleteScriptDTO struct {
+	Timestamp string `json:"timestamp"`
+}
+
 func toScriptDetail(dto []POSTUpdateScriptDTO) ([]loader.Script, time.Time, error) {
 	timestamp, err := time.Parse("2006-01-02 15:04:05.999999-07:00", dto[0].LastSync)
 	if err != nil {
@@ -43,4 +47,12 @@ func toScriptDetail(dto []POSTUpdateScriptDTO) ([]loader.Script, time.Time, erro
 		}
 	}
 	return sd, timestamp, nil
+}
+
+func toTimestamp(dto POSTDeleteScriptDTO) (time.Time, error) {
+	timestamp, err := time.Parse("2006-01-02 15:04:05.999999-07:00", dto.Timestamp)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return timestamp, nil
 }

@@ -24,7 +24,6 @@ func LoggerMiddleware(logger *zap.SugaredLogger) func(next http.Handler) http.Ha
 				zap.String("proto", r.Proto),
 				zap.String("path", r.URL.Path),
 				zap.String("request_id", requestId),
-				zap.String("query_args", r.URL.Query().Encode()),
 			)
 			ctx := context.WithValue(r.Context(), loggerKey, reqLogger)
 

@@ -72,18 +72,19 @@ func NewController(config *Config, pool *pgxpool.Pool, logger *zap.SugaredLogger
 	r.Use(middleware.Recoverer)
 
 	r.Route("/api/v1", func(r chi.Router) {
-		// public routes
-		r.Group(func(r chi.Router) {
-			tagApp.New(r, tagService)
-			languageApp.New(r, langService)
-			contributorApp.New(r, contribService)
+		tagApp.New(r, tagService)
+		languageApp.New(r, langService)
+		contributorApp.New(r, contribService)
+
+		r.Route("/code_documents", func(r chi.Router) {
 			scriptDetailApp.New(r, scriptDetailService)
+			// Private route
+			r.Group(func(r chi.Router) {
+				r.Use(beaverMiddleware.TokenAuthMiddleware(config.Secret))
+				loaderApp.New(r, loaderService)
+			})
 		})
-		// private routes
-		r.Group(func(r chi.Router) {
-			r.Use(beaverMiddleware.TokenAuthMiddleware(config.Secret))
-			loaderApp.New(r, loaderService)
-		})
+
 	})
 	return r
 }

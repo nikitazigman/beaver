@@ -8,6 +8,5 @@ import (
 
 func New(r chi.Router, s *biz.Service) {
 	ctrl := new(s)
-
-	r.Get("/code_documents/code_document/", ctrl.GetRandomScript)
+	r.Get("/code_document/", ctrl.GetRandomScript)
 }

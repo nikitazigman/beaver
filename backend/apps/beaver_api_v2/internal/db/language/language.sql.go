@@ -34,6 +34,15 @@ func (q *Queries) GetID(ctx context.Context, name pgtype.Text) (uuid.UUID, error
 	return id, err
 }
 
+const keepOnly = `-- name: KeepOnly :exec
+DELETE FROM languages WHERE NOT (id = ANY($1::UUID[]))
+`
+
+func (q *Queries) KeepOnly(ctx context.Context, ids []uuid.UUID) error {
+	_, err := q.db.Exec(ctx, keepOnly, ids)
+	return err
+}
+
 const list = `-- name: List :many
 SELECT id, created_at, updated_at, name FROM languages OFFSET $1 LIMIT $2
 `

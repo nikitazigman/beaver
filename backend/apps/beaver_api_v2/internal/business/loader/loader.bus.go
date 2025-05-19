@@ -5,6 +5,7 @@ import (
 	"beaver-api/internal/business/language"
 	"beaver-api/internal/business/script"
 	"beaver-api/internal/business/tag"
+	"beaver-api/utils/middleware"
 	"context"
 	"errors"
 	"fmt"
@@ -76,6 +77,7 @@ func (s *Service) LoadScripts(ctx context.Context, db pgx.Tx, scripts []Script, 
 			Code:          sl.code,
 			LinkToProject: sl.linkToProject,
 			LanguageID:    lID,
+			CreatedAt:     timestamp,
 		}
 		scriptID, err := s.scriptService.Upsert(ctx, db, sc)
 		if err != nil {
@@ -113,6 +115,40 @@ func (s *Service) LoadScripts(ctx context.Context, db pgx.Tx, scripts []Script, 
 	return nil
 }
 
-func (s *Service) RemoveOldScripts(ctx context.Context, timestamp time.Time) error {
+func (s *Service) RemoveOldScripts(ctx context.Context, db pgx.Tx, timestamp time.Time) error {
+	logger := middleware.GetLoggerFromContext(ctx)
+
+	if err := s.scriptService.DeleteScripts(ctx, db, timestamp); err != nil {
+		return err
+	}
+
+	langs, err := s.scriptService.Languages(ctx, db)
+	if err != nil {
+		return err
+	}
+
+	tags, err := s.scriptService.LinkedTags(ctx, db)
+	if err != nil {
+		return err
+	}
+
+	contribs, err := s.scriptService.LinkedContributors(ctx, db)
+	if err != nil {
+		return err
+	}
+
+	logger.Infow("Needs to keep the following objects", "langs", langs, "tags", tags, "contribs", contribs, "timestamp", timestamp.String())
+	if err := s.langService.KeepOnly(ctx, db, langs); err != nil {
+		return err
+	}
+
+	if err := s.tagService.KeepOnly(ctx, db, tags); err != nil {
+		return err
+	}
+
+	if err := s.contribService.KeepOnly(ctx, db, contribs); err != nil {
+		return err
+	}
+
 	return nil
 }

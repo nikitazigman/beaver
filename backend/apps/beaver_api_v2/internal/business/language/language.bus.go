@@ -78,16 +78,10 @@ func (s *Service) Upsert(ctx context.Context, db pgx.Tx, name string) (uuid.UUID
 	return uuid, nil
 }
 
-func (s *Service) Delete(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
+func (s *Service) KeepOnly(ctx context.Context, db pgx.Tx, ids []uuid.UUID) error {
 	repo := language.New(db)
-
-	var lErr error
-	repo.Delete(ctx, ids).Exec(func(i int, err error) {
-		if err != nil {
-			// TODO check when error in the middle
-			lErr = err
-		}
-	})
-
-	return lErr
+	if err := repo.KeepOnly(ctx, ids); err != nil {
+		return err
+	}
+	return nil
 }

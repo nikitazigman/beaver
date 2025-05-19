@@ -12,6 +12,15 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const delete = `-- name: Delete :exec
+DELETE FROM scripts WHERE created_at < $1
+`
+
+func (q *Queries) Delete(ctx context.Context, createdAt pgtype.Timestamptz) error {
+	_, err := q.db.Exec(ctx, delete, createdAt)
+	return err
+}
+
 const getID = `-- name: GetID :one
 SELECT id FROM scripts WHERE title=$1
 `
@@ -21,6 +30,30 @@ func (q *Queries) GetID(ctx context.Context, title pgtype.Text) (uuid.UUID, erro
 	var id uuid.UUID
 	err := row.Scan(&id)
 	return id, err
+}
+
+const languages = `-- name: Languages :many
+SELECT DISTINCT(language_id) from scripts
+`
+
+func (q *Queries) Languages(ctx context.Context) ([]pgtype.UUID, error) {
+	rows, err := q.db.Query(ctx, languages)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []pgtype.UUID
+	for rows.Next() {
+		var language_id pgtype.UUID
+		if err := rows.Scan(&language_id); err != nil {
+			return nil, err
+		}
+		items = append(items, language_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const linkContrib = `-- name: LinkContrib :exec
@@ -51,8 +84,57 @@ func (q *Queries) LinkTag(ctx context.Context, arg LinkTagParams) error {
 	return err
 }
 
+const linkedContributors = `-- name: LinkedContributors :many
+SELECT DISTINCT(contributor_id) FROM contributors_scripts
+`
+
+func (q *Queries) LinkedContributors(ctx context.Context) ([]pgtype.UUID, error) {
+	rows, err := q.db.Query(ctx, linkedContributors)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []pgtype.UUID
+	for rows.Next() {
+		var contributor_id pgtype.UUID
+		if err := rows.Scan(&contributor_id); err != nil {
+			return nil, err
+		}
+		items = append(items, contributor_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const linkedTags = `-- name: LinkedTags :many
+SELECT DISTINCT(tag_id) FROM tags_scripts
+`
+
+func (q *Queries) LinkedTags(ctx context.Context) ([]pgtype.UUID, error) {
+	rows, err := q.db.Query(ctx, linkedTags)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []pgtype.UUID
+	for rows.Next() {
+		var tag_id pgtype.UUID
+		if err := rows.Scan(&tag_id); err != nil {
+			return nil, err
+		}
+		items = append(items, tag_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const upsert = `-- name: Upsert :exec
-INSERT INTO scripts (title, code, link_to_project, language_id) VALUES($1, $2, $3, $4) ON CONFLICT (title) DO NOTHING
+INSERT INTO scripts (title, code, link_to_project, language_id, created_at) VALUES($1, $2, $3, $4, $5)
+ON CONFLICT (title) DO UPDATE SET created_at = EXCLUDED.created_at
 `
 
 type UpsertParams struct {
@@ -60,6 +142,7 @@ type UpsertParams struct {
 	Code          pgtype.Text
 	LinkToProject pgtype.Text
 	LanguageID    pgtype.UUID
+	CreatedAt     pgtype.Timestamptz
 }
 
 func (q *Queries) Upsert(ctx context.Context, arg UpsertParams) error {
@@ -68,6 +151,7 @@ func (q *Queries) Upsert(ctx context.Context, arg UpsertParams) error {
 		arg.Code,
 		arg.LinkToProject,
 		arg.LanguageID,
+		arg.CreatedAt,
 	)
 	return err
 }

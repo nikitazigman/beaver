@@ -8,6 +8,6 @@ import (
 
 func New(r chi.Router, s *loader.Service) {
 	ctrl := new(s)
-
-	r.Post("/code_documents/bulk_update/", ctrl.LoadScripts)
+	r.Post("/bulk_update/", ctrl.LoadScripts)
+	r.Post("/bulk_delete/", ctrl.DeleteScripts)
 }

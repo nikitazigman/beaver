@@ -8,5 +8,5 @@ INSERT INTO contributors (name, last_name, email_address) VALUES($1, $2, $3) ON 
 -- name: GetID :one
 SELECT id FROM contributors WHERE email_address=$1;
 
--- name: Delete :batchexec
-DELETE FROM contributors WHERE id = $1;
+-- name: KeepOnly :exec
+DELETE FROM contributors WHERE NOT (id = ANY(sqlc.narg('ids')::UUID[]));

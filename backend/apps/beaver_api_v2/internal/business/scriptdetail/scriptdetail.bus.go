@@ -2,7 +2,6 @@ package scriptdetail
 
 import (
 	"beaver-api/internal/db/scriptdetail"
-	"beaver-api/utils/middleware"
 	"context"
 	"errors"
 
@@ -16,8 +15,6 @@ func New() *Service {
 }
 
 func (s *Service) GetRandomScriptDetail(ctx context.Context, db pgx.Tx, tags []string, contributors []string, languages []string) (ScriptDetail, error) {
-	logger := middleware.GetLoggerFromContext(ctx)
-
 	repo := scriptdetail.New(db)
 	qp := scriptdetail.RandomParams{
 		Tags:     tags,
@@ -26,7 +23,6 @@ func (s *Service) GetRandomScriptDetail(ctx context.Context, db pgx.Tx, tags []s
 	}
 
 	dbScripts, err := repo.Random(ctx, qp)
-	logger.Infow("DB response", "rows", dbScripts)
 	if err != nil {
 		return ScriptDetail{}, err
 	}

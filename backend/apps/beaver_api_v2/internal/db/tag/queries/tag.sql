@@ -8,8 +8,8 @@ INSERT INTO tags (name) VALUES($1) ON CONFLICT (name) DO NOTHING;
 -- name: GetID :one
 SELECT id FROM tags WHERE name=$1;
 
--- name: Delete :batchexec
-DELETE FROM tags WHERE id = $1;
+-- name: KeepOnly :exec
+DELETE FROM tags WHERE NOT (id = ANY(sqlc.narg('ids')::UUID[]));
 
 -- name: Count :one
 SELECT COUNT(*) FROM tags;
