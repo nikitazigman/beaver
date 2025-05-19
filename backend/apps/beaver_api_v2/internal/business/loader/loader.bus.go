@@ -137,7 +137,6 @@ func (s *Service) RemoveOldScripts(ctx context.Context, db pgx.Tx, timestamp tim
 		return err
 	}
 
-	logger.Infow("Needs to keep the following objects", "langs", langs, "tags", tags, "contribs", contribs, "timestamp", timestamp.String())
 	if err := s.langService.KeepOnly(ctx, db, langs); err != nil {
 		return err
 	}
