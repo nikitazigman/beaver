@@ -5,7 +5,6 @@ import (
 	"beaver-api/internal/business/language"
 	"beaver-api/internal/business/script"
 	"beaver-api/internal/business/tag"
-	"beaver-api/utils/middleware"
 	"context"
 	"errors"
 	"fmt"
@@ -116,8 +115,6 @@ func (s *Service) LoadScripts(ctx context.Context, db pgx.Tx, scripts []Script, 
 }
 
 func (s *Service) RemoveOldScripts(ctx context.Context, db pgx.Tx, timestamp time.Time) error {
-	logger := middleware.GetLoggerFromContext(ctx)
-
 	if err := s.scriptService.DeleteScripts(ctx, db, timestamp); err != nil {
 		return err
 	}

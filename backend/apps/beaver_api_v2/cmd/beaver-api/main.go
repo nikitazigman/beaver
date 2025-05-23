@@ -39,11 +39,12 @@ type Config struct {
 	ServerTimeoutWrite time.Duration `envconfig:"SERVER_TIMEOUT_WRITE" default:"5s"`
 	ServerTimeoutIdle  time.Duration `envconfig:"SERVER_TIMEOUT_IDLE" default:"5s"`
 
-	DBHost string `envconfig:"DB_HOST"`
-	DBPort int    `envconfig:"DB_PORT"`
-	DBUser string `envconfig:"DB_USER"`
-	DBPass string `envconfig:"DB_PASS"`
-	DBName string `envconfig:"DB_NAME"`
+	DBHost    string `envconfig:"DB_HOST"`
+	DBPort    int    `envconfig:"DB_PORT"`
+	DBUser    string `envconfig:"DB_USER"`
+	DBPass    string `envconfig:"DB_PASS"`
+	DBName    string `envconfig:"DB_NAME"`
+	DBSSLMode string `envconfig:"DB_SSL_MODE"`
 }
 
 func NewConfig() *Config {
@@ -66,12 +67,18 @@ func NewController(config *Config, pool *pgxpool.Pool, logger *zap.SugaredLogger
 	loaderService := loader.New(scriptService, tagService, contribService, langService)
 
 	r := chi.NewRouter()
+
 	r.Use(middleware.RequestID)
 	r.Use(beaverMiddleware.LoggerMiddleware(logger))
-	r.Use(beaverMiddleware.TransactionMiddleware(pool))
 	r.Use(middleware.Recoverer)
 
+	r.Get("/ping/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	r.Route("/api/v1", func(r chi.Router) {
+		r.Use(beaverMiddleware.TransactionMiddleware(pool))
+
 		tagApp.New(r, tagService)
 		languageApp.New(r, langService)
 		contributorApp.New(r, contribService)
@@ -95,13 +102,13 @@ func main() {
 	logger := logger.New(config.Debug)
 	defer logger.Sync()
 
-	pool := db.New(config.DBHost, config.DBUser, config.DBPass, config.DBName, config.DBPort)
+	pool := db.New(config.DBHost, config.DBUser, config.DBPass, config.DBName, config.DBSSLMode, config.DBPort)
 	defer pool.Close()
 
 	controller := NewController(config, pool, logger)
 
 	s := &http.Server{
-		Addr:         fmt.Sprintf(":%d", 8000),
+		Addr:         fmt.Sprintf(":%d", config.ServerPort),
 		Handler:      controller,
 		ReadTimeout:  config.ServerTimeoutRead,
 		WriteTimeout: config.ServerTimeoutWrite,

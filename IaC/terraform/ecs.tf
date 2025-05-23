@@ -17,38 +17,57 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = "beaver-api"
-      image     = "public.ecr.aws/d0s9n5w1/beaver-api:latest",
+      image     = var.docker_image_api,
       cpu       = var.fargate_cpu,
       memory    = var.fargate_memory,
       essential = true,
-      command   = ["sh", "start.sh"],
       environment = [
         {
           "name" : "DEBUG",
-          "value" : "False"
+          "value" : "false"
         },
         {
-          "name" : "ALLOWED_HOSTS",
-          "value" : "*"
+          "name" : "SECRET",
+          "value" : var.api_secret
         },
         {
-          "name" : "RDS_DB_NAME",
-          "value" : var.rds_db_name
+          "name" : "SERVER_PORT",
+          "value" : "8000"
         },
         {
-          "name" : "RDS_USERNAME",
-          "value" : var.rds_username
+          "name" : "SERVER_TIMEOUT_READ",
+          "value" : "3s"
         },
         {
-          "name" : "RDS_PASSWORD",
-          "value" : var.rds_password
+          "name" : "SERVER_TIMEOUT_WRITE",
+          "value" : "5s"
         },
         {
-          "name" : "RDS_HOSTNAME",
-          "value" : var.rds_hostname
+          "name" : "SERVER_TIMEOUT_IDLE",
+          "value" : "5s"
         },
         {
-          "name" : "RDS_PORT",
+          "name" : "DB_NAME",
+          "value" : var.db_name
+        },
+        {
+          "name" : "DB_USER",
+          "value" : var.db_username
+        },
+        {
+          "name" : "DB_PASS",
+          "value" : var.db_password
+        },
+        {
+          "name" : "DB_HOST",
+          "value" : var.db_hostname
+        },
+        {
+          "name" : "DB_SSL_MODE",
+          "value" : "require"
+        },
+        {
+          "name" : "DB_PORT",
           "value" : "5432"
         }
       ],
