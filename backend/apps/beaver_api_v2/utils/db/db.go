@@ -9,15 +9,21 @@ import (
 )
 
 const (
-	fmtDBString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
+	fmtDBString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=%s"
 )
 
-func New(host, user, password, dbname string, port int) *pgxpool.Pool {
-	url := fmt.Sprintf(fmtDBString, host, user, password, dbname, port)
+func New(host, user, password, dbname, sslmode string, port int) *pgxpool.Pool {
+	url := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s", host, user, password, dbname, port, sslmode)
 
-	pool, err := pgxpool.New(context.Background(), url)
+	ctx := context.Background()
+	pool, err := pgxpool.New(ctx, url)
 	if err != nil {
-		log.Fatalf("Cannot establish connection with the database host=%s, db_name=%s, port=%d, name=%s", host, dbname, port, user)
+		log.Fatalf("Failed to create connection pool: %v", err)
+	}
+
+	// Validate DB connectivity
+	if err := pool.Ping(ctx); err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
 	return pool
