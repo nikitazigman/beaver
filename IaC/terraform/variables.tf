@@ -24,9 +24,9 @@ variable "log_retention_in_days" {
   default = 1
 }
 
-variable "docker_image_url_django" {
+variable "docker_image_api" {
   description = "Docker image to run in the ECS cluster"
-  default     = "public.ecr.aws/d0s9n5w1/beaver-api:latest"
+  default     = "public.ecr.aws/d0s9n5w1/beaver-api-v2:latest"
 }
 
 
@@ -56,29 +56,27 @@ variable "autoscale_min" {
 }
 
 
-
-variable "rds_db_name" {
-  description = "RDS database name"
-  default     = "neondb"
+variable "db_name" {
+  description = "DB database name"
+  default     = "beaver"
 }
 
-variable "rds_username" {
-  description = "RDS database username"
-  default     = "neondb_owner"
+variable "db_username" {
+  description = "DB database username"
+  default     = "beaver_owner"
 }
 
-variable "rds_password" {
-  description = "RDS database password"
+variable "db_password" {
+  description = "DB database password"
 }
 
-variable "rds_hostname" {
-  description = "RDS database hostname"
-  default     = "ep-misty-truth-abg82yf3-pooler.eu-west-2.aws.neon.tech"
+variable "api_secret" {
+  description = "API secret"
 }
 
-variable "rds_instance_class" {
-  description = "RDS instance type"
-  default     = "db.t4g.micro"
+variable "db_hostname" {
+  description = "DB database hostname"
+  default     = "ep-super-rice-abzeq4un-pooler.eu-west-2.aws.neon.tech"
 }
 
 variable "certificate_arn" {
@@ -95,9 +93,4 @@ variable "domain_name" {
 variable "record_name" {
   description = "Subdomain name for the hosted zone"
   default     = ""
-}
-
-variable "docker_image_url_nginx" {
-  description = "Docker nginx image to run in the ECS cluster"
-  default     = "public.ecr.aws/d0s9n5w1/beaver-nginx:latest"
 }

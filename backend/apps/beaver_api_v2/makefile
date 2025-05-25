@@ -5,7 +5,7 @@ TAG_MIGRATION_DIR := ./internal/db/tag/migrations/
 CONTRIBUTOR_MIGRATION_DIR := ./internal/db/contributor/migrations/
 LANGUAGE_MIGRATION_DIR := ./internal/db/language/migrations/
 GOOSE_DRIVER := postgres
-GOOSE_DBSTRING := ${GOOSE_DRIVER}://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
+GOOSE_DBSTRING := postgresql://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSL_MODE)
 SQL_FILE=./utils/demo_data.sql
 TMP_DIR=./tmp/migrations
 
