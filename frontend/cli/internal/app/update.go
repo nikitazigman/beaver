@@ -28,6 +28,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.currentScreen = ScreenTyping
 		m.err = nil
 
+		// Reset typing state
+		m.cursorPos = 0
+		m.userInput = make([]rune, 0)
+		m.isTyping = false
+		m.errorPos = make(map[int]bool)
+		m.typingEvents = make([]time.Time, 0)
+		m.errorEvents = make([]time.Time, 0)
+		m.corrections = 0
+		m.startTime = time.Time{}
+		m.endTime = time.Time{}
+
 		// Highlight the code
 		if m.algorithm != nil {
 			highlighted, err := m.highlighter.Highlight(m.algorithm.Code, m.algorithm.Language)
@@ -39,6 +50,30 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 
+		return m, nil
+
+	// Typing events
+	case startTypingMsg:
+		m.isTyping = true
+		m.startTime = msg.timestamp
+		return m, nil
+
+	case correctCharMsg:
+		m.typingEvents = append(m.typingEvents, msg.timestamp)
+		return m, nil
+
+	case errorCharMsg:
+		m.errorEvents = append(m.errorEvents, msg.timestamp)
+		m.errorPos[m.cursorPos] = true
+		return m, nil
+
+	case correctionMsg:
+		m.corrections++
+		return m, nil
+
+	case completionMsg:
+		m.endTime = msg.timestamp
+		m.currentScreen = ScreenResults
 		return m, nil
 
 	// Error loading algorithm
@@ -113,22 +148,99 @@ func (m Model) handleLoadingKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 // handleTypingKeys handles keys during typing practice
 func (m Model) handleTypingKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.String() {
-	case "tab":
+	// If no algorithm loaded, do nothing
+	if m.algorithm == nil {
+		return m, nil
+	}
+
+	codeRunes := []rune(m.algorithm.Code)
+
+	switch msg.Type {
+	case tea.KeyTab:
 		if !m.isTyping {
 			// Skip to next algorithm
 			m.currentScreen = ScreenLoading
 			return m, m.fetchAlgorithm()
 		}
-		// During typing, tab inserts spaces (handled in character input)
+		// During typing, insert tab as spaces
+		return m.handleCharacterInput('\t', codeRunes)
 
-	case "esc":
-		// Pause or return to menu (optional)
+	case tea.KeyEsc:
+		// Pause or return to menu
+		return m, nil
+
+	case tea.KeyBackspace:
+		return m.handleBackspace(codeRunes)
+
+	case tea.KeyEnter:
+		return m.handleCharacterInput('\n', codeRunes)
+
+	case tea.KeySpace:
+		return m.handleCharacterInput(' ', codeRunes)
+
+	case tea.KeyRunes:
+		// Handle regular character input
+		if len(msg.Runes) > 0 {
+			return m.handleCharacterInput(msg.Runes[0], codeRunes)
+		}
+	}
+
+	return m, nil
+}
+
+// handleCharacterInput processes a single character input
+func (m Model) handleCharacterInput(char rune, codeRunes []rune) (tea.Model, tea.Cmd) {
+	// Start typing on first character
+	if !m.isTyping {
+		m.isTyping = true
+		m.startTime = time.Now()
+	}
+
+	// Check if we've reached the end
+	if m.cursorPos >= len(codeRunes) {
 		return m, nil
 	}
 
-	// Handle character input
-	// TODO: Implement character-by-character validation
+	expected := codeRunes[m.cursorPos]
+
+	// Handle tab as 4 spaces or actual tab
+	if char == '\t' {
+		char = '\t' // Keep as tab for comparison
+	}
+
+	// Compare character
+	if char == expected {
+		// Correct character
+		m.userInput = append(m.userInput, char)
+		m.cursorPos++
+		m.typingEvents = append(m.typingEvents, time.Now())
+
+		// Check if completed
+		if m.cursorPos >= len(codeRunes) {
+			m.endTime = time.Now()
+			m.currentScreen = ScreenResults
+		}
+
+		return m, nil
+	} else {
+		// Incorrect character
+		m.errorPos[m.cursorPos] = true
+		m.errorEvents = append(m.errorEvents, time.Now())
+		return m, nil
+	}
+}
+
+// handleBackspace processes backspace key
+func (m Model) handleBackspace(codeRunes []rune) (tea.Model, tea.Cmd) {
+	if m.cursorPos > 0 {
+		m.cursorPos--
+		if len(m.userInput) > 0 {
+			m.userInput = m.userInput[:len(m.userInput)-1]
+		}
+		// Clear error at this position
+		delete(m.errorPos, m.cursorPos)
+		m.corrections++
+	}
 	return m, nil
 }
 

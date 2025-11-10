@@ -21,6 +21,30 @@ type algorithmErrorMsg struct {
 	err error
 }
 
+// Typing messages
+type startTypingMsg struct {
+	timestamp time.Time
+}
+
+type correctCharMsg struct {
+	char      rune
+	timestamp time.Time
+}
+
+type errorCharMsg struct {
+	expected  rune
+	actual    rune
+	timestamp time.Time
+}
+
+type correctionMsg struct {
+	timestamp time.Time
+}
+
+type completionMsg struct {
+	timestamp time.Time
+}
+
 // Screen represents the current active screen
 type Screen int
 
@@ -49,6 +73,7 @@ type Model struct {
 	isTyping    bool      // Whether user has started typing
 	startTime   time.Time
 	endTime     time.Time
+	errorPos    map[int]bool // Positions where errors occurred
 
 	// Statistics tracking
 	typingEvents []time.Time // Timestamps of correct keypresses
@@ -93,6 +118,8 @@ func NewModel(config *models.Config, apiClient *services.APIClient) Model {
 		typingEvents:  make([]time.Time, 0),
 		errorEvents:   make([]time.Time, 0),
 		corrections:   0,
+		errorPos:      make(map[int]bool),
+		userInput:     make([]rune, 0),
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/beaver-app/beaver-cli/internal/components"
 )
 
 // View renders the UI based on current model state
@@ -67,14 +68,17 @@ func (m Model) renderTyping() string {
 		}
 		s += "\n\n"
 
-		// Display highlighted code in viewport-like area
+		// Display code with cursor and error highlighting
 		codeStyle := lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(lipgloss.Color("238")).
 			Padding(0, 1)
 
-		codeContent := ""
-		if m.highlightedCode != "" {
+		// Use cursor renderer if typing, otherwise show highlighted code
+		var codeContent string
+		if m.isTyping || m.cursorPos > 0 {
+			codeContent = components.RenderCodeWithCursor(m.algorithm.Code, m.cursorPos, m.userInput, m.errorPos)
+		} else if m.highlightedCode != "" {
 			codeContent = m.highlightedCode
 		} else {
 			codeContent = m.algorithm.Code
@@ -83,7 +87,7 @@ func (m Model) renderTyping() string {
 		s += codeStyle.Render(codeContent)
 		s += "\n\n"
 
-		// Status message
+		// Status message with progress and stats
 		if !m.isTyping {
 			statusStyle := lipgloss.NewStyle().
 				Foreground(lipgloss.Color("42")).
@@ -91,9 +95,13 @@ func (m Model) renderTyping() string {
 			s += statusStyle.Render("  ▶ Start typing to begin...")
 		} else {
 			// Show progress
-			progress := float64(m.cursorPos) / float64(len([]rune(m.algorithm.Code))) * 100
+			totalChars := len([]rune(m.algorithm.Code))
+			progress := float64(m.cursorPos) / float64(totalChars) * 100
+			errors := len(m.errorPos)
+
 			statusStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("33"))
-			s += statusStyle.Render(fmt.Sprintf("  Progress: %.1f%%", progress))
+			s += statusStyle.Render(fmt.Sprintf("  Progress: %.1f%% | Errors: %d | Corrections: %d",
+				progress, errors, m.corrections))
 		}
 		s += "\n"
 	} else {
@@ -109,15 +117,60 @@ func (m Model) renderResults() string {
 	var s string
 	s += m.renderHeader()
 	s += "\n\n"
-	s += "  Results\n"
-	s += "  -------\n"
+
+	titleStyle := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("205")).
+		Bold(true)
+	s += titleStyle.Render("  Results")
 	s += "\n"
-	s += "  WPM: --\n"
-	s += "  Accuracy: --%\n"
-	s += "  Time: --s\n"
+	s += lipgloss.NewStyle().Foreground(lipgloss.Color("240")).Render("  -------")
+	s += "\n\n"
+
+	// Calculate statistics
+	duration := m.endTime.Sub(m.startTime).Seconds()
+	totalChars := 0
+	if m.algorithm != nil {
+		totalChars = len([]rune(m.algorithm.Code))
+	}
+	words := float64(totalChars) / 5.0 // Standard: 5 chars = 1 word
+	wpm := 0.0
+	if duration > 0 {
+		wpm = (words / duration) * 60.0
+	}
+
+	correctChars := len(m.typingEvents)
+	totalAttempts := correctChars + len(m.errorEvents)
+	accuracy := 100.0
+	if totalAttempts > 0 {
+		accuracy = (float64(correctChars) / float64(totalAttempts)) * 100.0
+	}
+
+	// Display stats
+	statStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("42"))
+	s += statStyle.Render(fmt.Sprintf("  WPM: %.1f", wpm))
 	s += "\n"
-	s += "  Press Tab/Enter/Space for next algorithm\n"
+	s += statStyle.Render(fmt.Sprintf("  Accuracy: %.1f%%", accuracy))
 	s += "\n"
+	s += statStyle.Render(fmt.Sprintf("  Time: %.1fs", duration))
+	s += "\n"
+	s += statStyle.Render(fmt.Sprintf("  Errors: %d", len(m.errorPos)))
+	s += "\n"
+	s += statStyle.Render(fmt.Sprintf("  Corrections: %d", m.corrections))
+	s += "\n\n"
+
+	// Show algorithm info
+	if m.algorithm != nil {
+		infoStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+		s += infoStyle.Render(fmt.Sprintf("  Algorithm: %s (%s)", m.algorithm.Title, m.algorithm.Language))
+		s += "\n\n"
+	}
+
+	actionStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("33"))
+	s += actionStyle.Render("  Press Tab/Enter/Space for next algorithm")
+	s += "\n"
+	s += actionStyle.Render("  Press 'r' to retry this algorithm")
+	s += "\n\n"
+
 	s += m.renderFooter()
 	return s
 }

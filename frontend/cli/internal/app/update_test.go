@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/beaver-app/beaver-cli/internal/models"
 	"github.com/beaver-app/beaver-cli/internal/services"
+	"github.com/google/uuid"
 )
 
 func TestUpdate_WindowSizeMsg(t *testing.T) {
@@ -255,6 +256,13 @@ func TestHandleTypingKeys_Tab(t *testing.T) {
 	model := NewModel(config, apiClient)
 	model.currentScreen = ScreenTyping
 	model.isTyping = false // Not started typing
+	// Need an algorithm for the handler to work
+	model.algorithm = &models.CodeDocument{
+		ID:       uuid.New(),
+		Title:    "Test",
+		Code:     "test code",
+		Language: "go",
+	}
 
 	msg := tea.KeyMsg{Type: tea.KeyTab}
 	newModel, cmd := model.Update(msg)
