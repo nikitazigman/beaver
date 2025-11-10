@@ -154,14 +154,15 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-009: Implement HTTP Client
 - **Priority**: Critical
 - **Estimate**: 3 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/services/api.go`
-  - [ ] Implement NewAPIClient() with timeout and connection pooling
-  - [ ] Implement FetchRandom(filters) method
-  - [ ] Implement ListLanguages() method
-  - [ ] Implement ListTags() method
-  - [ ] Add error handling and retries
-  - [ ] Write unit tests with mock HTTP server
+  - [x] Create `internal/services/api.go`
+  - [x] Implement NewAPIClient() with timeout and connection pooling
+  - [x] Implement FetchRandom(filters) method
+  - [x] Implement ListLanguages() method
+  - [x] Implement ListTags() method
+  - [x] Add error handling and retries (basic error handling, retries via prefetch)
+  - [x] Write unit tests with mock HTTP server
 
 ##### TICKET-010: Test API Integration
 - **Priority**: High
