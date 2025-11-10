@@ -67,13 +67,14 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-003: Create Makefile
 - **Priority**: High
 - **Estimate**: 1 hour
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create Makefile with targets: build, test, run, clean, install
-  - [ ] Add `make build` to compile binary
-  - [ ] Add `make test` to run tests
-  - [ ] Add `make run` to run app locally
-  - [ ] Add `make install` to install binary to $GOPATH/bin
-  - [ ] Test all targets
+  - [x] Create Makefile with targets: build, test, run, clean, install
+  - [x] Add `make build` to compile binary
+  - [x] Add `make test` to run tests
+  - [x] Add `make run` to run app locally
+  - [x] Add `make install` to install binary to $GOPATH/bin
+  - [x] Test all targets
 
 ##### TICKET-004: Set Up Logging
 - **Priority**: High
