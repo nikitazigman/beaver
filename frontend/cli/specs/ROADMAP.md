@@ -99,12 +99,13 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-005: Define Configuration Schema
 - **Priority**: Critical
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/models/config.go`
-  - [ ] Define Config struct with all settings (API, Filters, UI, Prefetch)
-  - [ ] Add struct tags for Viper/YAML mapping
-  - [ ] Add validation tags (go-playground/validator)
-  - [ ] Write unit tests for config struct
+  - [x] Create `internal/models/config.go`
+  - [x] Define Config struct with all settings (API, Filters, UI, Prefetch)
+  - [x] Add struct tags for Viper/YAML mapping
+  - [x] Add custom validation logic (manual validation instead of tags)
+  - [x] Write unit tests for config struct
 
 ##### TICKET-006: Implement Configuration Loading
 - **Priority**: Critical
