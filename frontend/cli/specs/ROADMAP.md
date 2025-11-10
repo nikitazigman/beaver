@@ -260,14 +260,15 @@ Real API testing will be done during manual testing phase.
 ##### TICKET-016: Implement Highlighter
 - **Priority**: Critical
 - **Estimate**: 3 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/syntax/highlighter.go`
-  - [ ] Implement NewHighlighter(theme)
-  - [ ] Implement Highlight(code, language) using Chroma
-  - [ ] Support "dark" and "light" themes
-  - [ ] Map language names to Chroma lexers
-  - [ ] Write unit tests with sample code
-  - [ ] Test with Python, Go, JavaScript code samples
+  - [x] Create `internal/syntax/highlighter.go`
+  - [x] Implement NewHighlighter(theme)
+  - [x] Implement Highlight(code, language) using Chroma
+  - [x] Support "dark" and "light" themes
+  - [x] Map language names to Chroma lexers
+  - [x] Write unit tests with sample code
+  - [x] Test with Python, Go, JavaScript code samples
 
 ##### TICKET-017: Integrate Highlighting into Model
 - **Priority**: High
