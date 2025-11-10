@@ -24,8 +24,8 @@ func TestCodeDocumentValidate(t *testing.T) {
 				Language:      "python",
 				Tags:          []string{"sort"},
 				LinkToProject: "https://example.com",
-				CreatedAt:     time.Now(),
-				UpdatedAt:     time.Now(),
+				CreatedAt:     FlexibleTime{time.Now()},
+				UpdatedAt:     FlexibleTime{time.Now()},
 			},
 			wantErr: false,
 		},
@@ -233,8 +233,8 @@ func TestCodeDocumentJSON(t *testing.T) {
 		Contributors: []Contributor{
 			{Name: "John", LastName: "Doe", Email: "john@example.com"},
 		},
-		CreatedAt: time.Now().UTC().Truncate(time.Second),
-		UpdatedAt: time.Now().UTC().Truncate(time.Second),
+		CreatedAt: FlexibleTime{time.Now().UTC().Truncate(time.Second)},
+		UpdatedAt: FlexibleTime{time.Now().UTC().Truncate(time.Second)},
 	}
 
 	// Marshal to JSON

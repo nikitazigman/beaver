@@ -1,10 +1,42 @@
 package models
 
 import (
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+// FlexibleTime is a custom time type that can parse multiple datetime formats
+type FlexibleTime struct {
+	time.Time
+}
+
+// UnmarshalJSON implements custom JSON unmarshaling for flexible datetime parsing
+func (ft *FlexibleTime) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), "\"")
+
+	// Try multiple datetime formats
+	formats := []string{
+		time.RFC3339,                    // "2006-01-02T15:04:05Z07:00"
+		"2006-01-02 15:04:05-07:00",     // "2006-01-02 15:04:05-07:00"
+		"2006-01-02 15:04:05+00:00",     // "2006-01-02 15:04:05+00:00"
+		"2006-01-02T15:04:05.999999Z",   // With microseconds
+		"2006-01-02 15:04:05",           // Without timezone
+	}
+
+	var err error
+	for _, format := range formats {
+		ft.Time, err = time.Parse(format, s)
+		if err == nil {
+			return nil
+		}
+	}
+
+	// If all formats fail, set to zero time
+	ft.Time = time.Time{}
+	return nil // Don't error on parse failure, just use zero time
+}
 
 // CodeDocument represents an algorithm/code snippet for typing practice
 type CodeDocument struct {
@@ -15,8 +47,8 @@ type CodeDocument struct {
 	Tags          []string      `json:"tags"`
 	LinkToProject string        `json:"link_to_project"`
 	Contributors  []Contributor `json:"contributors,omitempty"`
-	CreatedAt     time.Time     `json:"created_at"`
-	UpdatedAt     time.Time     `json:"updated_at"`
+	CreatedAt     FlexibleTime  `json:"created_at"`
+	UpdatedAt     FlexibleTime  `json:"updated_at"`
 }
 
 // Contributor represents a contributor to an algorithm
