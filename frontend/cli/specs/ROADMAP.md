@@ -79,13 +79,14 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-004: Set Up Logging
 - **Priority**: High
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/utils/logger.go`
-  - [ ] Configure Zerolog with console output (dev) and file output (prod)
-  - [ ] Set log level from environment variable
-  - [ ] Create log file at `~/.config/beaver/beaver.log`
-  - [ ] Add rotation for log files (optional)
-  - [ ] Test logging at different levels
+  - [x] Create `internal/utils/logger.go`
+  - [x] Configure Zerolog with console output (dev) and file output (prod)
+  - [x] Set log level from environment variable
+  - [x] Create log file at `~/.config/beaver/beaver.log`
+  - [x] Add rotation for log files (skipped - can be added later if needed)
+  - [x] Test logging at different levels
 
 ---
 
