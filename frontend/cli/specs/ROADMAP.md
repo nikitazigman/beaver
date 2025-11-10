@@ -406,46 +406,50 @@ Real API testing will be done during manual testing phase.
 ##### TICKET-026: Implement Statistics Model
 - **Priority**: Critical
 - **Estimate**: 3 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/models/statistics.go`
-  - [ ] Define Statistics struct
-  - [ ] Implement Calculate() method
-  - [ ] Calculate: time, total chars, errors, corrections, accuracy, CPM
-  - [ ] Write comprehensive unit tests with edge cases
-  - [ ] Test with various typing scenarios
+  - [x] Create `internal/models/statistics.go`
+  - [x] Define Statistics struct
+  - [x] Implement Calculate() method
+  - [x] Calculate: time, total chars, errors, corrections, accuracy, CPM
+  - [x] Write comprehensive unit tests with edge cases
+  - [x] Test with various typing scenarios
 
 ##### TICKET-027: Track Typing Events
 - **Priority**: Critical
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Add event slices to Model: typingEvents, errorEvents
-  - [ ] Record timestamp on correctCharMsg
-  - [ ] Record timestamp on errorCharMsg
-  - [ ] Increment corrections on correctionMsg
-  - [ ] Test event tracking accuracy
+  - [x] Add event slices to Model: typingEvents, errorEvents
+  - [x] Record timestamp on correctCharMsg
+  - [x] Record timestamp on errorCharMsg
+  - [x] Increment corrections on correctionMsg
+  - [x] Test event tracking accuracy
 
 ##### TICKET-028: Implement Timer
 - **Priority**: High
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Add startTime field to Model
-  - [ ] Start timer on first keypress
-  - [ ] Create timerTickMsg for updates (100ms interval)
-  - [ ] Implement tickTimer() Cmd
-  - [ ] Display elapsed time in header (MM:SS format)
-  - [ ] Stop timer on completion
-  - [ ] Test timer accuracy
+  - [x] Add startTime field to Model
+  - [x] Start timer on first keypress
+  - [x] Create timerTickMsg for updates (100ms interval)
+  - [x] Implement tickTimer() Cmd
+  - [x] Display elapsed time in header (MM:SS format)
+  - [x] Stop timer on completion
+  - [x] Test timer accuracy
 
 ##### TICKET-029: Detect Completion
 - **Priority**: Critical
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Detect when cursor reaches end of code
-  - [ ] Send completionMsg with endTime
-  - [ ] Stop timer
-  - [ ] Calculate final statistics
-  - [ ] Transition to results screen
-  - [ ] Test completion detection
+  - [x] Detect when cursor reaches end of code
+  - [x] Send completionMsg with endTime
+  - [x] Stop timer
+  - [x] Calculate final statistics
+  - [x] Transition to results screen
+  - [x] Test completion detection
 
 ---
 
