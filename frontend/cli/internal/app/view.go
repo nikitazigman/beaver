@@ -47,29 +47,59 @@ func (m Model) renderLoading() string {
 func (m Model) renderTyping() string {
 	var s string
 	s += m.renderHeader()
-	s += "\n\n"
+	s += "\n"
 
 	if m.algorithm != nil {
-		s += fmt.Sprintf("  Algorithm: %s\n", m.algorithm.Title)
-		s += fmt.Sprintf("  Language: %s\n", m.algorithm.Language)
+		// Algorithm metadata
+		metadataStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
 		s += "\n"
-
-		// Display highlighted code
-		if m.highlightedCode != "" {
-			s += m.highlightedCode
-		} else {
-			s += m.algorithm.Code
+		s += metadataStyle.Render(fmt.Sprintf("  %s", m.algorithm.Title))
+		s += metadataStyle.Render(fmt.Sprintf(" • %s", m.algorithm.Language))
+		if len(m.algorithm.Tags) > 0 {
+			tags := ""
+			for i, tag := range m.algorithm.Tags {
+				if i > 0 {
+					tags += ", "
+				}
+				tags += tag
+			}
+			s += metadataStyle.Render(fmt.Sprintf(" • %s", tags))
 		}
-
 		s += "\n\n"
-		if !m.isTyping {
-			s += "  Start typing to begin...\n"
+
+		// Display highlighted code in viewport-like area
+		codeStyle := lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("238")).
+			Padding(0, 1)
+
+		codeContent := ""
+		if m.highlightedCode != "" {
+			codeContent = m.highlightedCode
+		} else {
+			codeContent = m.algorithm.Code
 		}
+
+		s += codeStyle.Render(codeContent)
+		s += "\n\n"
+
+		// Status message
+		if !m.isTyping {
+			statusStyle := lipgloss.NewStyle().
+				Foreground(lipgloss.Color("42")).
+				Bold(true)
+			s += statusStyle.Render("  ▶ Start typing to begin...")
+		} else {
+			// Show progress
+			progress := float64(m.cursorPos) / float64(len([]rune(m.algorithm.Code))) * 100
+			statusStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("33"))
+			s += statusStyle.Render(fmt.Sprintf("  Progress: %.1f%%", progress))
+		}
+		s += "\n"
 	} else {
-		s += "  No algorithm loaded\n"
+		s += "\n  No algorithm loaded\n\n"
 	}
 
-	s += "\n"
 	s += m.renderFooter()
 	return s
 }
