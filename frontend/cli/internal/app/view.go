@@ -53,9 +53,18 @@ func (m Model) renderTyping() string {
 		s += fmt.Sprintf("  Algorithm: %s\n", m.algorithm.Title)
 		s += fmt.Sprintf("  Language: %s\n", m.algorithm.Language)
 		s += "\n"
-		s += "  [Code will be displayed here]\n"
-		s += "\n"
-		s += "  Start typing to begin...\n"
+
+		// Display highlighted code
+		if m.highlightedCode != "" {
+			s += m.highlightedCode
+		} else {
+			s += m.algorithm.Code
+		}
+
+		s += "\n\n"
+		if !m.isTyping {
+			s += "  Start typing to begin...\n"
+		}
 	} else {
 		s += "  No algorithm loaded\n"
 	}

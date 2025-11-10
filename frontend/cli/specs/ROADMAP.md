@@ -273,12 +273,13 @@ Real API testing will be done during manual testing phase.
 ##### TICKET-017: Integrate Highlighting into Model
 - **Priority**: High
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Add highlighter field to Model
-  - [ ] Pre-highlight code when algorithm loads
-  - [ ] Store highlighted output in model
-  - [ ] Handle theme changes (re-highlight code)
-  - [ ] Test highlighting performance
+  - [x] Add highlighter field to Model
+  - [x] Pre-highlight code when algorithm loads
+  - [x] Store highlighted output in model
+  - [x] Handle theme changes (re-highlight code)
+  - [x] Test highlighting performance
 
 ---
 

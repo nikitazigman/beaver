@@ -9,6 +9,7 @@ import (
 
 	"github.com/beaver-app/beaver-cli/internal/models"
 	"github.com/beaver-app/beaver-cli/internal/services"
+	"github.com/beaver-app/beaver-cli/internal/syntax"
 )
 
 // Custom messages for algorithm loading
@@ -56,6 +57,7 @@ type Model struct {
 
 	// Services
 	apiClient    *services.APIClient
+	highlighter  *syntax.Highlighter
 	prefetchChan chan *models.CodeDocument
 	prefetchStop chan struct{}
 
@@ -77,10 +79,14 @@ type Model struct {
 
 // NewModel creates a new application model
 func NewModel(config *models.Config, apiClient *services.APIClient) Model {
+	// Create highlighter with configured theme
+	highlighter := syntax.NewHighlighter(config.UI.Theme)
+
 	return Model{
 		currentScreen: ScreenLoading,
 		config:        config,
 		apiClient:     apiClient,
+		highlighter:   highlighter,
 		prefetchChan:  make(chan *models.CodeDocument, config.Prefetch.QueueSize),
 		prefetchStop:  make(chan struct{}),
 		codeViewport:  viewport.New(80, 24),
@@ -111,5 +117,18 @@ func (m Model) fetchAlgorithm() tea.Cmd {
 		}
 
 		return algorithmLoadedMsg{algorithm: doc}
+	}
+}
+
+// rehighlightCode re-applies syntax highlighting to the current algorithm
+// This is useful when the theme changes
+func (m *Model) rehighlightCode() {
+	if m.algorithm != nil {
+		highlighted, err := m.highlighter.Highlight(m.algorithm.Code, m.algorithm.Language)
+		if err != nil {
+			m.highlightedCode = m.algorithm.Code
+		} else {
+			m.highlightedCode = highlighted
+		}
 	}
 }

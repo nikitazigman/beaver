@@ -27,6 +27,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.algorithm = msg.algorithm
 		m.currentScreen = ScreenTyping
 		m.err = nil
+
+		// Highlight the code
+		if m.algorithm != nil {
+			highlighted, err := m.highlighter.Highlight(m.algorithm.Code, m.algorithm.Language)
+			if err != nil {
+				// Log error but continue with unhighlighted code
+				m.highlightedCode = m.algorithm.Code
+			} else {
+				m.highlightedCode = highlighted
+			}
+		}
+
 		return m, nil
 
 	// Error loading algorithm
