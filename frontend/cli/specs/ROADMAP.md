@@ -142,13 +142,14 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-008: Define Data Models
 - **Priority**: Critical
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/models/code_document.go`
-  - [ ] Define CodeDocument struct matching API response
-  - [ ] Define Language struct
-  - [ ] Define Tag struct
-  - [ ] Add JSON tags for unmarshaling
-  - [ ] Write unit tests
+  - [x] Create `internal/models/code_document.go`
+  - [x] Define CodeDocument struct matching API response
+  - [x] Define Language struct
+  - [x] Define Tag struct
+  - [x] Add JSON tags for unmarshaling
+  - [x] Write unit tests
 
 ##### TICKET-009: Implement HTTP Client
 - **Priority**: Critical
