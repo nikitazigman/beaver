@@ -52,16 +52,17 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-002: Set Up Dependency Management
 - **Priority**: Critical
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Add Bubble Tea: `go get github.com/charmbracelet/bubbletea`
-  - [ ] Add Bubbles: `go get github.com/charmbracelet/bubbles`
-  - [ ] Add Lipgloss: `go get github.com/charmbracelet/lipgloss`
-  - [ ] Add Chroma: `go get github.com/alecthomas/chroma/v2`
-  - [ ] Add Cobra: `go get github.com/spf13/cobra`
-  - [ ] Add Viper: `go get github.com/spf13/viper`
-  - [ ] Add Zerolog: `go get github.com/rs/zerolog`
-  - [ ] Run `go mod tidy`
-  - [ ] Run `go mod vendor` (optional)
+  - [x] Add Bubble Tea: `go get github.com/charmbracelet/bubbletea`
+  - [x] Add Bubbles: `go get github.com/charmbracelet/bubbles`
+  - [x] Add Lipgloss: `go get github.com/charmbracelet/lipgloss` (auto-added with Bubble Tea)
+  - [x] Add Chroma: `go get github.com/alecthomas/chroma/v2`
+  - [x] Add Cobra: `go get github.com/spf13/cobra`
+  - [x] Add Viper: `go get github.com/spf13/viper`
+  - [x] Add Zerolog: `go get github.com/rs/zerolog`
+  - [x] Run `go mod tidy`
+  - [x] Run `go mod vendor` (skipped - using go modules directly)
 
 ##### TICKET-003: Create Makefile
 - **Priority**: High
