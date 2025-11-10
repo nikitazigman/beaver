@@ -3,8 +3,16 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
+
+	"github.com/beaver-app/beaver-cli/internal/app"
+	"github.com/beaver-app/beaver-cli/internal/config"
+	"github.com/beaver-app/beaver-cli/internal/services"
+	"github.com/beaver-app/beaver-cli/internal/utils"
 )
 
 var (
@@ -19,14 +27,46 @@ var rootCmd = &cobra.Command{
 Improve your typing speed while practicing well-known algorithms and data structures.`,
 	Version: version,
 	Run: func(cmd *cobra.Command, args []string) {
-		// This will be replaced with the actual Bubble Tea app
-		fmt.Println("Beaver CLI v" + version)
-		fmt.Println("Starting TUI application...")
-		fmt.Println("\nPress Ctrl+C to quit")
+		// Initialize logger
+		logLevel := utils.GetLogLevelFromEnv()
+		logConfig := utils.LoggerConfig{
+			Level:      logLevel,
+			Pretty:     true,
+			EnableFile: true,
+			FilePath:   utils.GetDefaultLogPath(),
+		}
+		if err := utils.InitLogger(logConfig); err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to initialize logger: %v\n", err)
+			os.Exit(1)
+		}
 
-		// TODO: Start Bubble Tea app here
-		// For now, just show placeholder
-		fmt.Println("\n[Bubble Tea app will start here]")
+		log.Info().Str("version", version).Msg("Starting Beaver CLI")
+
+		// Load configuration
+		cfg, err := config.LoadConfig(configPath)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to load configuration")
+			fmt.Fprintf(os.Stderr, "Configuration error: %v\n", err)
+			fmt.Fprintln(os.Stderr, "Using default configuration...")
+		}
+
+		// Create API client
+		timeout := time.Duration(cfg.API.Timeout) * time.Second
+		apiClient := services.NewAPIClient(cfg.API.BaseURL, timeout)
+		log.Info().Str("api_url", cfg.API.BaseURL).Msg("Initialized API client")
+
+		// Create and start Bubble Tea app
+		model := app.NewModel(cfg, apiClient)
+		p := tea.NewProgram(model, tea.WithAltScreen())
+
+		log.Info().Msg("Starting TUI application")
+		if _, err := p.Run(); err != nil {
+			log.Error().Err(err).Msg("Application error")
+			fmt.Fprintf(os.Stderr, "Error running application: %v\n", err)
+			os.Exit(1)
+		}
+
+		log.Info().Msg("Application exited normally")
 	},
 }
 

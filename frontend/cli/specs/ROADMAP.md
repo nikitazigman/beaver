@@ -236,13 +236,14 @@ Real API testing will be done during manual testing phase.
 ##### TICKET-015: Run Basic App
 - **Priority**: Critical
 - **Estimate**: 1 hour
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Wire up main.go to start Bubble Tea app
-  - [ ] Test: `go run cmd/beaver/main.go`
-  - [ ] Verify app launches and shows placeholder
-  - [ ] Verify q quits the app
-  - [ ] Verify Ctrl+C quits the app
-  - [ ] Test on different terminals
+  - [x] Wire up main.go to start Bubble Tea app
+  - [x] Test: `go run cmd/beaver/main.go`
+  - [x] Verify app launches and shows placeholder
+  - [x] Verify q quits the app
+  - [x] Verify Ctrl+C quits the app
+  - [x] Test on different terminals
 
 ---
 
