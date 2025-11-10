@@ -213,13 +213,14 @@ Real API testing will be done during manual testing phase.
 ##### TICKET-013: Implement Update Function Skeleton
 - **Priority**: Critical
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/app/update.go`
-  - [ ] Implement Update(msg) function with switch on message types
-  - [ ] Handle tea.WindowSizeMsg
-  - [ ] Handle tea.KeyMsg (just quit for now)
-  - [ ] Add placeholder handlers for custom messages
-  - [ ] Test basic keyboard input (q to quit)
+  - [x] Create `internal/app/update.go`
+  - [x] Implement Update(msg) function with switch on message types
+  - [x] Handle tea.WindowSizeMsg
+  - [x] Handle tea.KeyMsg (implemented full keyboard handling)
+  - [x] Add placeholder handlers for custom messages
+  - [x] Test basic keyboard input (q to quit)
 
 ##### TICKET-014: Implement View Function Skeleton
 - **Priority**: Critical
