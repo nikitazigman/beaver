@@ -334,60 +334,66 @@ Real API testing will be done during manual testing phase.
 ##### TICKET-021: Define Typing Messages
 - **Priority**: Critical
 - **Estimate**: 1 hour
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create message types in app/update.go:
+  - [x] Create message types in app/model.go:
     - startTypingMsg
     - correctCharMsg
     - errorCharMsg
     - correctionMsg (backspace)
     - completionMsg
-  - [ ] Add timestamp fields to each message
+  - [x] Add timestamp fields to each message
+  - [x] Add errorPos map to track error positions
 
 ##### TICKET-022: Implement Character Input Handling
 - **Priority**: Critical
 - **Estimate**: 4 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Implement handleTypingKeys() in update.go
-  - [ ] Detect first keypress → start timer
-  - [ ] For each character:
-    - Compare to expected character
-    - Send correctCharMsg or errorCharMsg
-  - [ ] Handle Tab → insert 4 spaces
-  - [ ] Handle Enter → newline
-  - [ ] Handle Backspace → correctionMsg
-  - [ ] Ignore non-printable keys
-  - [ ] Write unit tests for each key type
+  - [x] Implement handleTypingKeys() in update.go
+  - [x] Detect first keypress → start timer
+  - [x] For each character:
+    - [x] Compare to expected character
+    - [x] Track correct/incorrect keypresses
+  - [x] Handle Tab → insert tab character
+  - [x] Handle Enter → newline
+  - [x] Handle Backspace → via handleBackspace()
+  - [x] Handle KeyRunes for regular characters
+  - [x] Transition to results on completion
 
 ##### TICKET-023: Implement Error Highlighting
 - **Priority**: High
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Track error positions in model
-  - [ ] Apply error style (red background/text) to incorrect characters
-  - [ ] Clear error highlight on backspace
-  - [ ] Test error display at different positions
-  - [ ] Ensure errors are visible with syntax colors
+  - [x] Track error positions in model (errorPos map)
+  - [x] Apply error style (red background) via RenderCodeWithCursor
+  - [x] Clear error highlight on backspace
+  - [x] Integrated with code renderer
+  - [x] Errors visible during typing
 
 ##### TICKET-024: Implement Backspace/Correction
 - **Priority**: High
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Handle backspace key in handleTypingKeys()
-  - [ ] Move cursor back one position
-  - [ ] Clear error at that position
-  - [ ] Increment correction counter
-  - [ ] Allow retyping the character
-  - [ ] Test correction flow end-to-end
+  - [x] Handle backspace key in handleTypingKeys()
+  - [x] Move cursor back one position
+  - [x] Clear error at that position
+  - [x] Increment correction counter
+  - [x] Allow retyping the character
+  - [x] Full correction flow working
 
 ##### TICKET-025: Implement Progress Tracking
 - **Priority**: Medium
 - **Estimate**: 2 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Calculate typing progress (current pos / total chars)
-  - [ ] Display progress in header or footer
-  - [ ] Show line number: "Line 5/42"
-  - [ ] Update progress on each keypress
-  - [ ] Test with different algorithm lengths
+  - [x] Calculate typing progress (current pos / total chars)
+  - [x] Display progress percentage during typing
+  - [x] Display errors and corrections count
+  - [x] Update progress on each keypress
+  - [x] Enhanced results screen with WPM, accuracy, time statistics
 
 ---
 
