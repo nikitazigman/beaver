@@ -257,12 +257,16 @@ func TestHandleTypingKeys_Tab(t *testing.T) {
 	model.isTyping = false // Not started typing
 
 	msg := tea.KeyMsg{Type: tea.KeyTab}
-	newModel, _ := model.Update(msg)
+	newModel, cmd := model.Update(msg)
 	m := newModel.(Model)
 
-	// Should stay on typing screen (TODO will implement loadNext later)
-	if m.currentScreen != ScreenTyping {
-		t.Errorf("currentScreen = %v, want ScreenTyping", m.currentScreen)
+	// Should transition to loading screen when Tab is pressed (skip to next)
+	if m.currentScreen != ScreenLoading {
+		t.Errorf("currentScreen = %v, want ScreenLoading", m.currentScreen)
+	}
+	// Should return a command to fetch algorithm
+	if cmd == nil {
+		t.Error("Expected cmd to fetch algorithm, got nil")
 	}
 }
 

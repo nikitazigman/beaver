@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"time"
 
 	"github.com/charmbracelet/bubbles/viewport"
@@ -9,6 +10,15 @@ import (
 	"github.com/beaver-app/beaver-cli/internal/models"
 	"github.com/beaver-app/beaver-cli/internal/services"
 )
+
+// Custom messages for algorithm loading
+type algorithmLoadedMsg struct {
+	algorithm *models.CodeDocument
+}
+
+type algorithmErrorMsg struct {
+	err error
+}
 
 // Screen represents the current active screen
 type Screen int
@@ -82,7 +92,24 @@ func NewModel(config *models.Config, apiClient *services.APIClient) Model {
 
 // Init initializes the Bubble Tea application
 func (m Model) Init() tea.Cmd {
-	// Start prefetch service (will be implemented later)
-	// For now, just return nil
-	return nil
+	// Fetch the first algorithm on startup
+	return m.fetchAlgorithm()
+}
+
+// fetchAlgorithm creates a command to fetch an algorithm from the API
+func (m Model) fetchAlgorithm() tea.Cmd {
+	return func() tea.Msg {
+		ctx := context.Background()
+
+		// Use configured language filter, or empty for random
+		language := m.config.Filters.Language
+		tags := m.config.Filters.Tags
+
+		doc, err := m.apiClient.FetchRandom(ctx, language, tags)
+		if err != nil {
+			return algorithmErrorMsg{err: err}
+		}
+
+		return algorithmLoadedMsg{algorithm: doc}
+	}
 }

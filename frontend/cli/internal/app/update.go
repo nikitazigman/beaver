@@ -1,6 +1,8 @@
 package app
 
 import (
+	"time"
+
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -18,6 +20,19 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.codeViewport.Width = msg.Width - 4
 		m.codeViewport.Height = msg.Height - 10
 
+		return m, nil
+
+	// Algorithm loaded successfully
+	case algorithmLoadedMsg:
+		m.algorithm = msg.algorithm
+		m.currentScreen = ScreenTyping
+		m.err = nil
+		return m, nil
+
+	// Error loading algorithm
+	case algorithmErrorMsg:
+		m.err = msg.err
+		m.currentScreen = ScreenError
 		return m, nil
 
 	// Keyboard input
@@ -90,8 +105,8 @@ func (m Model) handleTypingKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "tab":
 		if !m.isTyping {
 			// Skip to next algorithm
-			// TODO: Implement loadNext
-			return m, nil
+			m.currentScreen = ScreenLoading
+			return m, m.fetchAlgorithm()
 		}
 		// During typing, tab inserts spaces (handled in character input)
 
@@ -110,12 +125,18 @@ func (m Model) handleResultsKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "tab", "enter", " ":
 		// Load next algorithm
-		// TODO: Implement loadNext
 		m.currentScreen = ScreenLoading
-		return m, nil
+		return m, m.fetchAlgorithm()
 
 	case "r":
-		// Retry same algorithm (optional)
+		// Retry same algorithm
+		m.currentScreen = ScreenTyping
+		m.cursorPos = 0
+		m.userInput = make([]rune, 0)
+		m.isTyping = false
+		m.typingEvents = make([]time.Time, 0)
+		m.errorEvents = make([]time.Time, 0)
+		m.corrections = 0
 		return m, nil
 	}
 
@@ -176,10 +197,10 @@ func (m Model) handleHelpKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m Model) handleErrorKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "r":
-		// Retry
+		// Retry fetch
 		m.currentScreen = ScreenLoading
-		// TODO: Retry fetch
-		return m, nil
+		m.err = nil
+		return m, m.fetchAlgorithm()
 
 	case "s":
 		// Open settings
@@ -188,8 +209,12 @@ func (m Model) handleErrorKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		return m, nil
 
 	case "c":
-		// Clear filters (optional)
-		return m, nil
+		// Clear filters
+		m.config.Filters.Language = ""
+		m.config.Filters.Tags = []string{}
+		m.currentScreen = ScreenLoading
+		m.err = nil
+		return m, m.fetchAlgorithm()
 	}
 
 	return m, nil
