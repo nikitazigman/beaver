@@ -110,14 +110,15 @@ This document outlines the development roadmap for the Beaver Go CLI, including 
 ##### TICKET-006: Implement Configuration Loading
 - **Priority**: Critical
 - **Estimate**: 3 hours
+- **Status**: ✅ COMPLETED
 - **Tasks**:
-  - [ ] Create `internal/config/config.go`
-  - [ ] Implement LoadConfig() function using Viper
-  - [ ] Set default values for all config options
-  - [ ] Load from `~/.config/beaver/config.yaml`
-  - [ ] Support environment variables with BEAVER_ prefix
-  - [ ] Validate loaded config
-  - [ ] Write unit tests
+  - [x] Create `internal/config/config.go`
+  - [x] Implement LoadConfig() function using Viper
+  - [x] Set default values for all config options
+  - [x] Load from `~/.config/beaver/config.yaml`
+  - [x] Support environment variables with BEAVER_ prefix
+  - [x] Validate loaded config
+  - [x] Write unit tests
 
 ##### TICKET-007: Create Default Config File
 - **Priority**: Medium
